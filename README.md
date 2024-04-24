@@ -6,7 +6,7 @@ sobre servicios y comodidades ofrecidas por el hotel
 
 **Como Ejecutar (Local)**
 
-- [Video Tutorial]("https://drive.google.com/file/d/18PpdTmRiaYnCvreSKS3iEBOARN2CnHOS/view?usp=drive_link")
+- [Video Tutorial](https://drive.google.com/file/d/18PpdTmRiaYnCvreSKS3iEBOARN2CnHOS/view?usp=drive_link)
 
 ## License
 

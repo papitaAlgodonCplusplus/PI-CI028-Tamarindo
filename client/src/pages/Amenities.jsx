@@ -7,10 +7,24 @@ import { useNavigate } from 'react-router-dom';
 import { emptyContainer, updateContainer, showErrorDialog, postDataWithTimeout, deleteDataWithTimeout } from '../Misc';
 
 const Amenities = () => {
-    return (
-        <div className='body'>
-            Hello this is Amenities;
-        </div >
-    )
+  return (
+    <div>
+      <div className="amenities">
+        Amenities
+      </div>
+      <hr className="solid"></hr>
+
+      <div className="amenities-bar">
+        <div className="amenities-info-bar">
+          <span className="amenity">
+            Amenity
+          </span>
+          <span className="price">
+            Price
+          </span>
+        </div>
+      </div>
+    </div>
+  )
 }
 export default Amenities;

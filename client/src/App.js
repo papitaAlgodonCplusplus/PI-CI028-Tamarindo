@@ -12,32 +12,36 @@ import {
 // import Details from "./pages/Details"
 // import Payment from "./pages/Payment.jsx";
 // import Reservation from "./pages/Reservation.jsx";
-// import Amenities from "./pages/Amenities.jsx";
+import Amenities from "./pages/Amenities.jsx";
 // import ReservationsList from "./pages/ReservationsList.jsx"
 // import ReservationsAdmin from "./pages/ReservationsAdmin.jsx";
 import { Provider } from './Context.js';
 import { AuthProvider } from './AuthContext';
 
-// const Layout = () => {
-//   return (
-//     <>
-//       <Navbar />,
-//       <Outlet />,
-//       <Footer />
-//     </>
-//   );
-// }
+const Layout = () => {
+  return (
+    <>
+      {/* <Navbar />, */}
+      <Outlet />,
+      {/* <Footer /> */}
+    </>
+  );
+}
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <div>Hello</div>
-    // element: <Layout />,
-    // children: [
-    //   {
-    //     path: "/home",
-    //     element: <Home />,
-    //   },
+    element: <Layout />,
+    children: [
+      {
+        path: "/",
+        element: <div>Hello</div>,
+      },
+      {
+        path: "/amenities",
+        element: <Amenities />,
+      },
+    ]
     //   {
     //     path: "/",
     //     element: <Login />,

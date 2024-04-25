@@ -1,11 +1,11 @@
 import express from "express";
-import roomsRoutes from "./routes/rooms.js"
-import fileRoutes from "./routes/files.js"
-import authRoutes from "./routes/auth.js"
-import filterRoutes from "./routes/filters.js"
-import reservationRoutes from "./routes/reservations.js"
-import paymentRouter from "./routes/payments.js"
-import serviceRouter from "./routes/amenities.js"
+// import roomsRoutes from "./routes/rooms.js"
+// import fileRoutes from "./routes/files.js"
+// import authRoutes from "./routes/auth.js"
+// import filterRoutes from "./routes/filters.js"
+// import reservationRoutes from "./routes/reservations.js"
+// import paymentRouter from "./routes/payments.js"
+// import serviceRouter from "./routes/amenities.js"
 import path from "path";
 import cookieParser from "cookie-parser";
 import multer from "multer";
@@ -31,13 +31,13 @@ app.post("/api/upload", upload.single("image"), function (req, res) {
 
 app.use(express.json())
 app.use(cookieParser())
-app.use("/api/rooms", roomsRoutes)
-app.use("/api/files", fileRoutes)
-app.use("/api/auth", authRoutes)
-app.use("/api/filters", filterRoutes)
-app.use("/api/reservations", reservationRoutes)
-app.use("/api/payments", paymentRouter)
-app.use("/api/services", serviceRouter)
+// app.use("/api/rooms", roomsRoutes)
+// app.use("/api/files", fileRoutes)
+// app.use("/api/auth", authRoutes)
+// app.use("/api/filters", filterRoutes)
+// app.use("/api/reservations", reservationRoutes)
+// app.use("/api/payments", paymentRouter)
+// app.use("/api/services", serviceRouter)
 
 app.listen(8800, () => {
   console.log("Connected")

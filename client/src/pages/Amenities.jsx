@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import { emptyContainer, showErrorDialog, updateContainer } from '../Misc';
 import '../amenities_page_styles.scss';
+import axios from 'axios';
 
 // Function to add a new amenity to the UI
 const addAmenity = (title, fee, id, img) => {
@@ -90,8 +91,8 @@ const addAmenity = (title, fee, id, img) => {
 </div>
 `;
 
-  const services_table = document.querySelector('.amenities-container');
-  services_table.insertAdjacentHTML('beforeend', newAmenityHTML);
+  const amenities_table = document.querySelector('.amenities-container');
+  amenities_table.insertAdjacentHTML('beforeend', newAmenityHTML);
   const deleteButton = document.getElementById("delete-button-" + title);
   deleteButton.addEventListener('click', (e) => handleDelete(e, id));
 }
@@ -111,16 +112,15 @@ const fetchData = async () => {
   // if (userRol !== "admin" && userRol !== "employee") {
   //   return;
   // }
-  const services_table = document.querySelector('.amenities-container');
+  const amenities_table = document.querySelector('.amenities-container');
   try {
-    // const res = await axios.get("/services");
-    emptyContainer(services_table);
+    const res = await axios.get("/amenities");
+    emptyContainer(amenities_table);
     // Add each service to the UI
-    // res.data.forEach(service => {
-    addAmenity("Hello", "45000", 1, require("../assets/images/Image17.png"));
-    addAmenity("This is an example of a long title", "99000", 1, require("../assets/images/Image18.png"));
-    // });
-    updateContainer(services_table);
+    res.data.forEach(service => {
+      addAmenity(service.service_name, service.service_price, service.serviceid, service.image_path);
+    });
+    updateContainer(amenities_table);
     return;
   } catch (error) {
     showErrorDialog("An error occurred:", error);

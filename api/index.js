@@ -5,7 +5,7 @@ import express from "express";
 // import filterRoutes from "./routes/filters.js"
 // import reservationRoutes from "./routes/reservations.js"
 // import paymentRouter from "./routes/payments.js"
-// import serviceRouter from "./routes/amenities.js"
+import amenityRouter from "./routes/amenities.js"
 import path from "path";
 import cookieParser from "cookie-parser";
 import multer from "multer";
@@ -37,7 +37,7 @@ app.use(cookieParser())
 // app.use("/api/filters", filterRoutes)
 // app.use("/api/reservations", reservationRoutes)
 // app.use("/api/payments", paymentRouter)
-// app.use("/api/services", serviceRouter)
+app.use("/api/amenities", amenityRouter)
 
 app.listen(8800, () => {
   console.log("Connected")

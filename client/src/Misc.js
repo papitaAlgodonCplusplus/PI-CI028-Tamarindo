@@ -1,5 +1,5 @@
 import axios from "axios"
-
+import "./Misc.scss"
 export function emptyContainer(container) {
   container.innerHTML = '';
 }

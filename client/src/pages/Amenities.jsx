@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react';
-import { emptyContainer, showErrorDialog, updateContainer } from '../Misc';
+import { emptyContainer, showErrorDialog, updateContainer, deleteDataWithTimeout, showWarningDialog } from '../Misc';
 import '../amenities_page_styles.scss';
 import axios from 'axios';
 
@@ -94,19 +94,22 @@ const addAmenity = (title, fee, id, img) => {
   const amenities_table = document.querySelector('.amenities-container');
   amenities_table.insertAdjacentHTML('beforeend', newAmenityHTML);
   const deleteButton = document.getElementById("delete-button-" + title);
-  deleteButton.addEventListener('click', (e) => handleDelete(e, id));
+  deleteButton.addEventListener('click', (e) => handleDelete(e, id, title));
 }
 
 // Function to handle deletion of a service
-const handleDelete = async (e, id) => {
+const handleDelete = async (e, id, title) => {
   try {
-    // e.preventDefault();
-    // await deleteDataWithTimeout(`/services/delete/${id}`, 500);
-    // fetchData()
+    e.preventDefault();
+    const warningResult = await showWarningDialog("Delete Confirmation", "Are you sure you would like to delete the amenity "+title+"?")
+    if (!warningResult) return;
+    await deleteDataWithTimeout(`/amenities/delete${id}`, 500);
+    fetchData()
   } catch (error) {
     showErrorDialog("An error occurred:", error);
   }
 }
+
 // Function to fetch services data from server
 const fetchData = async () => {
   // if (userRol !== "admin" && userRol !== "employee") {

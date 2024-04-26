@@ -34,11 +34,21 @@ const addAmenity = (title, fee, id, icon_path) => {
 `;
 
   const services_table = document.querySelector('.list-container');
-  services_table.insertAdjacentHTML('beforeend', newServiceHTML);
+  services_table.insertAdjacentHTML('beforeend', newAmenityHTML);
   const deleteButton = document.getElementById("delete-button-" + title);
   deleteButton.addEventListener('click', (e) => handleDelete(e, id));
 }
 
+// Function to handle deletion of a service
+const handleDelete = async (e, id) => {
+  try {
+    // e.preventDefault();
+    // await deleteDataWithTimeout(`/services/delete/${id}`, 500);
+    // fetchData()
+  } catch (error) {
+    showErrorDialog("An error occurred:", error);
+  }
+}
 // Function to fetch services data from server
 const fetchData = async () => {
   // if (userRol !== "admin" && userRol !== "employee") {
@@ -50,7 +60,7 @@ const fetchData = async () => {
     emptyContainer(services_table);
     // Add each service to the UI
     res.data.forEach(service => {
-      addService(service.service_name, service.service_price, service.serviceid);
+      addAmenity(service.service_name, service.service_price, service.serviceid);
     });
     updateContainer(services_table);
     return;
@@ -59,12 +69,12 @@ const fetchData = async () => {
   }
 };
 
-// Fetch data on component mount
-useEffect(() => {
-  fetchData();
-}, []);
-
 const Amenities = () => {
+  // Fetch data on component mount
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <div>
       <div className="amenities">

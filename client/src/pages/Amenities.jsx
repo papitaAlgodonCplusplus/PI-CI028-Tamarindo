@@ -1,10 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useEffect } from 'react';
+import { emptyContainer, showErrorDialog, updateContainer } from '../Misc';
 import '../amenities_page_styles.scss';
-import axios from "axios";
-import { AuthContext } from '../AuthContext.js';
-import { useNavigate } from 'react-router-dom';
-import { emptyContainer, updateContainer, showErrorDialog, postDataWithTimeout, deleteDataWithTimeout } from '../Misc';
 
 // Function to add a new amenity to the UI
 const addAmenity = (title, fee, id, icon_path) => {
@@ -54,9 +51,9 @@ const fetchData = async () => {
   // if (userRol !== "admin" && userRol !== "employee") {
   //   return;
   // }
-  const services_table = document.querySelector('.list-container');
+  const services_table = document.querySelector('.amenities-container');
   try {
-    const res = await axios.get("/services");
+    // const res = await axios.get("/services");
     emptyContainer(services_table);
     // Add each service to the UI
     res.data.forEach(service => {

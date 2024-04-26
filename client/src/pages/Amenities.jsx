@@ -4,24 +4,84 @@ import { emptyContainer, showErrorDialog, updateContainer } from '../Misc';
 import '../amenities_page_styles.scss';
 
 // Function to add a new amenity to the UI
-const addAmenity = (title, fee, id, icon_path) => {
+const addAmenity = (title, fee, id, img) => {
   const newAmenityHTML = `
   <div className="list-container">
-  <div className='room-info'>
-    <div class="icon" src=${icon_path}></div>
-    <div class="title">${title}</div>
-    <div class="amenity-price">₡${fee}</div>
+  <div style="
+    height: 100px;
+    margin-top: 2%;
+    width: 71%;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    position: relative; /* Add position: relative to the parent div */">
+    <img style="
+      margin-left: 15px;
+      max-width: 90px;
+      max-height: 90px;
+      margin-right: 24px;
+      margin-bottom: 10px;" src=${img} alt="${title}-icon"/>
+    <div style="
+      font-size: 18px;
+      font-weight: bold;
+      position: absolute; 
+      left: 180px; /">${title}</div>
+    <div style="
+      font-size: 16px;
+      color: #333;
+      position: absolute;
+      left: 540px;">₡${fee}</div>
   </div>
+</div>
 
-  <div className='amenities-button-container'>
-    <div className='delete-button-container'>
-      <span className='delete-button' id="delete-button-${title}">
+  <div style="
+  display: flex;
+  align-items: center;">
+    <div style="
+    margin-top: 20px;
+    border-radius: 6px;
+    border: 1px solid #1E91B6;
+    background: #FFFFFF;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    cursor: pointer;
+    padding: 8px 0.4px 8px 0;
+    width: 169px;
+    box-sizing: border-box;">
+      <span style="
+      overflow-wrap: break-word;
+      font-family: 'Poppins';
+      font-weight: 400;
+      font-size: 15px;
+      letter-spacing: 0.3px;
+      line-height: 1.333;
+      color: #1E91B6;" id="delete-button-${title}">
         Delete Amenity
       </span>
     </div>
 
-    <div className="mod-amenity">
-      <span className="modify-amenity">
+    <div style="
+    margin-top: 20px;
+    margin-left: 1%;
+    border-radius: 6px;
+    background: #1E91B6;
+    display: flex;
+    justify-content: center;
+    padding: 9px 0.3px 9px 0;
+    width: 169px;
+    cursor: pointer;">
+      <span style="
+      overflow-wrap: break-word;
+      font-family: 'Poppins';
+      font-weight: 400;
+      font-size: 15px;
+      letter-spacing: 0.3px;
+      line-height: 1.333;
+      color: #FFFFFF;">
         Modify Amenity
       </span>
     </div>
@@ -30,7 +90,7 @@ const addAmenity = (title, fee, id, icon_path) => {
 </div>
 `;
 
-  const services_table = document.querySelector('.list-container');
+  const services_table = document.querySelector('.amenities-container');
   services_table.insertAdjacentHTML('beforeend', newAmenityHTML);
   const deleteButton = document.getElementById("delete-button-" + title);
   deleteButton.addEventListener('click', (e) => handleDelete(e, id));
@@ -56,9 +116,10 @@ const fetchData = async () => {
     // const res = await axios.get("/services");
     emptyContainer(services_table);
     // Add each service to the UI
-    res.data.forEach(service => {
-      addAmenity(service.service_name, service.service_price, service.serviceid);
-    });
+    // res.data.forEach(service => {
+    addAmenity("Hello", "45000", 1, require("../assets/images/Image17.png"));
+    addAmenity("This is an example of a long title", "99000", 1, require("../assets/images/Image18.png"));
+    // });
     updateContainer(services_table);
     return;
   } catch (error) {

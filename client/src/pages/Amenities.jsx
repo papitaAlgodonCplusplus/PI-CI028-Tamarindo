@@ -101,7 +101,7 @@ const addAmenity = (title, fee, id, img) => {
 const handleDelete = async (e, id, title) => {
   try {
     e.preventDefault();
-    const warningResult = await showWarningDialog("Delete Confirmation", "Are you sure you would like to delete the amenity "+title+"?")
+    const warningResult = await showWarningDialog("Delete Confirmation", "Are you sure you would like to delete the amenity " + title + "?")
     if (!warningResult) return;
     await deleteDataWithTimeout(`/amenities/delete${id}`, 500);
     fetchData()
@@ -136,6 +136,11 @@ const Amenities = () => {
     fetchData();
   }, []);
 
+  function closeModal() {
+    var modal = document.getElementById("myFormModal");
+    modal.style.display = "none";
+  }
+
   return (
     <div>
       <div className="amenities">
@@ -161,6 +166,29 @@ const Amenities = () => {
         </div>
         <button className="add-amenity-button"><center>Add Amenity</center></button>
       </div>
+
+      <div id="myFormModal" className="form-modal">
+        <div className="form-modal-content">
+          <span className="close" onClick={closeModal}>&times;</span>
+          <form id="myForm">
+            {/* File input for uploading image */}
+            <div className="file-input-container">
+              <input type="file" id="file-input" className="file-input" />
+              <label htmlFor="file-input" className="file-input-label">Choose an icon</label>
+              <img id="image-preview" className="image-preview" src="#" alt="Preview" />
+            </div>
+            {/* Input field for amenity title */}
+            <label htmlFor="title">Title</label><br />
+            <input type="text" id="title" name="title" /><br />
+            {/* Input field for amenity fee */}
+            <label htmlFor="fee">Fee</label><br />
+            <input type="number" id="fee" name="fee" /><br />
+            {/* Button to add amenity */}
+            <button className="add-amenity-button"><center>Add Amenity</center></button>
+          </form>
+        </div>
+      </div>
+
     </div >
   )
 }

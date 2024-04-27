@@ -3,19 +3,20 @@ import multer from "multer";
 
 export const addService = (req, res) => {
   const q = "SELECT * FROM services WHERE service_name = ?";
-
-  db.query(q, [req.body.service_name], (err, data) => {
+  console.log("rr")
+  db.query(q, [req.body.title], (err, data) => {
     if (err) {
       return res.json(err);
     }
     if (data.length) {
-      return res.status(409).json("Service already exists!");
+      return res.status(409).json("Amenity already exists!");
     }
 
-    const q = "INSERT INTO services(`service_name`, `service_price`) VALUES (?)"
+    const q = "INSERT INTO services(`service_name`, `service_price`, `image_path`) VALUES (?)"
     const values = [
-      req.body.service_name,
+      req.body.title,
       req.body.fee,
+      req.body.file_path
     ]
     db.query(q, [values], (err, data) => {
       if (err) {
@@ -28,7 +29,6 @@ export const addService = (req, res) => {
 }
 
 export const addToServiceLog = (req, res) => {
-  console.log("Here?")
   const q = "INSERT INTO services_log(`service_id`, `reservation_id`) VALUES (?)"
   const values = [
     req.body.service_id,
@@ -41,6 +41,26 @@ export const addToServiceLog = (req, res) => {
     }
     return res.status(200);
   })
+}
+
+export const updateAmenity = (req, res) => {
+  const updateQuery = `
+    UPDATE services
+    SET service_name = ?, service_price = ?, image_path = ?
+    WHERE serviceid = ?
+  `;
+
+  db.query(updateQuery, [req.body.title, req.body.fee, req.body.file_path, req.body.service_id], (error, results) => {
+    if (error) {
+      return res.status(500).send("Error updating amenity");
+    }
+
+    if (results.affectedRows === 0) {
+      return res.status(404).send("Amenity not found");
+    }
+
+    return res.status(200);
+  });
 }
 
 export const updateServices = (req, res) => {

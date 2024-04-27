@@ -3,55 +3,87 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #fcffcc;
-  border: 1px solid #b4bd38;
-  padding: 20px;
+  background-color: #ffffff;
+  border: 2px solid #045B78;
+  border-radius: 13px;
+  padding: 10px;
   width: 400px;
   z-index: 1001;
 }
 
-.warning-modal-close {
-  background-color: #165a16;
-  color: #fff;
-  border: none;
-  padding: 8px 15px;
-  font-size: 16px;
-  margin-right: 2%;
-  cursor: pointer;
-  float: right;
-}
-
 .modal-title {
-  font-size: 20px;
+  text-align: center;
+  font-family: 'Poppins';
+  font-weight: 500;
+  font-size: 23px;
   color: #000000;
-  font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+  margin-top: 8px;
 }
 
 .modal-close {
-  background-color: #ff0000;
-  color: #fff;
-  border: none;
+  background-color: #ffffff;
+  color: #1E90B6;
+  border: 1px solid #1E90B6;
+  border-radius: 6px;
   padding: 8px 15px;
-  font-size: 16px;
+  font-family: 'Poppins';
+  font-weight: 300;
+  font-size: 17px;
   cursor: pointer;
-  float: right;
+}
+
+.modal-close:hover {
+  background-color: #045B78;
+  border: 1px solid #045B78;
+  color: white;
+}
+
+.error-modal-close {
+  background-color: #ffffff;
+  color: #1E90B6;
+  border: 1px solid #1E90B6;
+  border-radius: 6px;
+  padding: 8px 15px;
+  font-family: 'Poppins';
+  font-weight: 200;
+  font-size: 15px;
+  padding-block: 2%;
+  cursor: pointer;
+  margin-left: 39%;
+}
+
+.error-modal-close:hover {
+  background-color: #045B78;
+  border: 1px solid #045B78;
+  color: white;
 }
 
 .modal-description {
+  text-align: center;
+  font-family: 'Poppins';
+  font-weight: 200;
+  font-size: 18px;
   color: #000000;
   margin-bottom: 20px;
 }
 
 .warning-modal-close {
-  background-color: #165a16;
+  background-color: #05789E;
   color: #fff;
-  border: none;
+  border: 1px solid #05789E;
+  border-radius: 6px;
   padding: 8px 15px;
   font-size: 16px;
-  margin-right: 2%;
+  margin-left: 22%;
+  margin-right: 5%;
   cursor: pointer;
-  float: right;
+}
+
+.warning-modal-close:hover {
+  background-color: #045B78;
+  border: 1px solid #045B78;
+  color: white;
 }
 
 .warning-modal-overlay {
@@ -62,4 +94,17 @@
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000;
+}
+
+.modal-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  border: 2px solid #05789E;
+  border-radius: 14px;
+  padding: 10px;
+  width: 400px;
+  z-index: 1001;
 }

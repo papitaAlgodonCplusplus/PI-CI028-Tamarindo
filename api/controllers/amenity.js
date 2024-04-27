@@ -3,7 +3,6 @@ import multer from "multer";
 
 export const addService = (req, res) => {
   const q = "SELECT * FROM services WHERE service_name = ?";
-  console.log("rr")
   db.query(q, [req.body.title], (err, data) => {
     if (err) {
       return res.json(err);
@@ -20,7 +19,6 @@ export const addService = (req, res) => {
     ]
     db.query(q, [values], (err, data) => {
       if (err) {
-        console.log(err)
         return res.json(err);
       }
       return res.status(200);
@@ -36,7 +34,6 @@ export const addToServiceLog = (req, res) => {
   ]
   db.query(q, [values], (err, data) => {
     if (err) {
-      console.log(err)
       return res.json(err);
     }
     return res.status(200);
@@ -108,7 +105,6 @@ export const getSumByReservationID = (req, res) => {
 
   db.query(getServiceIDsQuery, [reservationID], (error, results) => {
     if (error) {
-      console.error("Error retrieving service IDs:", error);
       res.status(500).send("Error retrieving service IDs");
       return;
     }
@@ -127,7 +123,6 @@ export const getSumByReservationID = (req, res) => {
 
     db.query(getServicePricesQuery, [serviceIDs], (error, results) => {
       if (error) {
-        console.error("Error retrieving service prices:", error);
         res.status(500).send("Error retrieving service prices");
         return;
       }

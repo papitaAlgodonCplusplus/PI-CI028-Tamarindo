@@ -23,11 +23,11 @@ export const showWarningDialog = async (title, description) => {
 
     const descriptionElement = document.createElement('div');
     descriptionElement.classList.add('modal-description');
-    descriptionElement.textContent = description;
+    descriptionElement.innerHTML = description;
 
     const closeButton = document.createElement('button');
     closeButton.classList.add('warning-modal-close');
-    closeButton.textContent = 'Accept';
+    closeButton.textContent = 'ACCEPT';
     closeButton.addEventListener('click', () => {
       document.body.removeChild(overlay);
       resolve(true);
@@ -35,7 +35,7 @@ export const showWarningDialog = async (title, description) => {
 
     const closeButton2 = document.createElement('button');
     closeButton2.classList.add('modal-close');
-    closeButton2.textContent = 'Cancel';
+    closeButton2.textContent = 'CANCEL';
     closeButton2.addEventListener('click', () => {
       document.body.removeChild(overlay);
       resolve(false);
@@ -43,8 +43,8 @@ export const showWarningDialog = async (title, description) => {
 
     dialog.appendChild(titleElement);
     dialog.appendChild(descriptionElement);
-    dialog.appendChild(closeButton2);
     dialog.appendChild(closeButton);
+    dialog.appendChild(closeButton2);
 
     overlay.appendChild(dialog);
 
@@ -124,8 +124,8 @@ export function showErrorDialog(title, description, exit_on_close = false, navig
   console.log(description)
 
   const closeButton = document.createElement('button');
-  closeButton.classList.add('modal-close');
-  closeButton.textContent = 'Close';
+  closeButton.classList.add('error-modal-close');
+  closeButton.textContent = 'CLOSE';
   closeButton.addEventListener('click', () => {
     document.body.removeChild(overlay);
     if (exit_on_close) {

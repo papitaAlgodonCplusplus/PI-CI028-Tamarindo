@@ -54,7 +54,7 @@ const Amenities = () => {
     cursor: pointer;
     padding: 8px 0.4px 8px 0;
     width: 169px;
-    box-sizing: border-box;">
+    box-sizing: border-box;" id="delete-button-${title}">
       <span style="
       overflow-wrap: break-word;
       font-family: 'Poppins';
@@ -62,7 +62,7 @@ const Amenities = () => {
       font-size: 15px;
       letter-spacing: 0.3px;
       line-height: 1.333;
-      color: #1E91B6;" id="delete-button-${title}">
+      color: #1E91B6;">
         Delete Amenity
       </span>
     </div>
@@ -76,7 +76,7 @@ const Amenities = () => {
     justify-content: center;
     padding: 9px 0.3px 9px 0;
     width: 169px;
-    cursor: pointer;">
+    cursor: pointer;" id="modify-button-${title}">
       <span style="
       overflow-wrap: break-word;
       font-family: 'Poppins';
@@ -84,7 +84,7 @@ const Amenities = () => {
       font-size: 15px;
       letter-spacing: 0.3px;
       line-height: 1.333;
-      color: #FFFFFF;" id="modify-button-${title}">
+      color: #FFFFFF;">
         Modify Amenity
       </span>
     </div>
@@ -105,12 +105,12 @@ const Amenities = () => {
   const handleDelete = async (e, id, title) => {
     try {
       e.preventDefault();
-      const warningResult = await showWarningDialog("Delete Confirmation", "Are you sure you would like to delete the amenity " + title + "?")
+      const warningResult = await showWarningDialog("Delete Confirmation", "Are you sure you would like to delete the amenity <strong>" + title + "</strong>?")
       if (!warningResult) return;
       await deleteDataWithTimeout(`/amenities/delete${id}`, 500);
       fetchData()
     } catch (error) {
-      showErrorDialog("An error occurred:", error);
+      showErrorDialog("Error", error);
     }
   }
 
@@ -130,7 +130,7 @@ const Amenities = () => {
       updateContainer(amenities_table);
       return;
     } catch (error) {
-      showErrorDialog("An error occurred:", error);
+      showErrorDialog("Error", error);
     }
   };
 
@@ -170,20 +170,49 @@ const Amenities = () => {
         ...prevData,
         id: res.data[0].serviceid
       }));
+      const imagePreview2 = document.getElementById('image-preview2');
+      imagePreview2.src = res.data[0].image_path;
+      imagePreview2.style.visibility = 'visible';
       displayModal2()
     } catch (error) {
-      showErrorDialog("An error occurred:", error);
+      showErrorDialog("Error", error);
     }
   }
 
   const [file, setFile] = useState(null);
 
   const handleChange = e => {
-    setInputs(prev => ({ ...prev, [e.target.name]: e.target.value }))
+    if (e.target.id === "fee") {
+      const newValue = e.target.value;
+
+      // Check if the entered value is negative
+      if (parseFloat(newValue) < 0) {
+        e.target.value = 0;
+        showErrorDialog("Error", "Fee can't be negative")
+        return;
+      } else {
+        setInputs(prev => ({ ...prev, [e.target.name]: e.target.value }))
+      }
+    } else {
+      setInputs(prev => ({ ...prev, [e.target.name]: e.target.value }))
+    }
   }
 
   const handleModifyChange = e => {
-    setData(prev => ({ ...prev, [e.target.name]: e.target.value }))
+    if (e.target.id === "fee_modify") {
+      const newValue = e.target.value;
+
+      // Check if the entered value is negative
+      if (parseFloat(newValue) < 0) {
+        e.target.value = 0;
+        showErrorDialog("Error", "Fee can't be negative")
+        return;
+      } else {
+        setData(prev => ({ ...prev, [e.target.name]: e.target.value }))
+      }
+    } else {
+      setData(prev => ({ ...prev, [e.target.name]: e.target.value }))
+    }
   }
 
   // Function to handle form submission
@@ -192,19 +221,19 @@ const Amenities = () => {
 
     // Validating file upload
     if (!file) {
-      showErrorDialog("An error occurred:", "Please upload an image");
+      showErrorDialog("Error", "Please upload an image");
       return;
     }
 
     // Validating title
     if (!inputs.title) {
-      showErrorDialog("An error occurred:", "Please add a title");
+      showErrorDialog("Error", "Please add a title");
       return;
     }
 
     // Validating fee
     if (!inputs.fee) {
-      showErrorDialog("An error occurred:", "Please add a fee");
+      showErrorDialog("Error", "Please add a fee");
       return;
     }
 
@@ -227,7 +256,12 @@ const Amenities = () => {
       });
 
       // Setting file_path in inputs
-      inputs.file_path = "./upload/" + filename.data;
+      if (filename !== undefined) {
+        setInputs(prevData => ({
+          ...prevData,
+          file_path: "./upload/" + filename.data
+        }));
+      }
 
       // Adding room data to database
       await postDataWithTimeout("/amenities/add_amenity", inputs, 500);
@@ -239,10 +273,10 @@ const Amenities = () => {
       if (error.response && error.response.status === 404) {
         // Handling specific error response
         const errorMessage = error.response.data;
-        showErrorDialog("An error occurred:", errorMessage);
+        showErrorDialog("Error", errorMessage);
       } else {
         // Handling generic error
-        showErrorDialog("An error occurred:", error);
+        showErrorDialog("Error", error);
       }
     }
   }
@@ -275,7 +309,6 @@ const Amenities = () => {
         file_path: file_path,
         service_id: data.id
       }
-      console.log("Setting: ", req)
       await putDataWithTimeout(`/amenities/update_amenity`, req, 500);
       fetchData()
       closeModal2();
@@ -285,10 +318,10 @@ const Amenities = () => {
       if (error.response && error.response.status === 404) {
         // Handling specific error response
         const errorMessage = error.response.data;
-        showErrorDialog("An error occurred:", errorMessage);
+        showErrorDialog("Error", errorMessage);
       } else {
         // Handling generic error
-        showErrorDialog("An error occurred:", error);
+        showErrorDialog("Error", error);
       }
     }
   }
@@ -316,9 +349,9 @@ const Amenities = () => {
       reader.onload = function (e) {
         // Displaying the image preview
         imagePreview.src = e.target.result;
-        imagePreview.style.display = 'block';
+        imagePreview.style.visibility = 'visible';
         imagePreview2.src = e.target.result;
-        imagePreview2.style.display = 'block';
+        imagePreview2.style.visibility = 'visible';
       };
 
       // Reading the selected file as data URL
@@ -329,9 +362,9 @@ const Amenities = () => {
     } else {
       // If no file is selected, reset the image preview
       imagePreview.src = '#';
-      imagePreview.style.display = 'none';
+      imagePreview.style.visibility = 'hidden';
       imagePreview2.src = '#';
-      imagePreview2.style.display = 'none';
+      imagePreview2.style.visibility = 'hidden';
     }
   };
 
@@ -342,11 +375,25 @@ const Amenities = () => {
 
   function closeModal() {
     var modal = document.getElementById("myFormModal");
+    setFileChanged(false);
+    const imagePreview = document.getElementById('image-preview');
+    const imagePreview2 = document.getElementById('image-preview2');
+    imagePreview.src = '#';
+    imagePreview.style.visibility = 'hidden';
+    imagePreview2.src = '#';
+    imagePreview2.style.visibility = 'hidden';
     modal.style.display = "none";
   }
 
   function closeModal2() {
     var modal = document.getElementById("myFormModal2");
+    setFileChanged(false);
+    const imagePreview = document.getElementById('image-preview');
+    const imagePreview2 = document.getElementById('image-preview2');
+    imagePreview.src = '#';
+    imagePreview.style.visibility = 'hidden';
+    imagePreview2.src = '#';
+    imagePreview2.style.visibility = 'hidden';
     modal.style.display = "none";
   }
 
@@ -398,12 +445,12 @@ const Amenities = () => {
             </div>
             {/* Input field for amenity title */}
             <label htmlFor="title">Title</label><br />
-            <input type="text" id="title" name="title" onChange={handleChange} /><br />
+            <input type="text" maxLength="28" id="title" name="title" onChange={handleChange} /><br />
             {/* Input field for amenity fee */}
             <label htmlFor="fee">Fee</label><br />
-            <input type="number" id="fee" name="fee" onChange={handleChange} /><br />
+            <input type="number" step="0.01" min="0" id="fee" name="fee" onChange={handleChange} /><br />
             {/* Button to add amenity */}
-            <button className="add-amenity-button" onClick={handleSubmit}><center>Add Amenity</center></button>
+            <button className="add-amenity-button" onClick={handleSubmit}><center>Upload Amenity</center></button>
           </form>
         </div>
       </div>
@@ -415,15 +462,15 @@ const Amenities = () => {
             {/* File input for uploading image */}
             <div className="file-input-container">
               <input type="file" id="file-input2" className="file-input" onChange={handleFileChange} />
-              <label htmlFor="file-input" className="file-input-label">Choose an icon</label>
+              <label htmlFor="file-input" className="file-input-label2">Choose an icon</label>
               <img id="image-preview2" className="image-preview2" src={data.file_path} alt="Preview" />
             </div>
             {/* Input field for amenity title */}
             <label htmlFor="title">Title</label><br />
-            <input placeholder={data.title} type="text" id="title_modify" name="title" onChange={handleModifyChange} /><br />
+            <input placeholder={data.title} maxLength="28" type="text" id="title_modify" name="title" onChange={handleModifyChange} /><br />
             {/* Input field for amenity fee */}
             <label htmlFor="fee">Fee</label><br />
-            <input placeholder={data.fee} type="number" id="fee_modify" name="fee" onChange={handleModifyChange} /><br />
+            <input placeholder={data.fee} step="0.01" min="0" type="number" id="fee_modify" name="fee" onChange={handleModifyChange} /><br />
             {/* Button to add amenity */}
             <button className="modify-amenity-button" onClick={handleUpdate}><center>Modify Amenity</center></button>
           </form>

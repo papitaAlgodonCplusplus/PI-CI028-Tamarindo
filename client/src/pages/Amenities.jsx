@@ -109,6 +109,7 @@ const Amenities = () => {
       if (!warningResult) return;
       await deleteDataWithTimeout(`/amenities/delete${id}`, 500);
       fetchData()
+      window.location.reload();
     } catch (error) {
       showErrorDialog("Error", error);
     }
@@ -268,6 +269,7 @@ const Amenities = () => {
       fetchData();
       closeModal();
       setFileChanged(false);
+      window.location.reload();
       return;
     } catch (error) {
       if (error.response && error.response.status === 404) {

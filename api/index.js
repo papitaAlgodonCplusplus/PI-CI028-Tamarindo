@@ -1,7 +1,7 @@
 import express from "express";
 // import roomsRoutes from "./routes/rooms.js"
 // import fileRoutes from "./routes/files.js"
-// import authRoutes from "./routes/auth.js"
+import authRoutes from "./routes/auth.js"
 // import filterRoutes from "./routes/filters.js"
 // import reservationRoutes from "./routes/reservations.js"
 // import paymentRouter from "./routes/payments.js"
@@ -33,7 +33,7 @@ app.use(express.json())
 app.use(cookieParser())
 // app.use("/api/rooms", roomsRoutes)
 // app.use("/api/files", fileRoutes)
-// app.use("/api/auth", authRoutes)
+app.use("/api/auth", authRoutes)
 // app.use("/api/filters", filterRoutes)
 // app.use("/api/reservations", reservationRoutes)
 // app.use("/api/payments", paymentRouter)

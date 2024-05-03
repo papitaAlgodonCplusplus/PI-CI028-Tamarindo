@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { emptyContainer, showErrorDialog, postDataWithTimeout, putDataWithTimeout, updateContainer, deleteDataWithTimeout, showWarningDialog } from '../Misc';
-import '../amenities_page_styles.scss';
+import '../styles/amenities.scss';
 import axios from 'axios';
 
 const Amenities = () => {
@@ -38,7 +38,7 @@ const Amenities = () => {
       position: absolute;
       left: 540px;">₡${fee}</div>
   </div>
-</div>
+  </div>
 
   <div style="
   display: flex;

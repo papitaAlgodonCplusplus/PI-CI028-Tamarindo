@@ -3,7 +3,7 @@ import {
   Outlet,
   RouterProvider,
 } from "react-router-dom";
-// import Login from "./pages/Login"
+import Login from "./pages/Login"
 // import Home from "./pages/Home"
 // import Register from "./pages/Register"
 // import Navbar from "./components/Navbar"
@@ -22,7 +22,7 @@ const Layout = () => {
   return (
     <>
       {/* <Navbar />, */}
-      <Outlet />,
+      <Outlet />
       {/* <Footer /> */}
     </>
   );
@@ -38,14 +38,14 @@ const router = createBrowserRouter([
         element: <div>Hello</div>,
       },
       {
+        path: "/login",
+        element: <Login />,
+      },
+      {
         path: "/amenities",
         element: <Amenities />,
       },
     ]
-    //   {
-    //     path: "/",
-    //     element: <Login />,
-    //   },
     //   {
     //     path: "/register",
     //     element: <Register />,
@@ -65,10 +65,6 @@ const router = createBrowserRouter([
     //   {
     //     path: "/pay",
     //     element: <Payment />,
-    //   },
-    //   {
-    //     path: "/amenities",
-    //     element: <Amenities />,
     //   },
     //   {
     //     path: "/reservations_list",

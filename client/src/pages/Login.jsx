@@ -1,12 +1,13 @@
 import React, { useState, useContext } from 'react';
-import { Checkbox } from '@mui/material';
+import { Checkbox, IconButton } from '@mui/material';
 import { FormControlLabel } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from '../AuthContext.js';
 import { showErrorDialog } from "../Misc.js";
 import axios from "axios";
 import '../styles/login.scss'
-import eye from "../assets/passVisible.png";
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
@@ -36,6 +37,12 @@ const Login = () => {
   // Function to handle input changes
   const handleChange = e => {
     setInputs(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
   };
 
   // Function to handle form submission
@@ -79,7 +86,7 @@ const Login = () => {
             <p>Email address</p>
           </div>
           <div className="inputEmail">
-            <input type="email-login" id="email" required onChange={handleChange}></input>
+            <input type="email-login" id="email" name="email" required onChange={handleChange}></input>
           </div>
         </div>
         {/* Password */}
@@ -88,9 +95,17 @@ const Login = () => {
             <p>Password</p>
           </div>
           <div className="inputPassword">
-            <input type="password" className="inputPass1" id="password"></input>
+            <input type={showPassword ? "text" : "password"} name="password"
+              required onChange={handleChange} className="inputPass1" id="password"></input>
             <div className="showPass">
-              <img src={eye} alt="An eye open" className="passEye" />
+              {/* Password Toggle */}
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={handleClickShowPassword}
+                edge="end"
+              >
+                {showPassword ? <VisibilityOffOutlinedIcon /> : <VisibilityOutlinedIcon />}
+              </IconButton>
             </div>
           </div>
         </div>
@@ -101,7 +116,7 @@ const Login = () => {
               <FormControlLabel control={<Checkbox />} label="Keep me signed in" />
             </ThemeProvider>
           </div>
-          <a href="#pass_recover" className='forgotPass'>Forgot password?</a>
+          <a href="/pass_recover" className='forgotPass'>Forgot password?</a>
         </div>
         {/* Button */}
         <button type="submit" onClick={handleSubmit} className='loginButton'>Log In</button>
@@ -109,7 +124,7 @@ const Login = () => {
         {/* Go to Register Page */}
         <div className="register">
           <p className="question">Don't have an account?
-            <a href="#pass_recover" className="linkRegister">Register</a>
+            <a href="/register" className="linkRegister">Register</a>
           </p>
         </div>
       </div>

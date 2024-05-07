@@ -9,6 +9,21 @@
   color: #000000;
 }
 
+.MODAL-BUTTON {
+  margin: 0%;
+  margin-top: 10%;
+  border-radius: 6px;
+  border: 1px solid #1E91B6;
+  background: #1E91B6;
+  font-family: 'Poppins';
+  cursor: pointer;
+  padding-block: 2%;
+  width: 150px;
+  font-weight: 500;
+  font-size: 23px;
+  color: #ffffff;
+}
+
 hr {
   width: 90%;
   height: 2px;
@@ -23,6 +38,51 @@ hr {
   padding: 0;
 }
 
+
+.custom-select {
+  width: 150px;
+  height: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  overflow: hidden;
+  border-radius: 5px;
+  margin-left: 5px;
+  margin-bottom: 20px;
+}
+
+.custom-select select {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  appearance: none;
+}
+
+.custom-select select::-ms-expand {
+  display: none;
+}
+
+.custom-select::after {
+  content: '\25BC';
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  color: #626262;
+  font-size: 16px;
+}
+
+.custom-select select option {
+  padding: 10px;
+}
+
+.custom-select select option:checked {
+  background-color: #15406e;
+  color: #fff;
+}
+
 #myForm {
   display: flex;
   padding-top: 1%;
@@ -32,14 +92,13 @@ hr {
   margin-top: 1%;
 }
 
-#myForm div,
-textarea,
-button {
+#myForm div {
   margin-bottom: 20px;
 }
 
 .image-preview {
-  display: none;
+  visibility: hidden;
+  display: block;
   margin-top: 20%;
   width: 205px;
   border-radius: 20px;
@@ -54,12 +113,6 @@ button {
   margin-bottom: 0%;
 }
 
-#myForm input[type="text"],
-input[type="number"],
-#myForm textarea {
-  width: 20%;
-  height: 25px;
-}
 
 .file-input-container {
   position: relative;
@@ -75,6 +128,7 @@ input[type="number"],
   background-color: #3498db;
   color: #fff;
   padding: 10px 15px;
+  margin-left: 15px;
   border-radius: 5px;
   cursor: pointer;
 }
@@ -82,31 +136,6 @@ input[type="number"],
 .file-input-label:hover {
   background-color: #2980b9;
 }
-
-.X,
-.Plus {
-  width: 70px;
-  height: 70px;
-  background-color: #ffffff;
-  border: none;
-  margin: 0;
-  cursor: pointer;
-}
-
-#myForm button {
-  display: absolute;
-  width: auto;
-  position: relative;
-  overflow: hidden;
-  background: none;
-  border: none;
-}
-
-#myForm button img {
-  max-width: 100%;
-  max-height: 100%;
-}
-
 
 // .admin-container {
 //   display: grid;
@@ -185,7 +214,7 @@ input[type="number"],
 
 .list-item {
   height: 100px;
-  width: 58%;
+  width: 845px;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
@@ -193,31 +222,52 @@ input[type="number"],
   display: flex;
   align-items: center;
   position: relative;
-  margin: 10px auto; 
+  margin: 10px auto;
   margin-bottom: 0;
-  // margin-left: 19.9%;
+  margin-left: 200px;
 }
 
+input[type="text"] {
+  position: relative;
+  width: 50%;
+  padding: 8px;
+  margin-top: 10px;
+  border: 1px solid #636363;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+textarea {
+  position: relative;
+  width: 50%;
+  padding: 8px;
+  margin-top: 10px;
+  border: 1px solid #636363;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
 
 .rooms-bar {
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   background: #F5F5F5;
   margin-top: 5%;
   margin-bottom: 30px;
-  margin-left: 20%;
+  margin-left: 200px;
   position: relative;
   display: flex;
   flex-direction: row;
   padding: 0%;
-  padding-top: 1%;
-  padding-bottom: 1%;
+  padding-top: 17px;
   justify-content: center;
-  width: 60%;
+  width: 886px;
+  border-radius: 5px;
   box-sizing: border-box;
   height: 60px;
 }
 
-.room, .description, .typeR {
+.room,
+.description,
+.typeR {
   padding: 0%;
   margin-right: 300px;
   overflow-wrap: break-word;
@@ -230,17 +280,17 @@ input[type="number"],
 
 .room {
   position: absolute;
-  left: 200px;
+  left: 110px;
 }
 
 .description {
   position: absolute;
-  left: 650px;
+  left: 450px;
 }
 
 .typeR {
   position: absolute;
-  left: 1000px;
+  left: 750px;
 }
 
 .roomT {
@@ -253,7 +303,7 @@ input[type="number"],
   left: 765px;
 }
 
-.add-room-type-button, .add-room-button {
+.add-room-button {
   border-radius: 6px;
   border: 1px solid #1E91B6;
   background: #1E91B6;

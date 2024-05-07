@@ -1,6 +1,27 @@
 import { db } from "../db.js";
 import multer from "multer";
 
+export const updateRoom = (req, res) => {
+  const updateQuery = `
+    UPDATE rooms
+    SET title = ?, description = ?, image_id = ?, type_of_room = ?
+    WHERE roomid = ?
+  `;
+
+  db.query(updateQuery, [req.body.title, req.body.description, req.body.image_id, req.body.type_of_room, req.body.id], (error, results) => {
+    if (error) {
+      return res.status(500).send("Error updating room");
+    }
+
+    if (results.affectedRows === 0) {
+      return res.status(404).send("Room not found");
+    }
+
+    return res.status(200);
+  });
+}
+
+
 export const addRoomType = (req, res) => {
   const q = "INSERT INTO categories(`class_name`, `price`) VALUES (?, ?)";
   const values = [
@@ -82,7 +103,7 @@ export const updateRoomTypes = (req, res) => {
 };
 
 export const updateRooms = (req, res) => {
-  const q = 'SELECT * FROM rooms';
+  const q = 'SELECT * FROM rooms LEFT JOIN images ON rooms.image_id = images.imageid';
   db.query(q, (err, result) => {
     if (err) {
       return res.status(500).json({ message: 'Failed to fetch rooms from the database.' });
@@ -94,7 +115,7 @@ export const updateRooms = (req, res) => {
 
 export const updateRoomsByID = (req, res) => {
   const roomID = req.params.roomID;
-  const q = 'SELECT * FROM rooms WHERE roomid = ?';
+  const q = 'SELECT * FROM rooms LEFT JOIN images ON rooms.image_id = images.imageid WHERE roomid = ?';
   db.query(q, [roomID], (err, result) => {
     if (err) {
       return res.status(500).json({ message: 'Failed to fetch rooms from the database.' });

@@ -1,5 +1,5 @@
 import express from "express";
-import { addRoom, updateRooms, updateRoomTypesByID, addRoomType, deleteRoom, deleteRoomType, getImagesFilenames, searchImages, updateRoomsByID, updateRoomTypes } from "../controllers/accomodations.js";
+import { addRoom, updateRooms, updateRoomTypesByID, addRoomType, deleteRoom, deleteRoomType, getImagesFilenames, searchImages, updateRoomsByID, updateRoomTypes, updateRoom } from "../controllers/accomodations.js";
 
 const router = express.Router()
 
@@ -13,5 +13,6 @@ router.post("/add_room", addRoom);
 router.post("/add_room_type", addRoomType);
 router.get("/get_filenames", getImagesFilenames)
 router.get("/get_images", searchImages)
+router.put("/update_room", updateRoom)
 
 export default router

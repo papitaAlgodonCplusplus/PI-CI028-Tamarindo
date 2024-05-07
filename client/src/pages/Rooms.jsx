@@ -1,10 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useContext, useEffect, useCallback } from 'react'
-import '../room_page_styles.scss';
+import '../styles/room_page_styles.scss';
 import axios from "axios"
-import X from "../img/X.png"
-import Plus from "../img/Add.png"
-import { showErrorDialog, updateContainer, emptyContainer, postDataWithTimeout } from '../Misc';
+import { showWarningDialog, showErrorDialog, putDataWithTimeout, updateContainer, emptyContainer, postDataWithTimeout, deleteDataWithTimeout } from '../Misc';
 import { AuthContext } from '../AuthContext.js';
 import { useNavigate } from 'react-router-dom';
 
@@ -25,82 +23,6 @@ const Rooms = () => {
     room_type_price: 0,
   })
 
-  // Function to add a room type to the UI
-  const addRoomType = (title, price, id) => {
-    // Selecting the container for room types
-    const roomsTypeContainer = document.querySelector('.rooms_type-container');
-
-    // Generating HTML for the new room type
-    const newRoomTypeHTML = `
-    <div class="list-item">
-    <div style="display: flex; justify-content: space-between; align-items: center; width: 70%; padding: 10px;">
-      <div style="font-size: 18px; font-weight: bold; position:absolute; left: 370px;">${title}</div>
-      <div style="font-size: 16px; color: #333; position:absolute; left: 755px;">${price}</div>
-    </div>
-  </div>
-  
-   <!-- Room Type delete & modify buttons  -->
-    <div style="
-    display: flex;
-    align-items: center;">
-      <div style="
-      margin-top: 20px;
-      margin-left: 20%;
-      border-radius: 6px;
-      border: 1px solid #1E91B6;
-      background: #FFFFFF;
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      cursor: pointer;
-      padding: 8px 0.4px 8px 0;
-      width: 169px;
-      box-sizing: border-box;" id="delete-room_type-button-${title}">
-        <span style="
-        overflow-wrap: break-word;
-        font-family: 'Poppins';
-        font-weight: 400;
-        font-size: 15px;
-        letter-spacing: 0.3px;
-        line-height: 1.333;
-        color: #1E91B6;">
-          Delete Room Type
-        </span>
-      </div>
-  
-      <div style="
-      margin-top: 20px;
-      margin-left: 1%;
-      border-radius: 6px;
-      background: #1E91B6;
-      display: flex;
-      justify-content: center;
-      padding: 9px 0.3px 9px 0;
-      width: 169px;
-      cursor: pointer;" id="modify-button-${title}">
-        <span style="
-        overflow-wrap: break-word;
-        font-family: 'Poppins';
-        font-weight: 400;
-        font-size: 15px;
-        letter-spacing: 0.3px;
-        line-height: 1.333;
-        color: #FFFFFF;">
-          Modify Room Type
-        </span>
-      </div>
-    </div>
-    <div style="padding-bottom: 20px;"></div> 
-  </div>
-  `;
-
-    // Inserting the new room type HTML into the container
-    roomsTypeContainer.insertAdjacentHTML('beforeend', newRoomTypeHTML);
-
-    // Adding event listener to the delete button
-    const deleteButton = document.getElementById("delete-room_type-button-" + title);
-    deleteButton.addEventListener('click', (e) => handleRoomTypeDelete(e, id));
-  };
 
   // Function to add a card to the UI
   const addCard = (title, description, room_type, filename, id) => {
@@ -115,16 +37,15 @@ const Rooms = () => {
 
       <!-- Delete button for the card 
       <button class="delete-button" id="delete-room-button-${title}">
-        <img src=${X} alt="X" id="XImg" style="width:40px; height:40px; background-color: transparent;"/>
       </button>
     </div>
     -->
     <div class="list-item">
     <div style="display: flex; justify-content: space-between; align-items: center; width: 70%; padding: 10px;">
-    <img src="${filename}" alt="${filename}"/>
-      <div style="font-size: 18px; font-weight: bold; position:absolute; left: 250px;">${title}</div>
-      <div style="font-size: 16px; color: #333; position:absolute; left: 550px;">${description}</div>
-      <div style="font-size: 16px; color: #333; position:absolute; left: 1000px;">${room_type}</div>
+    <img style="width: 130px" src="${filename}" alt="${filename}"/>
+      <div style="font-size: 18px; font-weight: bold; position:absolute; left: 200px;">${title}</div>
+      <div style="font-size: 16px; width: 200px; color: #333; position:absolute; left: 450px;">${description}</div>
+      <div style="font-size: 16px; color: #333; position:absolute; left: 750px;">${room_type}</div>
     </div>
   </div>
   <!-- Room Type delete & modify buttons  -->
@@ -133,7 +54,7 @@ const Rooms = () => {
   align-items: center;">
     <div style="
     margin-top: 20px;
-    margin-left: 20%;
+    margin-left: 200px;
     border-radius: 6px;
     border: 1px solid #1E91B6;
     background: #FFFFFF;
@@ -143,7 +64,7 @@ const Rooms = () => {
     cursor: pointer;
     padding: 8px 0.4px 8px 0;
     width: 169px;
-    box-sizing: border-box;" id="delete-room-button-${title}">
+    box-sizing: border-box;" id="delete-room-button-${id}">
       <span style="
       overflow-wrap: break-word;
       font-family: 'Poppins';
@@ -165,7 +86,7 @@ const Rooms = () => {
     justify-content: center;
     padding: 9px 0.3px 9px 0;
     width: 169px;
-    cursor: pointer;" id="modify-button-${title}">
+    cursor: pointer;" id="modify-button-${id}">
       <span style="
       overflow-wrap: break-word;
       font-family: 'Poppins';
@@ -186,13 +107,60 @@ const Rooms = () => {
     cardsContainer.insertAdjacentHTML('beforeend', newCardHTML);
 
     // Adding event listener to the delete button
-    const deleteButton = document.getElementById("delete-room-button-" + title);
-    deleteButton.addEventListener('click', (e) => handleDelete(e, id));
+    const deleteButton = document.getElementById("delete-room-button-" + id);
+    deleteButton.addEventListener('click', (e) => handleDelete(e, id, title));
+    const modifyButton = document.getElementById("modify-button-" + id);
+    modifyButton.addEventListener('click', (e) => handleModify(e, id, title));
   };
 
   const handleRoomTypeChange = (e) => {
     setRoomTypeOption(e.target.value);
   };
+
+  const [data, setData] = useState({
+    title: "",
+    description: "",
+    image_id: "",
+    id: "",
+    type_of_room: ""
+  })
+
+  // Function to handle modification of a room
+  const handleModify = async (e, id, title) => {
+    try {
+      e.preventDefault();
+      const res = await axios.get(`rooms/by_roomID${id}`)
+      setData(prevData => ({
+        ...prevData,
+        title: res.data[0].title
+      }));
+      setData(prevData => ({
+        ...prevData,
+        description: res.data[0].description
+      }));
+      setData(prevData => ({
+        ...prevData,
+        image_id: res.data[0].image_id
+      }));
+      setData(prevData => ({
+        ...prevData,
+        type_of_room: res.data[0].type_of_room
+      }));
+      setData(prevData => ({
+        ...prevData,
+        id: res.data[0].roomid
+      }));
+      displayModal2()
+    } catch (error) {
+      showErrorDialog("Error", error);
+    }
+  }
+
+
+  function displayModal2() {
+    var modal = document.getElementById("myFormModal2");
+    modal.style.display = "block";
+  }
 
   // Function to fetch data and populate UI
   const fetchData = useCallback(async () => {
@@ -200,7 +168,6 @@ const Rooms = () => {
     //   return;
     // }
     // Selecting containers for room types and cards
-    const roomTypesContainer = document.querySelector('.rooms_type-container');
     const cardsContainer = document.querySelector('.list-container');
 
     try {
@@ -213,40 +180,17 @@ const Rooms = () => {
         setRoomTypeOption(roomTypesResponse.data[0].categoryid);
       }
 
-      // Clearing room types container
-      emptyContainer(roomTypesContainer);
-
-      // Adding room types to UI
-      roomTypesResponse.data.forEach(room_type => {
-        addRoomType(room_type.class_name, room_type.price, room_type.categoryid);
-      });
-
-      // Updating room types container
-      updateContainer(roomTypesContainer);
-
       // Fetching rooms data
       const roomsResponse = await axios.get("/rooms");
-
-      // Fetching filenames of room images
-      const filenamesResponse = await axios.get(`/files/retrieve_images`);
-      var i = 0;
 
       // Clearing cards container
       emptyContainer(cardsContainer);
 
       // Adding cards for each room to UI
       roomsResponse.data.forEach(room => {
-        if (i >= filenamesResponse.data.length) {
-          // If there are no more filenames, update container and return
-          updateContainer(cardsContainer);
-          return;
-        }
-
-        // Generating filepath for room image
-        const filepath = "/upload/" + filenamesResponse.data[i].filename;
+        const filepath = "/upload/" + room.filename;
 
         let selectedRoomType;
-        
         // Retrieve categoryid that equals room's room type
         for (let i = 0; i < roomTypesResponse.data.length; i++) {
           if (roomTypesResponse.data[i].categoryid === room.type_of_room) {
@@ -257,7 +201,6 @@ const Rooms = () => {
 
         // Adding card for the room to UI
         addCard(room.title, room.description, selectedRoomType.class_name, filepath, room.roomid);
-        i++;
       });
 
       // Updating cards container
@@ -274,20 +217,15 @@ const Rooms = () => {
     fetchData();
   }, []);
 
-  const handleRoomTypeDelete = async (e, id) => {
+  const handleDelete = async (e, id, title) => {
     e.preventDefault()
     try {
-      await axios.delete(`/room_types/delete_room_type${id}`);
-    } catch (error) {
-      showErrorDialog("An error occurred:", error);
-    }
-    fetchData();
-  }
-
-  const handleDelete = async (e, id) => {
-    e.preventDefault()
-    try {
-      await axios.delete(`/rooms/delete${id}`);
+      e.preventDefault();
+      const warningResult = await showWarningDialog("Delete Confirmation", "Are you sure you would like to delete the room <strong>" + title + "</strong>?")
+      if (!warningResult) return;
+      await deleteDataWithTimeout(`/rooms/delete${id}`, 500);
+      fetchData()
+      window.location.reload();
     } catch (error) {
       showErrorDialog("An error occurred:", error);
     }
@@ -304,6 +242,7 @@ const Rooms = () => {
 
     // Getting the image preview element
     const imagePreview = document.getElementById('image-preview');
+    const imagePreview2 = document.getElementById('image-preview2');
 
     if (file) {
       // If a file is selected
@@ -313,7 +252,9 @@ const Rooms = () => {
       reader.onload = function (e) {
         // Displaying the image preview
         imagePreview.src = e.target.result;
-        imagePreview.style.display = 'block';
+        imagePreview.style.visibility = 'visible';
+        imagePreview2.src = e.target.result;
+        imagePreview2.style.visibility = 'visible';
       };
 
       // Reading the selected file as data URL
@@ -321,38 +262,15 @@ const Rooms = () => {
 
       // Setting the file state
       setFile(e.target.files[0]);
+      setFileChanged(true)
     } else {
       // If no file is selected, reset the image preview
       imagePreview.src = '#';
-      imagePreview.style.display = 'none';
+      imagePreview.style.visibility = 'none';
+      imagePreview.src = '#';
+      imagePreview2.style.visibility = 'none';
     }
   };
-
-  // Function that handles room type submition
-  const handleRoomTypeSubmit = async e => {
-    e.preventDefault()
-    if (!inputs.room_type_name) {
-      showErrorDialog("An error occurred:", "Please add a room type name");
-      return;
-    }
-    if (!inputs.room_type_price) {
-      showErrorDialog("An error occurred:", "Please add a price");
-      return;
-    }
-    try {
-      await postDataWithTimeout("/rooms/add_room_type", inputs, 500);
-      fetchData();
-      closeRoomTypeModal();
-      return;
-    } catch (error) {
-      if (error.response && error.response.status === 404) {
-        const errorMessage = error.response.data;
-        showErrorDialog("An error occurred:", errorMessage);
-      } else {
-        showErrorDialog("An error occurred:", error);
-      }
-    }
-  }
 
   // Function to handle form submission
   const handleSubmit = async e => {
@@ -400,6 +318,7 @@ const Rooms = () => {
 
       // Adding room data to database
       await postDataWithTimeout("/rooms/add_room", inputs, 500);
+      setFileChanged(false);
       fetchData();
       closeModal();
       return;
@@ -415,14 +334,8 @@ const Rooms = () => {
     }
   }
 
-  function displayRoomTypeModal() {
-    var modal = document.getElementById("roomTypeModal");
-    modal.style.display = "block";
-  }
-
-  function closeRoomTypeModal() {
-    var modal = document.getElementById("roomTypeModal");
-    modal.style.display = "none";
+  const handleModifyChange = e => {
+    setData(prev => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
   function displayModal() {
@@ -435,8 +348,66 @@ const Rooms = () => {
     modal.style.display = "none";
   }
 
+  function closeModal2() {
+    var modal = document.getElementById("myFormModal2");
+    modal.style.display = "none";
+  }
+
   const handleChange = e => {
     setInputs(prev => ({ ...prev, [e.target.name]: e.target.value }))
+  }
+
+  const [file_changed, setFileChanged] = useState(false);
+  // Function to handle amenity modify
+  const handleUpdate = async e => {
+    e.preventDefault(); // Preventing default form submission behavior
+    try {
+      let image_id = data.image_id;
+      if (file_changed) {
+        // Creating FormData object for form data
+        const formData = new FormData();
+        formData.append('image', file);
+
+        // Uploading image file
+        const filename = await axios.post('/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+
+        const img_req = {
+          filename: filename.data
+        }
+
+        await postDataWithTimeout(`/files/`, img_req, 500);
+        const res_img = await axios.get(`/files/get_image_by_filename${filename.data}`)
+        image_id = res_img.data[0].imageid
+      }
+
+      // Update amenity on the database
+      const req = {
+        title: data.title,
+        description: data.description,
+        image_id: image_id,
+        id: data.id,
+        type_of_room: roomTypeOption
+      }
+
+      await putDataWithTimeout(`/rooms/update_room`, req, 500);
+      fetchData()
+      closeModal2();
+      setFileChanged(false);
+      return;
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        // Handling specific error response
+        const errorMessage = error.response.data;
+        showErrorDialog("Error", errorMessage);
+      } else {
+        // Handling generic error
+        showErrorDialog("Error", error);
+      }
+    }
   }
 
   // userRol === "admin" || userRol === "employee" ?
@@ -461,7 +432,7 @@ const Rooms = () => {
             <textarea id="desc" name="desc" onChange={handleChange} ></textarea>
             {/* Dropdown for selecting room type */}
             <label htmlFor="room_types_selector">Room Type</label><br />
-            <select name="room_types_selector" className="room_types_selector" id="room_types_selector_1"
+            <select name="room_types_selector" className="custom-select" id="room_types_selector_1"
               onChange={handleRoomTypeChange} value={roomTypeOption} required>
               {/* Mapping room types to options */}
               {room_types.map(room_type => (
@@ -469,72 +440,69 @@ const Rooms = () => {
               ))}
             </select>
             {/* Button to add room */}
-            <button className="Plus">
-              <img src={Plus} alt="Plus" id="plusImg" onClick={handleSubmit} />
-            </button>
+            <button className="MODAL-BUTTON" onClick={handleSubmit}><center>Add Room</center></button>
           </form>
         </div>
       </div>
-      {/* Form modal for adding room type */}
-      <div id="roomTypeModal" className="form-modal">
+
+      {/* Form modal for updating rooms */}
+      <div id="myFormModal2" className="form-modal">
         <div className="form-modal-content">
-          <span className="close" onClick={closeRoomTypeModal}>&times;</span>
+          <span className="close" onClick={closeModal2}>&times;</span>
           <form id="myForm">
-            {/* Input field for room type name */}
-            <label htmlFor="room_type_name">Room Type Name</label><br />
-            <input type="text" id="room_type_name" name="room_type_name" onChange={handleChange} /><br />
-            {/* Input field for room type price */}
-            <label htmlFor="room_type_price">Room Type Price</label><br />
-            <input type="number" id="room_type_price" name="room_type_price" onChange={handleChange} /><br />
-            {/* Button to add room type */}
-            <button className="Plus">
-              <img src={Plus} alt="Plus" id="plusImg" onClick={handleRoomTypeSubmit} />
+            {/* File input for uploading image */}
+            <div className="file-input-container">
+              <input type="file" id="file-input" className="file-input" onChange={handleFileChange} />
+              <label htmlFor="file-input" className="file-input-label">Choose an image</label>
+              <img id="image-preview2" className="image-preview" src="#" alt="Preview" />
+            </div>
+            {/* Input field for room title */}
+            <label htmlFor="name">Title</label><br />
+            <input placeholder={data.title} type="text" id="title" name="title" onChange={handleModifyChange} /><br />
+            {/* Textarea for room description */}
+            <label htmlFor="desc">Description</label><br />
+            <textarea placeholder={data.description} id="description" name="description" onChange={handleModifyChange} ></textarea>
+            {/* Dropdown for selecting room type */}
+            <label htmlFor="room_types_selector">Room Type</label><br />
+            <select name="room_types_selector" className="custom-select" id="room_types_selector_1"
+              onChange={handleRoomTypeChange} value={roomTypeOption} required>
+              {/* Mapping room types to options */}
+              {room_types.map(room_type => (
+                <option key={room_type.categoryid} value={room_type.categoryid}>{room_type.class_name}</option>
+              ))}
+            </select>
+            {/* Button to update room */}
+            <button className="MODAL-BUTTON" onClick={handleUpdate}>
+              Update Room
             </button>
           </form>
         </div>
       </div>
       {/* Admin container */}
       <div className='admin-container'>
-        {/* Section for room types */}
-        <div>
-        <div className='rooms-title'>Type of Room</div>
-          <hr className="solid"></hr>
-          <div className="rooms-bar">
-              <span className="roomT">
-                 Rooms
-            </span>
-              <span className="priceT">
-                 Price
-               </span>
-         </div>
-          <div className="rooms_type-container">
-          </div>
-          {/* Button to display room type modal */}
-          <button className="add-room-type-button" onClick={displayRoomTypeModal}><center>Add Room Type</center></button>
-        </div>
         {/* Section for rooms */}
         <div>
           <div className='rooms-title'>Rooms</div>
           <hr className="solid"></hr>
           <div className="rooms-bar">
-              <span className="room">
-                 Rooms
+            <span className="room">
+              Rooms
             </span>
             <span className="description">
-                Description
-              </span>
-              <span className="typeR">
-                Type
-              </span>
-         </div>
+              Description
+            </span>
+            <span className="typeR">
+              Type
+            </span>
+          </div>
           <div className="list-container">
           </div>
           {/* Button to display add room modal */}
           <button className="add-room-button" onClick={displayModal}><center>Add Room</center></button>
         </div>
       </div>
-    </div > )
-    // : <div>{showErrorDialog("Error: ", "You must login as admin or employee to access this page", true, navigate)}</div>);
-    };
+    </div >)
+  // : <div>{showErrorDialog("Error: ", "You must login as admin or employee to access this page", true, navigate)}</div>);
+};
 
 export default Rooms;

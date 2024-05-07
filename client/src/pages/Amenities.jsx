@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+import { AuthContext } from '../AuthContext.js';
 import { emptyContainer, showErrorDialog, postDataWithTimeout, putDataWithTimeout, updateContainer, deleteDataWithTimeout, showWarningDialog } from '../Misc';
-import '../amenities_page_styles.scss';
+import '../styles/amenities_page_styles.scss';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Amenities = () => {
-
   // Function to add a new amenity to the UI
   const addAmenity = (title, fee, id, img) => {
     const newAmenityHTML = `
@@ -30,13 +31,13 @@ const Amenities = () => {
     <div style="
       font-size: 18px;
       font-weight: bold;
-      position: absolute; 
-      left: 180px; /">${title}</div>
+      position: relative; 
+      left: 55px;">${title}</div>
     <div style="
       font-size: 16px;
       color: #333;
-      position: absolute;
-      left: 540px;">₡${fee}</div>
+      position: relative;
+      left: 400px;">₡${fee}</div>
   </div>
 </div>
 
@@ -116,10 +117,13 @@ const Amenities = () => {
   }
 
   // Function to fetch services data from server
+  const { userRol } = useContext(AuthContext);
+  const navigate = useNavigate()
   const fetchData = async () => {
-    // if (userRol !== "admin" && userRol !== "employee") {
-    //   return;
-    // }
+    if (userRol !== "admin" && userRol !== "employee") {
+      navigate("/home")
+      return;
+    }
     const amenities_table = document.querySelector('.amenities-container');
     try {
       const res = await axios.get("/amenities");
@@ -257,11 +261,12 @@ const Amenities = () => {
       });
 
       // Setting file_path in inputs
-      if (filename !== undefined) {
+      if (filename.data !== undefined) {
         setInputs(prevData => ({
           ...prevData,
           file_path: "./upload/" + filename.data
         }));
+        inputs.file_path = "./upload/" + filename.data
       }
 
       // Adding room data to database
@@ -410,7 +415,8 @@ const Amenities = () => {
   }
 
   return (
-    <div>
+    <div className='amenities_page'>
+      <meta name="viewport" content="intial-scale=1"></meta>
       <div className="amenities">
         Amenities
       </div>

@@ -9,8 +9,7 @@
 
 .ima_register {
   flex: 1;
-  border: 1px solid black;
-  background-image: url('img/hotel_register.png'); /* Ruta de tu imagen de fondo */
+  background-image: url('../img/hotel_register.png'); /* Ruta de tu imagen de fondo */
   background-size: cover;
 }
 
@@ -19,16 +18,17 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
+  margin-top: 5%;
 }
 
 .sign-up {
   font-size: 30px;
-  margin-left: 40%;
+  margin-left: 42%;
 }
 
 .create-an-account {
   font-size: 20px;
-  margin-left: 36%;
+  margin-left: 38%;
 }
 
 .form {
@@ -49,58 +49,60 @@
 }
 
 .upload-image {
-  margin-top: -130%;
-  margin-left: -10%;
   filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.5));
+  margin-top: 100%;
+  margin-left: -10%;
+  width: 0.005px;
+  height: 0.00005px;
 }
 
 .name-user {
-  margin-top: -20%;
-  margin-left: -70%;
+  margin-top: -14%;
+  margin-left: -25%;
 }
 
 .last-name-user {
-  margin-top: -30%;
-  margin-left: 50%;
+  margin-top: 2%;
+  margin-left: -25%;
 }
 
 .email-user {
-  margin-top: -30%;
-  margin-left: -70%;
+  margin-top: 2%;
+  margin-left: -25%;
 }
 
 .phone-user {
-  margin-top: -50%;
-  margin-left: 50%;
+  margin-top: 2%;
+  margin-left: -25%;
 }
 
 .password-user {
-  margin-top: 20%;
+  margin-top: 2%;
   margin-left: -70%;
 } 
 
 .password-confirm-user {
-  margin-top: -55%;
-  margin-left: 50%;
+  margin-top: 2%;
+  margin-left: -25%;
 }
 
 .container-terms {
-  margin-top: -25%;
-  margin-left: 35%;
+  margin-top: -15%;
+  margin-left: 37%;
 }
 
 .already-account {
   margin-top: 0%;
-  margin-left: 35%;
+  margin-left: 37%;
 }
 
 .sign-button {
   margin-top: 3%;
-  margin-left: 0%;
+  margin-left: 37%;
 }
 
 input[type="name"] {
-  width: 60%;
+  width: 200%;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -116,7 +118,7 @@ input[type="last_name"] {
 }
 
 input[type="email"] {
-  width: 60%;
+  width: 200%;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -125,7 +127,6 @@ input[type="email"] {
 
 input[type="number"] {
   width: 200%;
-  height: 100%;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -133,7 +134,7 @@ input[type="number"] {
 }
 
 input[type="password"] {
-  width: 60%;
+  width: 200%;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -141,7 +142,7 @@ input[type="password"] {
 }
 
 #password_reg {
-  width: 60%;
+  width: 200%;
   padding: 8px;
   margin-top: 10px;
   border: 1px solid #ccc;
@@ -156,4 +157,16 @@ input[type="password"] {
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
+}
+
+.create {
+  font-family: 'Poppins';
+  font-weight: 500;
+  font-size: 23px;
+  background-color: #1E91B6;
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 5px;
+  margin-left: 8%;
+  cursor: pointer;
 }

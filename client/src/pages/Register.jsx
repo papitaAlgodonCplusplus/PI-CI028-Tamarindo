@@ -8,6 +8,7 @@ import { showErrorDialog } from '../Misc'
 
 const Register = () => {
   const [isChecked, setChecked] = useState(false);
+  const [modalIsOpen, setIsOpen] = useState(false);
   const [inputs, setInputs] = useState({
     name: "",
     last_name: "",
@@ -26,6 +27,14 @@ const Register = () => {
 
   const handleCheckbox = () => {
     setChecked(!isChecked);
+  }
+
+  const openModal = () => {
+    setIsOpen(true);
+  }
+
+  const closeModal = () => {
+    setIsOpen(false);
   }
 
   const handleSubmit = async (e) => {
@@ -74,7 +83,7 @@ const Register = () => {
       showErrorDialog("An error occurred:", "It is necessary to accept our terms and conditions.");
       return;
     }
-
+    
     if (passwordRegEx.test(password)) {
       e.preventDefault()
       try {
@@ -111,51 +120,42 @@ const Register = () => {
         </div>
 
         <form  className='form'>
-          <div className="container-name-lastname">
-            <div className="upload-image">
-              <img src={User} alt="User Upload" />
-            </div>
- 
-            <div className='name-user'>
-              <label htmlFor="name"> Name </label>
+          <div className='name-user'>
+            <label htmlFor="name"> Name </label>
+            <br />
+            <input type="name" id="name" name="name" onChange={handleChange} required />
+          </div>
+          
+          <div className='last-name-user'>
+            <label htmlFor="last_name"> Last Name </label>
+            <br />
+            <input type="last_name" id="last_name" name="last_name" onChange={handleChange} required />
+          </div>
+          
+            <div className='email-user'>
+              <label htmlFor="email_reg"> Email address </label>
               <br />
-              <input type="name" id="name" name="name" onChange={handleChange} required />
+              <input type="email" id="email_reg" name="email" onChange={handleChange} required />
             </div>
-            
-            <div className='last-name-user'>
-              <label htmlFor="last_name"> Last Name </label>
+
+            <div className='phone-user'>
+              <label htmlFor="phone"> Phone Number </label>
               <br />
-              <input type="last_name" id="last_name" name="last_name" onChange={handleChange} required />
+              <input type="number" id="phone" name="phone" onChange={handleChange} required />
             </div>
+          
+          <div className='password-user'>
+            <label htmlFor="password_reg">Password</label>
+            <br />
+            <input type="password" id="password" name="password" className='password' onChange={handleChange} required />
           </div>
 
-          <div className="container-email-number">
-              <div className='email-user'>
-                <label htmlFor="email_reg"> Email address </label>
-                <br />
-                <input type="email" id="email_reg" name="email" onChange={handleChange} required />
-              </div>
-
-              <div className='phone-user'>
-                <label htmlFor="phone"> Phone Number </label>
-                <br />
-                <input type="number" id="phone" name="phone" onChange={handleChange} required />
-              </div>
+          <div className='password-confirm-user'>
+            <label htmlFor="password_confirm"> Confirm Password </label>
+            <br />
+            <input type="password" id="password_confirm" name="password_confirm" className='password_confirm ' onChange={handleChange} required />
           </div>
-
-          <div className="container-password">
-            <div className='password-user'>
-              <label htmlFor="password_reg">Password</label>
-              <br />
-              <input type="password" id="password" name="password" className='password' onChange={handleChange} required />
-            </div>
-
-            <div className='password-confirm-user'>
-              <label htmlFor="password_confirm"> Confirm Password </label>
-              <br />
-              <input type="password" id="password_confirm" name="password_confirm" className='password_confirm ' onChange={handleChange} required />
-            </div>
-          </div>
+          
         </form>
 
         <div className="container-terms">

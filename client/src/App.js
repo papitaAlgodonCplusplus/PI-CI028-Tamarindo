@@ -8,15 +8,15 @@ import Login from "./pages/Login"
 // import Register from "./pages/Register"
 // import Navbar from "./components/Navbar"
 // import Footer from "./components/Footer"
-// import Rooms from "./pages/Rooms"
+import Rooms from "./pages/Rooms";
 // import Details from "./pages/Details"
 // import Payment from "./pages/Payment.jsx";
 // import Reservation from "./pages/Reservation.jsx";
 import Amenities from "./pages/Amenities.jsx";
 // import ReservationsList from "./pages/ReservationsList.jsx"
 // import ReservationsAdmin from "./pages/ReservationsAdmin.jsx";
-import { Provider } from './Context.js';
-import { AuthProvider } from './AuthContext';
+import { Provider } from "./Context.js";
+import { AuthProvider } from "./AuthContext";
 
 const Layout = () => {
   return (
@@ -26,7 +26,7 @@ const Layout = () => {
       {/* <Footer /> */}
     </>
   );
-}
+};
 
 const router = createBrowserRouter([
   {
@@ -53,7 +53,11 @@ const router = createBrowserRouter([
         path: "/amenities",
         element: <Amenities />
       },
-    ]
+      {
+        path: "/rooms",
+        element: <Rooms />,
+      },
+    ],
     //   {
     //     path: "/rooms",
     //     element: <Rooms />,
@@ -79,9 +83,8 @@ const router = createBrowserRouter([
     //     element: <ReservationsAdmin />
     //   }
     // ]
-  }
+  },
 ]);
-
 
 function App() {
   return (

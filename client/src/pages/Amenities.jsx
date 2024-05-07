@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../AuthContext.js';
 import { emptyContainer, showErrorDialog, postDataWithTimeout, putDataWithTimeout, updateContainer, deleteDataWithTimeout, showWarningDialog } from '../Misc';
-import '../styles/amenities_page_styles.scss';
+import '../styles/amenities.scss';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 

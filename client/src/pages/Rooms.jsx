@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useContext, useEffect, useCallback } from 'react'
-import '../styles/room_page_styles.scss';
+import '../styles/rooms.scss';
 import axios from "axios"
 import { showWarningDialog, showErrorDialog, putDataWithTimeout, updateContainer, emptyContainer, postDataWithTimeout, deleteDataWithTimeout } from '../Misc';
 import { AuthContext } from '../AuthContext.js';

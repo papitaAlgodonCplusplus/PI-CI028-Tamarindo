@@ -58,17 +58,10 @@ const Login = () => {
       login(userID.data[0].userid);
       navigate("/home");
     } catch (error) {
-      if (error.response && error.response.status === 404) {
-        // Show error message if user is not found
-        const errorMessage = error.response.data;
-        showErrorDialog("An error occurred:", errorMessage);
-      } else {
-        // Show any other error obtained
-        showErrorDialog("An error occurred:", error);
-      }
+      showErrorDialog("An error occurred:", "Wrong email or password");
     }
   };
-  
+
   // Render login form
   return (
     <div className="loginPage">

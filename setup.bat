@@ -20,7 +20,7 @@ cd client || exit
 
 echo *************************************************************************************************
 echo Instalando React, Axios, React-Router-DOM y SCSS [npm install react axios react-router-dom scss]
-call npm install react axios react-router-dom scss || pause
+call npm install react axios react-router-dom scss @mui/material @emotion/react @emotion/styled || pause
 
 echo *************************************************************************************************
 echo Instalando react-multi-date-picker [yarn add react-multi-date-picker]

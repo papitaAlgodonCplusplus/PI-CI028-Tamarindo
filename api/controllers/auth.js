@@ -35,31 +35,32 @@ export const getUserByID = (req, res) => {
 
 export const register = (req, res) => {
   // Check if the user already exists
-  const q = "SELECT * FROM users WHERE email = ?";
-  db.query(q, [req.body.email], (err, data) => {
+  const querying = "SELECT * FROM users WHERE email = ?";
+  db.query(querying, [req.body.email], (err, data) => {
+    // If there is an error
     if (err) {
-      console.log(err)
       return res.json(err);
     }
-    if (data.length) return res.status(409).json("User already exists!");
+
+    // If there is data, is because the user already exists
+    if (data.length) {
+      return res.status(409).json("User already exists!");
+    }
 
     // Hash the password and create the user
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(req.body.password, salt);
 
-    const q = "INSERT INTO users(`name`, `email`, `last_name`, `password`, `rol`) VALUES (?)"
-    const values = [
-      req.body.name,
-      req.body.email,
-      req.body.last_name,
-      hash,
-      req.body.rol
-    ]
-    db.query(q, [values], (err, data) => {
-      if (err) return res.json(err);
+    const querying = "INSERT INTO users(`name`, `last_name`, `email`, `phone`, `password`, `rol`) VALUES (?)";
+    const values = [req.body.name, req.body.last_name, req.body.email, req.body.phone, hash, req.body.rol];
+    
+    db.query(querying, [values], (err, data) => {
+      if (err) {
+        return res.json(err);
+      }
       return res.status(200).json({ message: "User has been created!" });
-    })
-  })
+    });
+  });
 }
 
 export const login = (req, res) => {

@@ -56,7 +56,7 @@ const Login = () => {
 
       // Login the user using the AuthContext
       login(userID.data[0].userid);
-      navigate("/home");
+      navigate("/reservations_list");
     } catch (error) {
       showErrorDialog("An error occurred:", "Wrong email or password");
       logout()

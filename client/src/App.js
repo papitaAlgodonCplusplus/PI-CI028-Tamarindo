@@ -21,7 +21,8 @@ import { AuthProvider } from "./AuthContext";
 const Layout = () => {
   return (
     <>
-      <Navbar />,
+      <Navbar />
+      <br></br>
       <Outlet />
       <Footer />
     </>

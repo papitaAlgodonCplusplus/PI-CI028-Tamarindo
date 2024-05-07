@@ -58,6 +58,18 @@
   height: 0.00005px;
 }
 
+.form .file-input-container {
+  position: absolute;
+  top: 104vh;
+  left: 44vh;
+}
+
+.form .image-preview {
+  position: absolute;
+  left: 1.5vh; 
+  width: 180px;
+}
+
 .name-user {
   margin-top: -14%;
   margin-left: -25%;
@@ -89,18 +101,18 @@
 }
 
 .container-terms {
-  margin-top: -15%;
+  margin-top: 17%;
   margin-left: 35%;
 }
 
 .already-account {
   margin-top: 0%;
-  margin-left: 37%;
+  margin-left: 35%;
 }
 
 .sign-button {
   margin-top: 3%;
-  margin-left: 37%;
+  margin-left: 36%;
 }
 
 input[type="name"] {

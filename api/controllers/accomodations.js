@@ -1,6 +1,25 @@
 import { db } from "../db.js";
 import multer from "multer";
 
+export const updateRoom = (req, res) => {
+  const updateQuery = `
+    UPDATE rooms
+    SET title = ?, description = ?, image_id = ?, type_of_room = ?
+    WHERE roomid = ?
+  `;
+
+  db.query(updateQuery, [req.body.title, req.body.description, req.body.image_id, req.body.type_of_room, req.body.id], (error, results) => {
+    if (error) {
+      return res.status(500).send("Error updating room");
+    }
+
+    if (results.affectedRows === 0) {
+      return res.status(404).send("Room not found");
+    }
+
+    return res.status(200);
+  });
+}
 
 
 export const addRoom = (req, res) => {

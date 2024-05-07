@@ -1,0 +1,159 @@
+.register-window {
+  background: #FFFFFF;
+  display: flex;
+  
+  padding-left: 50px;
+  box-sizing: border-box;
+  font-family: 'Poppins';
+}
+
+.ima_register {
+  flex: 1;
+  border: 1px solid black;
+  background-image: url('img/hotel_register.png'); /* Ruta de tu imagen de fondo */
+  background-size: cover;
+}
+
+.container-sign-up {
+  flex: 2;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.sign-up {
+  font-size: 30px;
+  margin-left: 40%;
+}
+
+.create-an-account {
+  font-size: 20px;
+  margin-left: 36%;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-size: 20px;
+}
+
+.container-name-lastname{
+  display: block;
+}
+
+.container-email-number {
+  margin-top: 5%;
+}
+
+.upload-image {
+  margin-top: -130%;
+  margin-left: -10%;
+  filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.5));
+}
+
+.name-user {
+  margin-top: -20%;
+  margin-left: -70%;
+}
+
+.last-name-user {
+  margin-top: -30%;
+  margin-left: 50%;
+}
+
+.email-user {
+  margin-top: -30%;
+  margin-left: -70%;
+}
+
+.phone-user {
+  margin-top: -50%;
+  margin-left: 50%;
+}
+
+.password-user {
+  margin-top: 20%;
+  margin-left: -70%;
+} 
+
+.password-confirm-user {
+  margin-top: -55%;
+  margin-left: 50%;
+}
+
+.container-terms {
+  margin-top: -25%;
+  margin-left: 35%;
+}
+
+.already-account {
+  margin-top: 0%;
+  margin-left: 35%;
+}
+
+.sign-button {
+  margin-top: 3%;
+  margin-left: 0%;
+}
+
+input[type="name"] {
+  width: 60%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type="last_name"] {
+  width: 200%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type="email"] {
+  width: 60%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type="number"] {
+  width: 200%;
+  height: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type="password"] {
+  width: 60%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+#password_reg {
+  width: 60%;
+  padding: 8px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+#password_confirm {
+  width: 200%;
+  padding: 8px;
+  margin-left: 0px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}

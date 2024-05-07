@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import User from "../img/User.png"
 import hotel_login from "../img/hotel_register.png"
-import "../styles_register.scss"
+import "../styles/register.scss"
 import axios from "axios"
 import { Link, useNavigate } from "react-router-dom"
 import { showErrorDialog } from '../Misc'

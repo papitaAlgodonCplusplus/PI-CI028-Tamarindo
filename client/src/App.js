@@ -1,5 +1,9 @@
-import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
-// import Login from "./pages/Login"
+import {
+  createBrowserRouter,
+  Outlet,
+  RouterProvider,
+} from "react-router-dom";
+import Login from "./pages/Login"
 // import Home from "./pages/Home"
 // import Register from "./pages/Register"
 // import Navbar from "./components/Navbar"
@@ -18,7 +22,8 @@ const Layout = () => {
   return (
     <>
       {/* <Navbar />, */}
-      <Outlet />,{/* <Footer /> */}
+      <Outlet />
+      {/* <Footer /> */}
     </>
   );
 };
@@ -30,25 +35,29 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <div>Hello</div>,
+        element: <div>Hello</div>
+      },
+      {
+        path: "/login",
+        element: <Login />
+      },
+      {
+        path: "/pass_recover",
+        element: <div>Recover Password</div>
+      },
+      {
+        path: "/register",
+        element: <div>Register</div> // element: <Register />,
       },
       {
         path: "/amenities",
-        element: <Amenities />,
+        element: <Amenities />
       },
       {
         path: "/rooms",
         element: <Rooms />,
       },
     ],
-    //   {
-    //     path: "/",
-    //     element: <Login />,
-    //   },
-    //   {
-    //     path: "/register",
-    //     element: <Register />,
-    //   },
     //   {
     //     path: "/rooms",
     //     element: <Rooms />,
@@ -64,10 +73,6 @@ const router = createBrowserRouter([
     //   {
     //     path: "/pay",
     //     element: <Payment />,
-    //   },
-    //   {
-    //     path: "/amenities",
-    //     element: <Amenities />,
     //   },
     //   {
     //     path: "/reservations_list",

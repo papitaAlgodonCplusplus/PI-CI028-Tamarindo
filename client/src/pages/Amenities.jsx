@@ -39,7 +39,7 @@ const Amenities = () => {
       position: relative;
       left: 400px;">₡${fee}</div>
   </div>
-</div>
+  </div>
 
   <div style="
   display: flex;

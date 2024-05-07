@@ -3,14 +3,19 @@ SELECT * FROM hotel.services;
 SELECT * FROM hotel.reservations;
 SELECT * from hotel.categories;
 
-INSERT INTO hotel.users(userid, name, last_name, email, password, rol, image_id) VALUES (3, 'Alex', 'Quesada', 'alexquesada24@gmail.com', '$10$aa2fg5WyfDgKLvOnWte89OwiImvhiUKxhnGBcZeXNHaGqZK01ijR2', 'admin', 6);
+INSERT INTO hotel.users(userid, name, last_name, email, password, rol, image_id) VALUES (3, 'Alex', 'Quesada', 'alexquesada24@gmail.com', '$10$aa2fg5WyfDgKLvOnWte89OwiImvhiUKxhnGBcZeXNHaGqZK01ijR2', 'admin', 19);
 SELECT * FROM users;
 SELECT * FROM images;
+delete from images;
+insert into hotel.categories(class_name, price) values ('Deluxe', 700000);
 SELECT * from categories;
 SELECT * FROM rooms;
+SELECT * FROM rooms LEFT JOIN images ON rooms.image_id = images.imageid;
+
 DELETE FROM hotel.reservations;
 DELETE FROM hotel.users;
 DELETE FROM hotel.services_log;
+delete from hotel.rooms;
 
 SELECT * from hotel.users;
 

@@ -172,7 +172,7 @@ const Rooms = () => {
 
     try {
       // Fetching room types data
-      const roomTypesResponse = await axios.get('/rooms/room_types');
+      const roomTypesResponse = await axios.get('/categories/room_types');
 
       // Setting room types state and default room type option
       if (roomTypesResponse.data[0]) {
@@ -413,7 +413,7 @@ const Rooms = () => {
   // userRol === "admin" || userRol === "employee" ?
   return (
     <div className='body'>
-    <meta name="viewport" content="intial-scale=1"></meta>
+      <meta name="viewport" content="intial-scale=1"></meta>
       {/* Form modal for adding rooms */}
       <div id="myFormModal" className="form-modal">
         <div className="form-modal-content">

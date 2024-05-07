@@ -57,7 +57,7 @@ export const addRoom = (req, res) => {
 }
 
 export const updateRooms = (req, res) => {
-  const q = 'SELECT * FROM rooms';
+  const q = 'SELECT * FROM rooms LEFT JOIN images ON rooms.image_id = images.imageid';
   db.query(q, (err, result) => {
     if (err) {
       return res.status(500).json({ message: 'Failed to fetch rooms from the database.' });
@@ -69,7 +69,7 @@ export const updateRooms = (req, res) => {
 
 export const updateRoomsByID = (req, res) => {
   const roomID = req.params.roomID;
-  const q = 'SELECT * FROM rooms WHERE roomid = ?';
+  const q = 'SELECT * FROM rooms LEFT JOIN images ON rooms.image_id = images.imageid WHERE roomid = ?';
   db.query(q, [roomID], (err, result) => {
     if (err) {
       return res.status(500).json({ message: 'Failed to fetch rooms from the database.' });
@@ -78,6 +78,7 @@ export const updateRoomsByID = (req, res) => {
     return res.status(200).json(result);
   });
 };
+
 
 export const getImagesFilenames = (req, res) => {
   const q = 'SELECT * FROM images';

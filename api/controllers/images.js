@@ -11,6 +11,20 @@ export const retrieveImages = (req, res) => {
   });
 };
 
+export const addImage = (req, res) => {
+  const qi = "INSERT INTO images(`filename`, `filepath`) VALUES (?)"
+  const filepath = "client/public/upload/" + req.body.filename;
+
+  const values_0 = [
+    req.body.filename,
+    filepath
+  ]
+  db.query(qi, [values_0], (err, data) => {
+    if (err) return res.json(err);
+
+    return res.status(200)
+  })
+};
 
 export const geImageByID = (req, res) => {
   const q = 'SELECT * FROM images WHERE imageid = ?';

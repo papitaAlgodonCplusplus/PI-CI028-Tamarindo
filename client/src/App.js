@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 import Login from "./pages/Login"
 // import Home from "./pages/Home"
-// import Register from "./pages/Register"
+import Register from "./pages/Register"
 // import Navbar from "./components/Navbar"
 // import Footer from "./components/Footer"
 import Rooms from "./pages/Rooms";
@@ -47,7 +47,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/register",
-        element: <div>Register</div> // element: <Register />,
+        element: <Register />,
       },
       {
         path: "/amenities",

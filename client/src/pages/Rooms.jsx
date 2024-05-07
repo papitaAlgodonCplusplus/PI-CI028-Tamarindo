@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useContext, useEffect, useCallback } from 'react'
-import '../styles/room_page_styles.scss';
+import '../styles/rooms.scss';
 import axios from "axios"
 import { showWarningDialog, showErrorDialog, putDataWithTimeout, updateContainer, emptyContainer, postDataWithTimeout, deleteDataWithTimeout } from '../Misc';
 import { AuthContext } from '../AuthContext.js';
@@ -43,18 +43,18 @@ const Rooms = () => {
     <div class="list-item">
     <div style="display: flex; justify-content: space-between; align-items: center; width: 70%; padding: 10px;">
     <img style="width: 130px" src="${filename}" alt="${filename}"/>
-      <div style="font-size: 18px; font-weight: bold; position:absolute; left: 200px;">${title}</div>
-      <div style="font-size: 16px; width: 200px; color: #333; position:absolute; left: 450px;">${description}</div>
+      <div style="font-size: 18px; width: 100px; font-weight: bold; position:absolute; left: 200px;">${title}</div>
+      <div style="font-size: 16px; width: 200px; color: #333; position:absolute; left: 370px;">${description}</div>
       <div style="font-size: 16px; color: #333; position:absolute; left: 750px;">${room_type}</div>
     </div>
   </div>
   <!-- Room Type delete & modify buttons  -->
   <div style="
   display: flex;
-  align-items: center;">
-    <div style="
+  align-items: center;"
+  class="buttons";>
+  <div style="
     margin-top: 20px;
-    margin-left: 200px;
     border-radius: 6px;
     border: 1px solid #1E91B6;
     background: #FFFFFF;
@@ -172,7 +172,7 @@ const Rooms = () => {
 
     try {
       // Fetching room types data
-      const roomTypesResponse = await axios.get('/rooms/room_types');
+      const roomTypesResponse = await axios.get('/categories/room_types');
 
       // Setting room types state and default room type option
       if (roomTypesResponse.data[0]) {
@@ -413,6 +413,7 @@ const Rooms = () => {
   // userRol === "admin" || userRol === "employee" ?
   return (
     <div className='body'>
+      <meta name="viewport" content="intial-scale=1"></meta>
       {/* Form modal for adding rooms */}
       <div id="myFormModal" className="form-modal">
         <div className="form-modal-content">
@@ -479,7 +480,7 @@ const Rooms = () => {
         </div>
       </div>
       {/* Admin container */}
-      <div className='admin-container'>
+      <center><div className='admin-container'>
         {/* Section for rooms */}
         <div>
           <div className='rooms-title'>Rooms</div>
@@ -500,7 +501,7 @@ const Rooms = () => {
           {/* Button to display add room modal */}
           <button className="add-room-button" onClick={displayModal}><center>Add Room</center></button>
         </div>
-      </div>
+      </div></center>
     </div >)
   // : <div>{showErrorDialog("Error: ", "You must login as admin or employee to access this page", true, navigate)}</div>);
 };

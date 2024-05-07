@@ -18,7 +18,6 @@ export const AuthProvider = ({ children }) => {
   }, [userId, isLoggedIn, userRol]);
 
   const login = async (userId) => {
-    console.log("aaa");
     setIsLoggedIn(true);
     setUserId(userId);
     try {

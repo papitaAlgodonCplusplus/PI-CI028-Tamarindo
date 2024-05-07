@@ -22,22 +22,6 @@ export const updateRoom = (req, res) => {
 }
 
 
-export const addRoomType = (req, res) => {
-  const q = "INSERT INTO categories(`class_name`, `price`) VALUES (?, ?)";
-  const values = [
-    req.body.room_type_name,
-    req.body.room_type_price,
-  ];
-
-  db.query(q, values, (err, data) => {
-    if (err) {
-      return res.json(err);
-    } else {
-      return res.json(data);
-    }
-  });
-};
-
 export const addRoom = (req, res) => {
   const qi = "INSERT INTO images(`filename`, `filepath`) VALUES (?)"
   const filepath = "client/public/upload/" + req.body.filename.data;
@@ -91,17 +75,6 @@ export const addRoom = (req, res) => {
   })
 }
 
-export const updateRoomTypes = (req, res) => {
-  const q = 'SELECT * FROM categories';
-  db.query(q, (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: 'Failed to fetch categories from the database.' });
-    }
-
-    return res.status(200).json(result);
-  });
-};
-
 export const updateRooms = (req, res) => {
   const q = 'SELECT * FROM rooms LEFT JOIN images ON rooms.image_id = images.imageid';
   db.query(q, (err, result) => {
@@ -125,17 +98,6 @@ export const updateRoomsByID = (req, res) => {
   });
 };
 
-export const updateRoomTypesByID = (req, res) => {
-  const roomTypeID = req.params.roomTypeID;
-  const q = 'SELECT * FROM categories WHERE categoryid = ?';
-  db.query(q, [roomTypeID], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: 'Failed to fetch categories from the database.' });
-    }
-
-    return res.status(200).json(result);
-  });
-};
 
 export const getImagesFilenames = (req, res) => {
   const q = 'SELECT * FROM images';
@@ -167,21 +129,21 @@ export const deleteRoom = (req, res) => {
 
   db.query(getRoomImageIDQuery, [roomID], (err, roomData) => {
     if (err) {
-      return res.status(500);
+      return res.status(500).json("Error retrieving room data.");
     }
 
     if (roomData.length === 0) {
-      return res.status(404);
+      return res.status(404).json("Room not found.");
     }
 
     const imageId = roomData[0].image_id;
 
     db.query(deleteImagesQuery, [imageId], (err, imagesData) => {
       if (err) {
-        return res.status(500);
+        return res.status(500).json("Error deleting images.");
       }
 
-      res.status(200);
+      res.json("Images related to the room have been deleted!");
     });
   });
 
@@ -190,22 +152,6 @@ export const deleteRoom = (req, res) => {
   db.query(q, [roomID], (err, data) => {
     if (err) {
       return res.status(500).json("Error.");
-    }
-
-    return res.status(200);
-  });
-};
-
-export const deleteRoomType = (req, res) => {
-  console.log("Hello");
-  const roomTypeID = req.params.id;
-  console.log(roomTypeID);
-  const q = "DELETE FROM categories WHERE categoryid = ?";
-
-  db.query(q, [roomTypeID], (err, data) => {
-    if (err) {
-      console.log(err)
-      return res.status(500);
     }
 
     return res.status(200);

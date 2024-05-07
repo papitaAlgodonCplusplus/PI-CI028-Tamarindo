@@ -22,7 +22,7 @@ const theme = createTheme({
 });
 
 const Login = () => {
-  const { login } = useContext(AuthContext);
+  const { login, logout } = useContext(AuthContext);
 
   // State to manage form inputs
   const [inputs, setInputs] = useState({
@@ -56,19 +56,13 @@ const Login = () => {
 
       // Login the user using the AuthContext
       login(userID.data[0].userid);
-      navigate("/home");
+      navigate("/reservations_list");
     } catch (error) {
-      if (error.response && error.response.status === 404) {
-        // Show error message if user is not found
-        const errorMessage = error.response.data;
-        showErrorDialog("An error occurred:", errorMessage);
-      } else {
-        // Show any other error obtained
-        showErrorDialog("An error occurred:", error);
-      }
+      showErrorDialog("An error occurred:", "Wrong email or password");
+      logout()
     }
   };
-  
+
   // Render login form
   return (
     <div className="loginPage">

@@ -88,7 +88,10 @@ export const deleteService = (req, res) => {
 
   db.query(q, [serviceID], (err, data) => {
     if (err) {
-      return res.status(500).json("Error couldn't delete service.");
+      if (err.errno === 1451) {
+        return res.status(415).json({ error: "Error: This amenity is already in a reservation" });
+      }
+      return res.status(500).json({ error: "Error: Couldn't delete service." });
     }
 
     return res.status(200);

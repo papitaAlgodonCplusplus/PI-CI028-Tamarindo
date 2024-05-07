@@ -5,15 +5,15 @@ import {
 } from "react-router-dom";
 import Login from "./pages/Login"
 // import Home from "./pages/Home"
-// import Register from "./pages/Register"
-// import Navbar from "./components/Navbar"
-// import Footer from "./components/Footer"
+import Register from "./pages/Register"
+import Navbar from "./components/Navbar"
+import Footer from "./components/Footer"
 import Rooms from "./pages/Rooms";
 // import Details from "./pages/Details"
 // import Payment from "./pages/Payment.jsx";
 // import Reservation from "./pages/Reservation.jsx";
 import Amenities from "./pages/Amenities.jsx";
-// import ReservationsList from "./pages/ReservationsList.jsx"
+import ReservationsList from "./pages/ReservationsList.jsx"
 // import ReservationsAdmin from "./pages/ReservationsAdmin.jsx";
 import { Provider } from "./Context.js";
 import { AuthProvider } from "./AuthContext";
@@ -21,9 +21,10 @@ import { AuthProvider } from "./AuthContext";
 const Layout = () => {
   return (
     <>
-      {/* <Navbar />, */}
+      <Navbar />
+      <br></br>
       <Outlet />
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 };
@@ -35,10 +36,6 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <div>Hello</div>
-      },
-      {
-        path: "/login",
         element: <Login />
       },
       {
@@ -47,7 +44,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/register",
-        element: <div>Register</div> // element: <Register />,
+        element: <Register />
       },
       {
         path: "/amenities",
@@ -56,6 +53,10 @@ const router = createBrowserRouter([
       {
         path: "/rooms",
         element: <Rooms />,
+      },
+      {
+        path: "/reservations_list",
+        element: <ReservationsList />,
       },
     ],
     //   {
@@ -73,10 +74,6 @@ const router = createBrowserRouter([
     //   {
     //     path: "/pay",
     //     element: <Payment />,
-    //   },
-    //   {
-    //     path: "/reservations_list",
-    //     element: <ReservationsList />,
     //   },
     //   {
     //     path: "/reservations_admin",

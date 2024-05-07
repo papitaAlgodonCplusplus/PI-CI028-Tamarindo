@@ -1,15 +1,14 @@
-import React, { useState, useContext } from 'react';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Checkbox, IconButton } from '@mui/material';
 import { FormControlLabel } from '@mui/material';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from '../AuthContext.js';
 import { showErrorDialog } from "../Misc.js";
 import axios from "axios";
 import '../styles/login.scss'
-import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
-
-import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
   typography: {

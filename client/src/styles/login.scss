@@ -59,16 +59,19 @@ input:focus{
   margin-bottom: 14px;
   align-self: flex-start;
   letter-spacing: 0.3px;
+  letter-spacing: 1px;
   line-height: 0.3;
   color: #181818;
 }
 
 #email {
   padding-left: 15px;
+  font-family: 'Poppins';
   font-size: 18px;
   width: 395px;
   height: 35px;
   background-color: rgb(228, 228, 228);
+  letter-spacing: 1px;
   border-radius: 3px;
   border: none;
 }
@@ -88,7 +91,7 @@ input:focus{
   margin-top: 30px;
   margin-bottom: 14px;
   align-self: flex-start;
-  letter-spacing: 0.3px;
+  letter-spacing: 1px;
   line-height: 0.3;
   color: #181818;
 }
@@ -112,6 +115,8 @@ input:focus{
 #password {
   font-size: 18px;
   width: 300px;
+  font-family: 'Poppins';
+  letter-spacing: 1px;
   height: 35px;
   border-radius: 3px;
   background-color: rgb(228, 228, 228);
@@ -119,6 +124,7 @@ input:focus{
 }
 
 .showPass {
+  letter-spacing: 1px;
   margin: 5px 10px;
   display: flex;
   width: 30px;

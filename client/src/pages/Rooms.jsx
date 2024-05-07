@@ -51,10 +51,10 @@ const Rooms = () => {
   <!-- Room Type delete & modify buttons  -->
   <div style="
   display: flex;
-  align-items: center;">
-    <div style="
+  align-items: center;"
+  class="buttons";>
+  <div style="
     margin-top: 20px;
-    margin-left: 200px;
     border-radius: 6px;
     border: 1px solid #1E91B6;
     background: #FFFFFF;
@@ -413,6 +413,7 @@ const Rooms = () => {
   // userRol === "admin" || userRol === "employee" ?
   return (
     <div className='body'>
+    <meta name="viewport" content="intial-scale=1"></meta>
       {/* Form modal for adding rooms */}
       <div id="myFormModal" className="form-modal">
         <div className="form-modal-content">
@@ -479,7 +480,7 @@ const Rooms = () => {
         </div>
       </div>
       {/* Admin container */}
-      <div className='admin-container'>
+      <center><div className='admin-container'>
         {/* Section for rooms */}
         <div>
           <div className='rooms-title'>Rooms</div>
@@ -500,7 +501,7 @@ const Rooms = () => {
           {/* Button to display add room modal */}
           <button className="add-room-button" onClick={displayModal}><center>Add Room</center></button>
         </div>
-      </div>
+      </div></center>
     </div >)
   // : <div>{showErrorDialog("Error: ", "You must login as admin or employee to access this page", true, navigate)}</div>);
 };

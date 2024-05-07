@@ -22,7 +22,7 @@ const theme = createTheme({
 });
 
 const Login = () => {
-  const { login } = useContext(AuthContext);
+  const { login, logout } = useContext(AuthContext);
 
   // State to manage form inputs
   const [inputs, setInputs] = useState({
@@ -59,6 +59,7 @@ const Login = () => {
       navigate("/home");
     } catch (error) {
       showErrorDialog("An error occurred:", "Wrong email or password");
+      logout()
     }
   };
 

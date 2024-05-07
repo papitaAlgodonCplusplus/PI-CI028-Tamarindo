@@ -22,6 +22,10 @@ ADD CONSTRAINT fk_image_id
 FOREIGN KEY (image_id)
 REFERENCES hotel.images(imageid);
 
+select * from hotel.rooms;
+
+alter table hotel.users
+add column phone varchar(50);
 
 ALTER TABLE hotel.users
 DROP CONSTRAINT fk_image_id;

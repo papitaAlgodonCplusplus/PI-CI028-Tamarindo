@@ -31,7 +31,7 @@ const ReservationsList = () => {
       align-items: center;
       position: relative; /* Add position: relative to the parent div */">
       <img style="
-        margin-left: 15px;
+        margin-left: 35px;
         max-width: 90px;
         max-height: 90px;
         margin-right: 24px;

@@ -26,7 +26,7 @@ const Amenities = () => {
       margin-left: 15px;
       max-width: 90px;
       max-height: 90px;
-      margin-right: 24px;
+      margin-right: -5px;
       margin-bottom: 10px;" src=${img} alt="${title}-icon"/>
     <div style="
       font-size: 18px;
@@ -121,8 +121,8 @@ const Amenities = () => {
   const navigate = useNavigate()
   const fetchData = async () => {
     if (userRol !== "admin" && userRol !== "employee") {
-      navigate("/home")
-      return;
+      // navigate("/home")
+      // return;
     }
     const amenities_table = document.querySelector('.amenities-container');
     try {

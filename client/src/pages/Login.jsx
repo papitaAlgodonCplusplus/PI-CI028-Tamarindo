@@ -66,9 +66,9 @@ const Login = () => {
   // Render login form
   return (
     <div className="loginPage">
-      {/* <p style={{marginLeft: "50%"}}>Nav-Bar</p> */}
       <div className="login">
         <div className='formBg'></div>
+        <div className='formContainer'></div>
         {/* Title */}
         <div className="loginTitle">
           <p>Log In</p>

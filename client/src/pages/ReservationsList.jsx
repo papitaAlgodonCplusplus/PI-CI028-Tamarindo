@@ -323,7 +323,6 @@ const ReservationsList = () => {
       // Checking if the new price is greater or lesser than the original
       if (Math.abs(old_price - new_price) > 1000) {
         // Showing error message if the new price is not valid
-        console.log(old_price, new_price)
         showErrorDialog("Error: ", "Cannot select a range of dates greater or lesser than the original.");
         return;
       }

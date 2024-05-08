@@ -42,7 +42,7 @@ const Rooms = () => {
     -->
     <div class="list-item">
     <div style="display: flex; justify-content: space-between; align-items: center; width: 70%; padding: 10px;">
-    <img style="width: 130px" src="${filename}" alt="${filename}"/>
+    <img style="width: 150px; height: 100px; border-radius: 7px; " src="${filename}" alt="${filename}"/>
       <div style="font-size: 18px; width: 100px; font-weight: bold; position:absolute; left: 200px;">${title}</div>
       <div style="font-size: 16px; width: 200px; color: #333; position:absolute; left: 370px;">${description}</div>
       <div style="font-size: 16px; color: #333; position:absolute; left: 750px;">${room_type}</div>

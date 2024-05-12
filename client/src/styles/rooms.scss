@@ -162,6 +162,7 @@ hr {
 .list-container {
   align-self: center;
 }
+
 // .list-container {
 //   display: flex;
 //   flex-direction: column;
@@ -264,7 +265,6 @@ textarea {
   flex-direction: row;
   padding: 0%;
   padding-top: 17px;
-  justify-content: center;
   width: 886px;
   border-radius: 5px;
   box-sizing: border-box;
@@ -273,9 +273,9 @@ textarea {
 
 .room,
 .description,
-.typeR {
+.typeR,
+.actions {
   padding: 0%;
-  margin-right: 300px;
   overflow-wrap: break-word;
   font-family: 'Poppins';
   font-weight: 500;
@@ -291,12 +291,31 @@ textarea {
 
 .description {
   position: absolute;
-  left: 410px;
+  left: 29vw;
+}
+
+.red-label {
+  font-size: 16px;
+  color: rgb(161, 7, 7);
+  display: none;
+  margin-bottom: 5vh;
+}
+
+.red-label-2 {
+  font-size: 16px;
+  margin-bottom: 5vh;
+  color: rgb(161, 7, 7);
+  display: none;
+}
+
+.actions {
+  position: absolute;
+  left: 58vw;
 }
 
 .typeR {
   position: absolute;
-  left: 750px;
+  left: 45.5vw;
 }
 
 .roomT {
@@ -327,6 +346,3 @@ textarea {
   font-size: 18px;
   color: #ffffff;
 }
-
-
-

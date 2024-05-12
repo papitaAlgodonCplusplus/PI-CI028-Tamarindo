@@ -46,8 +46,30 @@ const Login = () => {
 
   // Function to handle form submission
   const handleSubmit = async e => {
-    e.preventDefault();
     try {
+      e.preventDefault()
+      const email = inputs.email.trim();
+      const password = inputs.password.trim();
+
+      let isError = false;
+
+      if (email === '') {
+        document.getElementById("warning-email").style.display = "block";
+        isError = true;
+      } else {
+        document.getElementById("warning-email").style.display = "none";
+      }
+
+      if (password === '') {
+        document.getElementById("warning-pass").style.display = "block";
+        isError = true;
+      } else {
+        document.getElementById("warning-pass").style.display = "none";
+      }
+
+      if(isError) return;
+
+
       // Attempt to log in using Axios
       await axios.post(`/auth/login`, inputs);
 
@@ -65,62 +87,67 @@ const Login = () => {
 
   // Render login form
   return (
-    <div className="loginPage">
-      <div className="login">
-        <div className='formBg'></div>
-        <div className='formContainer'></div>
-        {/* Title */}
-        <div className="loginTitle">
-          <p>Log In</p>
-        </div>
-        {/* Email */}
-        <div className="email">
-          <div className="emailText">
-            <p>Email address</p>
-          </div>
-          <div className="inputEmail">
-            <input type="email-login" id="email" name="email" required onChange={handleChange}></input>
-          </div>
-        </div>
-        {/* Password */}
-        <div className="password">
-          <div className="passwordText">
-            <p>Password</p>
-          </div>
-          <div className="inputPassword">
-            <input type={showPassword ? "text" : "password"} name="password"
-              required onChange={handleChange} className="inputPass1" id="password"></input>
-            <div className="showPass">
-              {/* Password Toggle */}
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={handleClickShowPassword}
-                edge="end"
-              >
-                {showPassword ? <VisibilityOffOutlinedIcon /> : <VisibilityOutlinedIcon />}
-              </IconButton>
+    <div className="login">
+      <div className='formBg'></div>
+      <form>
+        <div className='formContainer'>
+          {/* Title */}
+          <center><div className="loginTitle">
+            <p>Log In</p>
+          </div></center>
+          <center><div>
+            {/* Email */}
+            <div className="email">
+              <div className="emailText">
+                <p>Email address</p>
+              </div>
+              <div className="inputEmail">
+                <input type="email-login" id="email" name="email" required onChange={handleChange}></input>
+              </div>
+              <label id="warning-email" className='red-label'>Please provide an email</label>
             </div>
-          </div>
+            {/* Password */}
+            <div className="password">
+              <div className="passwordText">
+                <p>Password</p>
+              </div>
+              <div className="inputPassword">
+                <input type={showPassword ? "text" : "password"} name="password"
+                  required onChange={handleChange} className="inputPass1" id="password"></input>
+                <div className="showPass">
+                  {/* Password Toggle */}
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOffOutlinedIcon /> : <VisibilityOutlinedIcon />}
+                  </IconButton>
+                </div>
+              </div>
+            </div>
+            <label id="warning-pass" className='red-label-2'>Please provide a password</label>
+            {/* Questions: Checkbox - Forgot Pass */}
+            <div className="containerQuestions">
+              <div className="checkbox">
+                <ThemeProvider theme={theme}>
+                  <FormControlLabel control={<Checkbox />} label="Keep me signed in" />
+                </ThemeProvider>
+              </div>
+              <a href="/pass_recover" className='forgotPass'>Forgot password?</a>
+            </div>
+            {/* Button */}
+            <button type="submit" onClick={handleSubmit} className='loginButton'>Log In</button>
+          </div></center>
+          <hr class="separator" />
+          {/* Go to Register Page */}
+          <center><div className="register">
+            <p className="question">Don't have an account?
+              <a href="/register" className="linkRegister">Register</a>
+            </p>
+          </div></center>
         </div>
-        {/* Questions: Checkbox - Forgot Pass */}
-        <div className="containerQuestions">
-          <div className="checkbox">
-            <ThemeProvider theme={theme}>
-              <FormControlLabel control={<Checkbox />} label="Keep me signed in" />
-            </ThemeProvider>
-          </div>
-          <a href="/pass_recover" className='forgotPass'>Forgot password?</a>
-        </div>
-        {/* Button */}
-        <button type="submit" onClick={handleSubmit} className='loginButton'>Log In</button>
-        <hr class="separator" />
-        {/* Go to Register Page */}
-        <div className="register">
-          <p className="question">Don't have an account?
-            <a href="/register" className="linkRegister">Register</a>
-          </p>
-        </div>
-      </div>
+      </form>
       {/* <p style={{marginLeft: "50%"}}>Footer</p> */}
     </div>
   );

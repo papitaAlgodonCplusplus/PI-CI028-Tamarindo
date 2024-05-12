@@ -1,10 +1,6 @@
-.loginPage {
-  margin: 0 auto;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-bottom: 25vh;
-}
+html {
+  overflow-x: hidden;
+} 
 
 .login {
   font-family: 'Poppins';
@@ -18,16 +14,14 @@
 }
 
 .formContainer {
-  position: absolute;
   box-shadow: 7px 7px 50px 7px rgb(61, 57, 57);
   background: #FFFFFF;
   border: 2px solid white;
-  height: 92vh;
-  width: 85vh;
+  width: 40vw;
+  display: inline-block;
   margin-top: 10vh;
-  z-index: -1;
+  margin-bottom: 10vh;
 }
-
 
 .formBg {
   box-shadow: 7px 7px 50px 7px rgb(61, 57, 57);
@@ -42,7 +36,6 @@
 
 .loginTitle {
   position: relative;
-  top: 65px;
   margin: 0 1px 26px 0;
   display: inline-block;
   overflow-wrap: break-word;
@@ -56,7 +49,6 @@ input:focus{
 }
 
 .email {
-  top: 55px;
   position: relative;
   flex-direction: column;
   width: 410px;
@@ -85,10 +77,10 @@ input:focus{
   letter-spacing: 1px;
   border-radius: 3px;
   border: none;
+  margin-bottom: 3vh;
 }
 
 .password {
-  top: 65px;
   position: relative;
   flex-direction: column;
   width: 410px;
@@ -121,6 +113,7 @@ input:focus{
   box-sizing: border-box;
   background-color: rgb(228, 228, 228);
   border-radius: 3px;
+  margin-bottom: 3vh;
 }
 
 #password {
@@ -144,7 +137,6 @@ input:focus{
 }
 
 .containerQuestions {
-  top: 80px;
   position: relative;
   // margin: 0 0 63px 4px;
   display: flex;
@@ -153,6 +145,7 @@ input:focus{
   width: 396px;
   box-sizing: border-box;
   color: #4F4F4F;
+  margin-bottom: 3vh;
 }
 
 a {
@@ -164,7 +157,6 @@ a {
 }
 
 .loginButton {
-  top: 110px;
   border-radius: 6px;
   border: none;
   background: #1E91B6;
@@ -183,7 +175,6 @@ a {
 }
 
 .separator {
-  top: 98px;
   position: relative;
   height: 1px;
   width: 400px;
@@ -192,7 +183,6 @@ a {
 }
 
 .register {
-  top: 100px;
   position: relative;
   color: #4F4F4F;
 }

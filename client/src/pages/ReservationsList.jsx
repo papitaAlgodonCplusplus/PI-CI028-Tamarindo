@@ -45,85 +45,85 @@ const ReservationsList = () => {
       <div style="
         font-size: 16px;
         position: relative;
-        margin-left: -44px;
+        margin-left: -7.5vw;
         color: #545454;
         margin-top: 15px;">Guests: 3 (2 adults, 1 child)</div>
       <div style="
         font-size: 16px;
         position: relative;
-        margin-left: -180px;
+        margin-left: -14.5vw;
         color: #545454;
         margin-top: 100px;">• Extra Services</div>
       <div style="
         font-size: 16px;
         color: #333;
         position: relative;
-        left: 200px;">${check_in.substring(0, 10)}</div>
+        left: 15vw;">${check_in.substring(0, 10)}</div>
       <div style="
       font-size: 16px;
       color: #333;
       position: relative;
-      left: 320px;">${check_out.substring(0, 10)}</div>
+      left: 20vw;">${check_out.substring(0, 10)}</div>
       <div style="
       font-size: 16px;
       color: #333;
       position: relative;
-      left: 446px;">Active</div>
+      left: 24vw;">Active</div>
+      <!-- Buttons Container -->
+      <div style="
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        margin-left: auto;
+        margin-right: 20px; /* Adjust the right margin for spacing */">
+        <div style="
+          margin-top: 20px;
+          border-radius: 6px;
+          border: 1px solid #1E91B6;
+          background: #FFFFFF;
+          display: flex;
+          justify-content: center;
+          cursor: pointer;
+          padding: 8px 0.4px 8px 0;
+          width: 169px;
+          box-sizing: border-box;" id="delete-button-${id}">
+          <span style="
+            overflow-wrap: break-word;
+            font-family: 'Poppins';
+            font-weight: 400;
+            font-size: 15px;
+            letter-spacing: 0.3px;
+            line-height: 1.333;
+            color: #1E91B6;">
+            Delete Reservation
+          </span>
+        </div>
+  
+        <div style="
+          margin-top: 20px;
+          border-radius: 6px;
+          background: #1E91B6;
+          display: flex;
+          justify-content: center;
+          padding: 9px 0.3px 9px 0;
+          width: 169px;
+          cursor: pointer;
+          margin-top: 10px;" id="modify-button-${id}">
+          <span style="
+            overflow-wrap: break-word;
+            font-family: 'Poppins';
+            font-weight: 400;
+            font-size: 15px;
+            letter-spacing: 0.3px;
+            line-height: 1.333;
+            color: #FFFFFF;">
+            Modify Reservation
+          </span>
+        </div>
+      </div>
     </div>
   </div>
   
-    <div style="
-    display: flex;
-    align-items: center;">
-      <div style="
-      margin-top: 20px;
-      border-radius: 6px;
-      border: 1px solid #1E91B6;
-      background: #FFFFFF;
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      cursor: pointer;
-      padding: 8px 0.4px 8px 0;
-      width: 169px;
-      margin-left: 100px;
-      box-sizing: border-box;" id="delete-button-${id}">
-        <span style="
-        overflow-wrap: break-word;
-        font-family: 'Poppins';
-        font-weight: 400;
-        font-size: 15px;
-        letter-spacing: 0.3px;
-        line-height: 1.333;
-        color: #1E91B6;">
-          Delete Reservation
-        </span>
-      </div>
-  
-      <div style="
-      margin-top: 20px;
-      margin-left: 1%;
-      border-radius: 6px;
-      background: #1E91B6;
-      display: flex;
-      justify-content: center;
-      padding: 9px 0.3px 9px 0;
-      width: 169px;
-      cursor: pointer;" id="modify-button-${id}">
-        <span style="
-        overflow-wrap: break-word;
-        font-family: 'Poppins';
-        font-weight: 400;
-        font-size: 15px;
-        letter-spacing: 0.3px;
-        line-height: 1.333;
-        color: #FFFFFF;">
-          Modify Reservation
-        </span>
-      </div>
-    </div>
-    
-  </div>
   `;
 
     const reservations_table = document.querySelector('.reservations-container');
@@ -398,6 +398,9 @@ const ReservationsList = () => {
           </span>
           <span className="status">
             Status
+          </span>
+          <span className="actions-label">
+            Actions
           </span>
         </div>
       </div>

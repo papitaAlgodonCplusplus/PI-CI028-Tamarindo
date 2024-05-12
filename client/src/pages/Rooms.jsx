@@ -12,6 +12,7 @@ const Rooms = () => {
   const [roomTypeOption, setRoomTypeOption] = useState('');
   const [file, setFile] = useState(null);
   const [room_types, setRoomTypes] = useState([]);
+  let logs = 3;
   const [inputs, setInputs] = useState({
     name: "",
     desc: "",
@@ -22,6 +23,12 @@ const Rooms = () => {
     room_type_name: "",
     room_type_price: 0,
   })
+
+  const handleLoggingChange = e => {
+    logs = e.target.value;
+    fetchData()
+    return;
+  }
 
 
   // Function to add a card to the UI
@@ -34,73 +41,71 @@ const Rooms = () => {
 
     // Generating HTML for the new card
     const newCardHTML = `
-
-      <!-- Delete button for the card 
-      <button class="delete-button" id="delete-room-button-${title}">
-      </button>
-    </div>
-    -->
-    <div class="list-item">
+    <!-- Delete button for the card 
+    <button class="delete-button" id="delete-room-button-${title}">
+    </button>
+  -->
+  <div class="list-item">
     <div style="display: flex; justify-content: space-between; align-items: center; width: 70%; padding: 10px;">
-    <img style="width: 150px; height: 100px; border-radius: 7px; " src="${filename}" alt="${filename}"/>
+      <img style="width: 150px; height: 100px; border-radius: 7px; " src="${filename}" alt="${filename}"/>
       <div style="font-size: 18px; width: 100px; font-weight: bold; position:absolute; left: 200px;">${title}</div>
-      <div style="font-size: 16px; width: 200px; color: #333; position:absolute; left: 370px;">${description}</div>
-      <div style="font-size: 16px; color: #333; position:absolute; left: 750px;">${room_type}</div>
+      <div style="font-size: 16px; width: 200px; color: #333; position:absolute; left: 25vw;">${description}</div>
+      <div style="font-size: 16px; color: #333; position:absolute; left: 45vw;">${room_type}</div>
+      <div style="
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        position: absolute;
+        right: 20px; /* Adjust the right spacing as needed */">
+        <div style="
+          margin-top: 20px;
+          border-radius: 6px;
+          border: 1px solid #1E91B6;
+          background: #FFFFFF;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          cursor: pointer;
+          padding: 8px 0.4px 8px 0;
+          width: 169px;
+          box-sizing: border-box;" id="delete-room-button-${id}">
+          <span style="
+            overflow-wrap: break-word;
+            font-family: 'Poppins';
+            font-weight: 400;
+            font-size: 15px;
+            letter-spacing: 0.3px;
+            line-height: 1.333;
+            color: #1E91B6;">
+            Delete Room
+          </span>
+        </div>
+        <div style="
+          margin-top: 20px;
+          border-radius: 6px;
+          background: #1E91B6;
+          display: flex;
+          justify-content: center;
+          padding: 9px 0.3px 9px 0;
+          width: 169px;
+          cursor: pointer;
+          margin-top: 10px;" id="modify-button-${id}">
+          <span style="
+            overflow-wrap: break-word;
+            font-family: 'Poppins';
+            font-weight: 400;
+            font-size: 15px;
+            letter-spacing: 0.3px;
+            line-height: 1.333;
+            color: #FFFFFF;">
+            Modify Room
+          </span>
+        </div>
+      </div>
     </div>
   </div>
-  <!-- Room Type delete & modify buttons  -->
-  <div style="
-  display: flex;
-  align-items: center;"
-  class="buttons";>
-  <div style="
-    margin-top: 20px;
-    border-radius: 6px;
-    border: 1px solid #1E91B6;
-    background: #FFFFFF;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    cursor: pointer;
-    padding: 8px 0.4px 8px 0;
-    width: 169px;
-    box-sizing: border-box;" id="delete-room-button-${id}">
-      <span style="
-      overflow-wrap: break-word;
-      font-family: 'Poppins';
-      font-weight: 400;
-      font-size: 15px;
-      letter-spacing: 0.3px;
-      line-height: 1.333;
-      color: #1E91B6;">
-        Delete Room
-      </span>
-    </div>
-
-    <div style="
-    margin-top: 20px;
-    margin-left: 1%;
-    border-radius: 6px;
-    background: #1E91B6;
-    display: flex;
-    justify-content: center;
-    padding: 9px 0.3px 9px 0;
-    width: 169px;
-    cursor: pointer;" id="modify-button-${id}">
-      <span style="
-      overflow-wrap: break-word;
-      font-family: 'Poppins';
-      font-weight: 400;
-      font-size: 15px;
-      letter-spacing: 0.3px;
-      line-height: 1.333;
-      color: #FFFFFF;">
-        Modify Room
-      </span>
-    </div>
-  </div>
-  <div style="padding-bottom: 20px;"></div> 
-</div>
+  <div style="padding-bottom: 20px;"></div>
+  
   `;
 
     // Inserting the new card HTML into the container
@@ -186,8 +191,14 @@ const Rooms = () => {
       // Clearing cards container
       emptyContainer(cardsContainer);
 
+      // Counter for lazy logging
+      let logged = 0;
       // Adding cards for each room to UI
       roomsResponse.data.forEach(room => {
+        if (logged >= logs) {
+          updateContainer(cardsContainer);
+          return;
+        }
         const filepath = "/upload/" + room.filename;
 
         let selectedRoomType;
@@ -199,6 +210,8 @@ const Rooms = () => {
           }
         }
 
+        // Increment logged cards
+        logged++;
         // Adding card for the room to UI
         addCard(room.title, room.description, selectedRoomType.class_name, filepath, room.roomid);
       });
@@ -274,8 +287,7 @@ const Rooms = () => {
 
   // Function to handle form submission
   const handleSubmit = async e => {
-    e.preventDefault(); // Preventing default form submission behavior
-
+    e.preventDefault()
     // Validating file upload
     if (!file) {
       showErrorDialog("An error occurred:", "Please upload an image");
@@ -360,7 +372,6 @@ const Rooms = () => {
   const [file_changed, setFileChanged] = useState(false);
   // Function to handle amenity modify
   const handleUpdate = async e => {
-    e.preventDefault(); // Preventing default form submission behavior
     try {
       let image_id = data.image_id;
       if (file_changed) {
@@ -427,10 +438,10 @@ const Rooms = () => {
             </div>
             {/* Input field for room title */}
             <label htmlFor="name">Title</label><br />
-            <input type="text" id="name" name="name" onChange={handleChange} /><br />
+            <input required type="text" id="name" name="name" onChange={handleChange} /><br />
             {/* Textarea for room description */}
             <label htmlFor="desc">Description</label><br />
-            <textarea id="desc" name="desc" onChange={handleChange} ></textarea>
+            <textarea required id="desc" name="desc" onChange={handleChange} ></textarea>
             {/* Dropdown for selecting room type */}
             <label htmlFor="room_types_selector">Room Type</label><br />
             <select name="room_types_selector" className="custom-select" id="room_types_selector_1"
@@ -441,7 +452,7 @@ const Rooms = () => {
               ))}
             </select>
             {/* Button to add room */}
-            <button className="MODAL-BUTTON" onClick={handleSubmit}><center>Add Room</center></button>
+            <button type='submit' className="MODAL-BUTTON" onClick={handleSubmit}><center>Add Room</center></button>
           </form>
         </div>
       </div>
@@ -473,7 +484,7 @@ const Rooms = () => {
               ))}
             </select>
             {/* Button to update room */}
-            <button className="MODAL-BUTTON" onClick={handleUpdate}>
+            <button type="submit" className="MODAL-BUTTON" onClick={handleUpdate}>
               Update Room
             </button>
           </form>
@@ -495,7 +506,18 @@ const Rooms = () => {
             <span className="typeR">
               Type
             </span>
+            <span className="actions">
+              Actions
+            </span>
           </div>
+          <label>Show: </label>
+          <select name="lazy-logger" className="custom-select" id="lazy-logger"
+            onChange={handleLoggingChange}>
+            <option key={3} value={3}>3</option>
+            <option key={10} value={10}>10</option>
+            <option key={25} value={25}>25</option>
+            <option key={50} value={50}>50</option>
+          </select>
           <div className="list-container">
           </div>
           {/* Button to display add room modal */}

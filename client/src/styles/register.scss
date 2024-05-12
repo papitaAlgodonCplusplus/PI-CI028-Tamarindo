@@ -65,7 +65,7 @@
 }
 
 .form .image-preview {
-  position: absolute;
+  position: relative;
   left: 1.5vh; 
   width: 180px;
 }
@@ -101,18 +101,21 @@
 }
 
 .container-terms {
-  margin-top: 17%;
   margin-left: 35%;
+  margin-top: 30vh;
 }
 
 .already-account {
   margin-top: 0%;
   margin-left: 35%;
+  margin-top: 10vh;
 }
 
 .sign-button {
-  margin-top: 3%;
-  margin-left: 36%;
+  position: absolute;
+  width: 10vw;
+  margin-top: 180vh;
+  margin-left: -3vw;
 }
 
 input[type="name"] {

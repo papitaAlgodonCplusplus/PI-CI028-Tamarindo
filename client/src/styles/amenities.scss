@@ -28,14 +28,15 @@ hr {
   padding: 0%;
   padding-top: 1%;
   padding-bottom: 1%;
-  justify-content: center;
+  margin-bottom: 5vh;
   width: 60%;
   box-sizing: border-box;
 }
 
 .amenity {
   padding: 0%;
-  margin-right: 300px;
+  margin-right: 130px;
+  margin-left: 170px;
   overflow-wrap: break-word;
   font-family: 'Poppins';
   font-weight: 500;
@@ -44,6 +45,17 @@ hr {
 }
 
 .price {
+  padding: 0%;
+  overflow-wrap: break-word;
+  font-family: 'Poppins';
+  margin-right: 15px;
+  font-weight: 500;
+  margin-right: 16vw;
+  font-size: 20px;
+  color: #181818;
+}
+
+.amenity-actions {
   padding: 0%;
   overflow-wrap: break-word;
   font-family: 'Poppins';

@@ -57,6 +57,7 @@ hr {
 
 .amenity-actions {
   padding: 0%;
+  margin-left: 2.5vw;
   overflow-wrap: break-word;
   font-family: 'Poppins';
   margin-right: 15px;
@@ -75,6 +76,13 @@ hr {
   z-index: 1000;
 }
 
+#myForm .red-label-a {
+  font-size: 16px;
+  color: rgb(161, 7, 7);
+  display: none;
+  margin-bottom: 5vh;
+}
+
 .add-amenity-button {
   border-radius: 6px;
   border: 1px solid #1E91B6;
@@ -82,7 +90,6 @@ hr {
   font-family: 'Poppins';
   cursor: pointer;
   width: 150px;
-  margin-top: 5%;
   margin-left: 44%;
   padding-block: 0.5%;
   font-weight: 500;

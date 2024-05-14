@@ -71,55 +71,54 @@ const ReservationsList = () => {
       left: 24vw;">Active</div>
       <!-- Buttons Container -->
       <div style="
+      display: flex;
+      flex-direction: row;
+      align-items: flex-end;
+      position: absolute;">
+        <div style="
+        margin-top: 20px;
+        border-radius: 6px;
+        background: #FFFFFF;
         display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        margin-left: auto;
-        margin-right: 20px; /* Adjust the right margin for spacing */">
-        <div style="
-          margin-top: 20px;
-          border-radius: 6px;
-          border: 1px solid #1E91B6;
-          background: #FFFFFF;
-          display: flex;
-          justify-content: center;
+        flex-direction: row;
+        justify-content: center;
+        cursor: pointer;
+        padding: 8px 0.4px 8px 0;
+        margin-left: 74vw;
+        box-sizing: border-box;" id="delete-button-${id}">
+        <img style="
+          overflow-wrap: break-word;
+          font-family: 'Poppins';
+          font-weight: 400;
+          width: 4vw;
+          font-size: 15px;
+          letter-spacing: 0.3px;
           cursor: pointer;
-          padding: 8px 0.4px 8px 0;
-          width: 169px;
-          box-sizing: border-box;" id="delete-button-${id}">
-          <span style="
-            overflow-wrap: break-word;
-            font-family: 'Poppins';
-            font-weight: 400;
-            font-size: 15px;
-            letter-spacing: 0.3px;
-            line-height: 1.333;
-            color: #1E91B6;">
-            Delete Reservation
-          </span>
-        </div>
-  
-        <div style="
-          margin-top: 20px;
-          border-radius: 6px;
-          background: #1E91B6;
-          display: flex;
-          justify-content: center;
-          padding: 9px 0.3px 9px 0;
-          width: 169px;
-          cursor: pointer;
-          margin-top: 10px;" id="modify-button-${id}">
-          <span style="
-            overflow-wrap: break-word;
-            font-family: 'Poppins';
-            font-weight: 400;
-            font-size: 15px;
-            letter-spacing: 0.3px;
-            line-height: 1.333;
-            color: #FFFFFF;">
-            Modify Reservation
-          </span>
-        </div>
+          line-height: 1.333;" src="${require("../assets/Bin.jpg")}">
+        </img>
+      </div>
+    </div>
+    <div style="
+        border-radius: 50px;
+        margin-left: 31vw;
+        border: solid 1.5px #045B78;
+        display: flex;
+        justify-content: center;
+        padding-inline: 0.4vw;
+        margin-top: 3.5vh;
+        padding-block: 2vh;
+        width: 3vw;
+        cursor: pointer;" id="modify-button-${id}">
+        <img style="
+          overflow-wrap: break-word;
+          font-family: 'Poppins';
+          font-weight: 400;
+          width: 2vw;
+          font-size: 15px;
+          letter-spacing: 0.3px;
+          color: #FFFFFF;" src="${require("../assets/Pencil.png")}">
+        </img>
+      </div>
       </div>
     </div>
   </div>
@@ -413,7 +412,7 @@ const ReservationsList = () => {
 
       <div id="calendar-modal-modify" className="form-modal-2">
         <div className="form-modal-content-2">
-        <span className="close-modal-x" onClick={closeModal}>&times;</span>
+          <span className="close-modal-x" onClick={closeModal}>&times;</span>
           {(
             <Calendar className="modification-calendar"
               value={selectedDateRange}

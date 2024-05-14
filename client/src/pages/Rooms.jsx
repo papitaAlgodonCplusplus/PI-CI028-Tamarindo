@@ -53,10 +53,10 @@ const Rooms = () => {
       <div style="font-size: 16px; color: #333; position:absolute; left: 45vw;">${room_type}</div>
       <div style="
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         align-items: flex-end;
         position: absolute;
-        right: 20px; /* Adjust the right spacing as needed */">
+        right: 1vw;
         <div style="
           margin-top: 20px;
           border-radius: 6px;
@@ -67,41 +67,39 @@ const Rooms = () => {
           justify-content: center;
           cursor: pointer;
           padding: 8px 0.4px 8px 0;
-          width: 169px;
           box-sizing: border-box;" id="delete-room-button-${id}">
-          <span style="
+          <img style="
             overflow-wrap: break-word;
             font-family: 'Poppins';
             font-weight: 400;
+            width: 4vw;
             font-size: 15px;
             letter-spacing: 0.3px;
-            line-height: 1.333;
-            color: #1E91B6;">
-            Delete Room
-          </span>
-        </div>
-        <div style="
-          margin-top: 20px;
-          border-radius: 6px;
-          background: #1E91B6;
-          display: flex;
-          justify-content: center;
-          padding: 9px 0.3px 9px 0;
-          width: 169px;
-          cursor: pointer;
-          margin-top: 10px;" id="modify-button-${id}">
-          <span style="
-            overflow-wrap: break-word;
-            font-family: 'Poppins';
-            font-weight: 400;
-            font-size: 15px;
-            letter-spacing: 0.3px;
-            line-height: 1.333;
-            color: #FFFFFF;">
-            Modify Room
-          </span>
+            cursor: pointer;
+            line-height: 1.333;" src="${require("../assets/Bin.jpg")}">
+          </img>
         </div>
       </div>
+      <div style="
+          border-radius: 50px;
+          margin-left: 7.6vw;
+          border: solid 1.5px #045B78;
+          display: flex;
+          justify-content: center;
+          padding-left: 0.8vw;
+          padding-block: 2.5vh;
+          width: 3.5vw;
+          cursor: pointer;" id="modify-button-${id}">
+          <img style="
+            overflow-wrap: break-word;
+            font-family: 'Poppins';
+            font-weight: 400;
+            width: 2vw;
+            font-size: 15px;
+            letter-spacing: 0.3px;
+            color: #FFFFFF;" src="${require("../assets/Pencil.png")}">
+          </img>
+        </div>
     </div>
   </div>
   <div style="padding-bottom: 20px;"></div>
@@ -288,23 +286,32 @@ const Rooms = () => {
   // Function to handle form submission
   const handleSubmit = async e => {
     e.preventDefault()
-    // Validating file upload
+    let isError = false;
+    const title = inputs.name.trim();
+    const description = inputs.desc.trim();
+
+    if (title === '') {
+      document.getElementById("warning-title").style.display = "block";
+      isError = true;
+    } else {
+      document.getElementById("warning-title").style.display = "none";
+    }
+
+    if (description === '') {
+      document.getElementById("warning-desc").style.display = "block";
+      isError = true;
+    } else {
+      document.getElementById("warning-desc").style.display = "none";
+    }
+
     if (!file) {
-      showErrorDialog("An error occurred:", "Please upload an image");
-      return;
+      document.getElementById("warning-photo").style.display = "block";
+      isError = true;
+    } else {
+      document.getElementById("warning-photo").style.display = "none";
     }
 
-    // Validating title
-    if (!inputs.name) {
-      showErrorDialog("An error occurred:", "Please add a title");
-      return;
-    }
-
-    // Validating description
-    if (!inputs.desc) {
-      showErrorDialog("An error occurred:", "Please add a description");
-      return;
-    }
+    if (isError) return;
 
     try {
       // Creating FormData object for form data
@@ -436,15 +443,18 @@ const Rooms = () => {
               <label htmlFor="file-input" className="file-input-label">Choose an image</label>
               <img id="image-preview" className="image-preview" src="#" alt="Preview" />
             </div>
+            <label id="warning-photo" className='red-label-r'>Please provide a photo</label>
             {/* Input field for room title */}
             <label htmlFor="name">Title</label><br />
             <input required type="text" id="name" name="name" onChange={handleChange} /><br />
+            <label id="warning-title" className='red-label-r'>Please provide a title</label>
             {/* Textarea for room description */}
             <label htmlFor="desc">Description</label><br />
             <textarea required id="desc" name="desc" onChange={handleChange} ></textarea>
+            <label id="warning-desc" className='red-label-r'>Please provide a description</label>
             {/* Dropdown for selecting room type */}
             <label htmlFor="room_types_selector">Room Type</label><br />
-            <select name="room_types_selector" className="custom-select" id="room_types_selector_1"
+            <select name="room_types_selector" className="custom-select-2" id="room_types_selector_1"
               onChange={handleRoomTypeChange} value={roomTypeOption} required>
               {/* Mapping room types to options */}
               {room_types.map(room_type => (
@@ -510,18 +520,18 @@ const Rooms = () => {
               Actions
             </span>
           </div>
-          <label>Show: </label>
-          <select name="lazy-logger" className="custom-select" id="lazy-logger"
+          <label style={{"marginLeft": "-65.5vw"}}>Show: </label>
+          <select  style={{"marginTop": "-3.2vh"}} name="lazy-logger" className="custom-select" id="lazy-logger"
             onChange={handleLoggingChange}>
             <option key={3} value={3}>3</option>
             <option key={10} value={10}>10</option>
             <option key={25} value={25}>25</option>
             <option key={50} value={50}>50</option>
           </select>
-          <div className="list-container">
-          </div>
           {/* Button to display add room modal */}
           <button className="add-room-button" onClick={displayModal}><center>Add Room</center></button>
+          <div className="list-container">
+          </div>
         </div>
       </div></center>
     </div >)

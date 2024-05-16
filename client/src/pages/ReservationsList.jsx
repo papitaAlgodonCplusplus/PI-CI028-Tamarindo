@@ -31,7 +31,7 @@ const ReservationsList = () => {
       align-items: center;
       position: relative; /* Add position: relative to the parent div */">
       <img style="
-        margin-left: 15px;
+        margin-left: 35px;
         max-width: 90px;
         max-height: 90px;
         margin-right: 24px;
@@ -45,85 +45,84 @@ const ReservationsList = () => {
       <div style="
         font-size: 16px;
         position: relative;
-        margin-left: -44px;
+        margin-left: -7.5vw;
         color: #545454;
         margin-top: 15px;">Guests: 3 (2 adults, 1 child)</div>
       <div style="
         font-size: 16px;
         position: relative;
-        margin-left: -180px;
+        margin-left: -14.5vw;
         color: #545454;
         margin-top: 100px;">• Extra Services</div>
       <div style="
         font-size: 16px;
         color: #333;
         position: relative;
-        left: 200px;">${check_in.substring(0, 10)}</div>
+        left: 15vw;">${check_in.substring(0, 10)}</div>
       <div style="
       font-size: 16px;
       color: #333;
       position: relative;
-      left: 320px;">${check_out.substring(0, 10)}</div>
+      left: 20vw;">${check_out.substring(0, 10)}</div>
       <div style="
       font-size: 16px;
       color: #333;
       position: relative;
-      left: 446px;">Active</div>
-    </div>
-  </div>
-  
-    <div style="
-    display: flex;
-    align-items: center;">
+      left: 24vw;">Active</div>
+      <!-- Buttons Container -->
       <div style="
-      margin-top: 20px;
-      border-radius: 6px;
-      border: 1px solid #1E91B6;
-      background: #FFFFFF;
       display: flex;
       flex-direction: row;
-      justify-content: center;
-      cursor: pointer;
-      padding: 8px 0.4px 8px 0;
-      width: 169px;
-      margin-left: 100px;
-      box-sizing: border-box;" id="delete-button-${id}">
-        <span style="
-        overflow-wrap: break-word;
-        font-family: 'Poppins';
-        font-weight: 400;
-        font-size: 15px;
-        letter-spacing: 0.3px;
-        line-height: 1.333;
-        color: #1E91B6;">
-          Delete Reservation
-        </span>
-      </div>
-  
-      <div style="
-      margin-top: 20px;
-      margin-left: 1%;
-      border-radius: 6px;
-      background: #1E91B6;
-      display: flex;
-      justify-content: center;
-      padding: 9px 0.3px 9px 0;
-      width: 169px;
-      cursor: pointer;" id="modify-button-${id}">
-        <span style="
-        overflow-wrap: break-word;
-        font-family: 'Poppins';
-        font-weight: 400;
-        font-size: 15px;
-        letter-spacing: 0.3px;
-        line-height: 1.333;
-        color: #FFFFFF;">
-          Modify Reservation
-        </span>
+      align-items: flex-end;
+      position: absolute;">
+        <div style="
+        margin-top: 20px;
+        border-radius: 6px;
+        background: #FFFFFF;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        cursor: pointer;
+        padding: 8px 0.4px 8px 0;
+        margin-left: 74vw;
+        box-sizing: border-box;" id="delete-button-${id}">
+        <img style="
+          overflow-wrap: break-word;
+          font-family: 'Poppins';
+          font-weight: 400;
+          width: 4vw;
+          font-size: 15px;
+          letter-spacing: 0.3px;
+          cursor: pointer;
+          line-height: 1.333;" src="${require("../assets/Bin.jpg")}">
+        </img>
       </div>
     </div>
-    
+    <div style="
+        border-radius: 50px;
+        margin-left: 31vw;
+        border: solid 1.5px #045B78;
+        display: flex;
+        justify-content: center;
+        padding-inline: 0.4vw;
+        margin-top: 3.5vh;
+        padding-block: 2vh;
+        width: 3vw;
+        cursor: pointer;" id="modify-button-${id}">
+        <img style="
+          overflow-wrap: break-word;
+          font-family: 'Poppins';
+          font-weight: 400;
+          width: 2vw;
+          font-size: 15px;
+          letter-spacing: 0.3px;
+          color: #FFFFFF;" src="${require("../assets/Pencil.png")}">
+        </img>
+      </div>
+      </div>
+    </div>
   </div>
+  
   `;
 
     const reservations_table = document.querySelector('.reservations-container');
@@ -323,7 +322,6 @@ const ReservationsList = () => {
       // Checking if the new price is greater or lesser than the original
       if (Math.abs(old_price - new_price) > 1000) {
         // Showing error message if the new price is not valid
-        console.log(old_price, new_price)
         showErrorDialog("Error: ", "Cannot select a range of dates greater or lesser than the original.");
         return;
       }
@@ -400,6 +398,9 @@ const ReservationsList = () => {
           <span className="status">
             Status
           </span>
+          <span className="actions-label">
+            Actions
+          </span>
         </div>
       </div>
 
@@ -411,7 +412,7 @@ const ReservationsList = () => {
 
       <div id="calendar-modal-modify" className="form-modal-2">
         <div className="form-modal-content-2">
-        <span className="close-modal-x" onClick={closeModal}>&times;</span>
+          <span className="close-modal-x" onClick={closeModal}>&times;</span>
           {(
             <Calendar className="modification-calendar"
               value={selectedDateRange}

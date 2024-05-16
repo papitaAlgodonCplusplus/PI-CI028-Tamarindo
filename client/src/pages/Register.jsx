@@ -40,7 +40,6 @@ const Register = () => {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
 
     if (!file) {
       showErrorDialog("An error occurred:", "Please upload an image");
@@ -48,17 +47,14 @@ const Register = () => {
     }
 
     if (!inputs.name) {
-      showErrorDialog("An error occurred:", "Please enter your name.");
       return;
     }
 
     if (!inputs.last_name) {
-      showErrorDialog("An error occurred:", "Please enter your last name.");
       return;
     }
 
     if (!inputs.email) {
-      showErrorDialog("An error occurred:", "Please enter your email address.");
       return;
     }
 
@@ -69,12 +65,10 @@ const Register = () => {
     }
 
     if (!inputs.phone) {
-      showErrorDialog("An error occurred:", "Please enter your phone number.");
       return;
     }
 
     if (!inputs.password) {
-      showErrorDialog("An error occurred:", "Please enter your password.");
       return;
     }
 
@@ -226,16 +220,16 @@ const Register = () => {
             <input type="password" id="password_confirm" name="password_confirm" className='password_confirm ' onChange={handleChange} required />
           </div>
 
+
+          <div className="sign-button">
+            <button type="submit" className='create' onClick={handleSubmit}>Sign Up</button>
+          </div>
+
         </form>
 
         <div className="container-terms">
           <input type="checkbox" id="checkbox" value="checkbox" checked={isChecked} onChange={handleCheckbox} />
           <label for="checkbox">Accept Terms and Conditions</label>
-        </div>
-
-        <div className="sign-button">
-          <button type="submit" className='create' onClick={handleSubmit}>Sign Up</button>
-          {err && <p>{err}</p>}
         </div>
 
         <p className="already-account">

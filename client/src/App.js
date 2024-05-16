@@ -9,7 +9,8 @@ import Register from "./pages/Register"
 import Navbar from "./components/Navbar"
 import Footer from "./components/Footer"
 import Rooms from "./pages/Rooms";
-// import Details from "./pages/Details"
+import Details from "./pages/Details"
+import Search from "./pages/Search.jsx"
 // import Payment from "./pages/Payment.jsx";
 // import Reservation from "./pages/Reservation.jsx";
 import Amenities from "./pages/Amenities.jsx";
@@ -22,7 +23,6 @@ const Layout = () => {
   return (
     <>
       <Navbar />
-      <br></br>
       <Outlet />
       <Footer />
     </>
@@ -58,14 +58,18 @@ const router = createBrowserRouter([
         path: "/reservations_list",
         element: <ReservationsList />,
       },
+      {
+        path: "/details",
+        element: <Details />,
+      },
+      {
+        path: "/search",
+        element: <Search />,
+      },
     ],
     //   {
     //     path: "/rooms",
     //     element: <Rooms />,
-    //   },
-    //   {
-    //     path: "/details",
-    //     element: <Details />,
     //   },
     //   {
     //     path: "/reservation",

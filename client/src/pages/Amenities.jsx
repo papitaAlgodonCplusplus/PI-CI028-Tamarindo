@@ -10,96 +10,103 @@ const Amenities = () => {
   // Function to add a new amenity to the UI
   const addAmenity = (title, fee, id, img) => {
     const newAmenityHTML = `
-  <div className="list-container">
-  <div style="
-    height: 100px;
-    margin-top: 2%;
-    width: 71%;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    position: relative; /* Add position: relative to the parent div */">
-    <img style="
-      margin-left: 15px;
-      max-width: 90px;
-      max-height: 90px;
-      margin-right: 24px;
-      margin-bottom: 10px;" src=${img} alt="${title}-icon"/>
+    <div className="list-container">
     <div style="
-      font-size: 18px;
-      font-weight: bold;
-      position: relative; 
-      left: 55px;">${title}</div>
-    <div style="
-      font-size: 16px;
-      color: #333;
-      position: relative;
-      left: 400px;">₡${fee}</div>
-  </div>
-  </div>
-
-  <div style="
-  display: flex;
-  align-items: center;">
-    <div style="
-    margin-top: 20px;
-    border-radius: 6px;
-    border: 1px solid #1E91B6;
-    background: #FFFFFF;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    cursor: pointer;
-    padding: 8px 0.4px 8px 0;
-    width: 169px;
-    box-sizing: border-box;" id="delete-button-${title}">
-      <span style="
-      overflow-wrap: break-word;
-      font-family: 'Poppins';
-      font-weight: 400;
-      font-size: 15px;
-      letter-spacing: 0.3px;
-      line-height: 1.333;
-      color: #1E91B6;">
-        Delete Amenity
-      </span>
+      height: 100px;
+      margin-top: 2%;
+      width: 71%;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      position: relative; /* Add position: relative to the parent div */">
+      <img style="
+        margin-left: 15px;
+        max-width: 90px;
+        max-height: 90px;
+        margin-right: -5px;
+        margin-bottom: 10px;" src=${img} alt="${title}-icon"/>
+      <div style="
+        font-size: 18px;
+        font-weight: bold;
+        position: relative; 
+        width: 10vw;
+        left: 4vw;">${title}</div>
+      <div style="
+        font-size: 16px;
+        color: #333;
+        position: relative;
+        width: 10vw;
+        left: 9vw;">$${fee}</div>
+      <div style="
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        position: absolute;
+        right: 20px;">
+        <div style="
+        margin-top: 20px;
+        border-radius: 6px;
+        background: #FFFFFF;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        cursor: pointer;
+        padding: 8px 0.4px 8px 0;
+        margin-left: 74vw;
+        box-sizing: border-box;" id="delete-button-${id}">
+        <img style="
+          overflow-wrap: break-word;
+          font-family: 'Poppins';
+          font-weight: 400;
+          width: 4vw;
+          font-size: 15px;
+          letter-spacing: 0.3px;
+          cursor: pointer;
+          line-height: 1.333;" src="${require("../assets/Bin.jpg")}">
+        </img>
+      </div>
     </div>
-
     <div style="
-    margin-top: 20px;
-    margin-left: 1%;
-    border-radius: 6px;
-    background: #1E91B6;
-    display: flex;
-    justify-content: center;
-    padding: 9px 0.3px 9px 0;
-    width: 169px;
-    cursor: pointer;" id="modify-button-${title}">
-      <span style="
-      overflow-wrap: break-word;
-      font-family: 'Poppins';
-      font-weight: 400;
-      font-size: 15px;
-      letter-spacing: 0.3px;
-      line-height: 1.333;
-      color: #FFFFFF;">
-        Modify Amenity
-      </span>
+        border-radius: 50px;
+        margin-left: 19vw;
+        border: solid 1.5px #045B78;
+        display: flex;
+        justify-content: center;
+        padding-inline: 0.4vw;
+        margin-top: 3.5vh;
+        padding-block: 2vh;
+        width: 3vw;
+        cursor: pointer;" id="modify-button-${id}">
+        <img style="
+          overflow-wrap: break-word;
+          font-family: 'Poppins';
+          font-weight: 400;
+          width: 2vw;
+          font-size: 15px;
+          letter-spacing: 0.3px;
+          color: #FFFFFF;" src="${require("../assets/Pencil.png")}">
+        </img>
+      </div>
     </div>
-  </div>
-  
-</div>
+  </div>  
 `;
 
     const amenities_table = document.querySelector('.amenities-container');
     amenities_table.insertAdjacentHTML('beforeend', newAmenityHTML);
-    const deleteButton = document.getElementById("delete-button-" + title);
+    const deleteButton = document.getElementById("delete-button-" + id);
     deleteButton.addEventListener('click', (e) => handleDelete(e, id, title));
-    const modifyButton = document.getElementById("modify-button-" + title);
+    const modifyButton = document.getElementById("modify-button-" + id);
     modifyButton.addEventListener('click', (e) => handleModify(e, title));
+  }
+
+  let logs = 3;
+  const handleLoggingChange = e => {
+    logs = e.target.value;
+    fetchData()
+    return;
   }
 
   // Function to handle deletion of a service
@@ -121,16 +128,22 @@ const Amenities = () => {
   const navigate = useNavigate()
   const fetchData = async () => {
     if (userRol !== "admin" && userRol !== "employee") {
-      navigate("/home")
-      return;
+      // navigate("/home")
+      // return;
     }
     const amenities_table = document.querySelector('.amenities-container');
     try {
       const res = await axios.get("/amenities");
       emptyContainer(amenities_table);
       // Add each service to the UI
+      let logged = 0;
       res.data.forEach(service => {
+        if (logged >= logs) {
+          updateContainer(amenities_table);
+          return;
+        }
         addAmenity(service.service_name, service.service_price, service.serviceid, service.image_path);
+        logged++;
       });
       updateContainer(amenities_table);
       return;
@@ -222,25 +235,33 @@ const Amenities = () => {
 
   // Function to handle form submission
   const handleSubmit = async e => {
-    e.preventDefault(); // Preventing default form submission behavior
+    e.preventDefault()
+    let isError = false;
+    const title = inputs.title.trim();
+    const fee = inputs.fee.trim();
 
-    // Validating file upload
+    if (title === '') {
+      document.getElementById("warning-title").style.display = "block";
+      isError = true;
+    } else {
+      document.getElementById("warning-title").style.display = "none";
+    }
+
+    if (fee === '') {
+      document.getElementById("warning-fee").style.display = "block";
+      isError = true;
+    } else {
+      document.getElementById("warning-fee").style.display = "none";
+    }
+
     if (!file) {
-      showErrorDialog("Error", "Please upload an image");
-      return;
+      document.getElementById("warning-photo").style.display = "block";
+      isError = true;
+    } else {
+      document.getElementById("warning-photo").style.display = "none";
     }
 
-    // Validating title
-    if (!inputs.title) {
-      showErrorDialog("Error", "Please add a title");
-      return;
-    }
-
-    // Validating fee
-    if (!inputs.fee) {
-      showErrorDialog("Error", "Please add a fee");
-      return;
-    }
+    if (isError) return;
 
     try {
       // Creating FormData object for form data
@@ -430,15 +451,26 @@ const Amenities = () => {
           <span className="price">
             Price
           </span>
+          <span className="amenity-actions">
+            Actions
+          </span>
         </div>
       </div>
 
 
+      <label style={{ "marginLeft": "20vw" }}>Show: </label>
+      <select name="lazy-logger" style={{ "marginLeft": "25vw", "marginTop": "-3vh" }} className="custom-select" id="lazy-logger"
+        onChange={handleLoggingChange}>
+        <option key={3} value={3}>3</option>
+        <option key={10} value={10}>10</option>
+        <option key={25} value={25}>25</option>
+        <option key={50} value={50}>50</option>
+      </select>
+      <button className="add-amenity-button" onClick={displayModal}><center>Add Amenity</center></button>
       <div>
         <div className="amenities-container">
 
         </div>
-        <button className="add-amenity-button" onClick={displayModal}><center>Add Amenity</center></button>
       </div>
 
       <div id="myFormModal" className="form-modal">
@@ -451,14 +483,17 @@ const Amenities = () => {
               <label htmlFor="file-input" className="file-input-label">Choose an icon</label>
               <img id="image-preview" className="image-preview" src={data.file_path} alt="Preview" />
             </div>
+            <label id="warning-photo" className='red-label-a'>Please provide an image</label>
             {/* Input field for amenity title */}
             <label htmlFor="title">Title</label><br />
-            <input type="text" maxLength="28" id="title" name="title" onChange={handleChange} /><br />
+            <input required type="text" maxLength="28" id="title" name="title" onChange={handleChange} /><br />
+            <label id="warning-title" className='red-label-a'>Please provide a title</label>
             {/* Input field for amenity fee */}
             <label htmlFor="fee">Fee</label><br />
-            <input type="number" step="0.01" min="0" id="fee" name="fee" onChange={handleChange} /><br />
+            <input required type="number" step="0.01" min="0" id="fee" name="fee" onChange={handleChange} /><br />
+            <label id="warning-fee" className='red-label-a'>Please provide a fee</label>
             {/* Button to add amenity */}
-            <button className="add-amenity-button" onClick={handleSubmit}><center>Upload Amenity</center></button>
+            <button type="submit" className="add-amenity-button" onClick={handleSubmit}><center>Upload Amenity</center></button>
           </form>
         </div>
       </div>

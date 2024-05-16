@@ -28,14 +28,15 @@ hr {
   padding: 0%;
   padding-top: 1%;
   padding-bottom: 1%;
-  justify-content: center;
+  margin-bottom: 5vh;
   width: 60%;
   box-sizing: border-box;
 }
 
 .amenity {
   padding: 0%;
-  margin-right: 300px;
+  margin-right: 130px;
+  margin-left: 170px;
   overflow-wrap: break-word;
   font-family: 'Poppins';
   font-weight: 500;
@@ -45,6 +46,18 @@ hr {
 
 .price {
   padding: 0%;
+  overflow-wrap: break-word;
+  font-family: 'Poppins';
+  margin-right: 15px;
+  font-weight: 500;
+  margin-right: 16vw;
+  font-size: 20px;
+  color: #181818;
+}
+
+.amenity-actions {
+  padding: 0%;
+  margin-left: 2.5vw;
   overflow-wrap: break-word;
   font-family: 'Poppins';
   margin-right: 15px;
@@ -63,6 +76,13 @@ hr {
   z-index: 1000;
 }
 
+#myForm .red-label-a {
+  font-size: 16px;
+  color: rgb(161, 7, 7);
+  display: none;
+  margin-bottom: 5vh;
+}
+
 .add-amenity-button {
   border-radius: 6px;
   border: 1px solid #1E91B6;
@@ -70,7 +90,6 @@ hr {
   font-family: 'Poppins';
   cursor: pointer;
   width: 150px;
-  margin-top: 5%;
   margin-left: 44%;
   padding-block: 0.5%;
   font-weight: 500;
@@ -87,7 +106,7 @@ hr {
   font-family: 'Poppins';
   cursor: pointer;
   padding-block: 2%;
-  width: 150px;
+  width: 170px;
   font-weight: 500;
   font-size: 23px;
   color: #ffffff;

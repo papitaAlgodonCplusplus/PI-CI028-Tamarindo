@@ -39,7 +39,9 @@ hr {
 }
 
 
-.custom-select {
+
+.custom-select-2 {
+  display: block;
   width: 150px;
   height: 20px;
   border: 1px solid #ccc;
@@ -47,7 +49,20 @@ hr {
   background-color: #fff;
   overflow: hidden;
   border-radius: 5px;
-  margin-left: 5px;
+  margin-left: 18vw;
+  margin-bottom: 20px;
+}
+
+.custom-select {
+  display: block;
+  width: 150px;
+  height: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  overflow: hidden;
+  border-radius: 5px;
+  margin-left: -48vw;
   margin-bottom: 20px;
 }
 
@@ -86,6 +101,13 @@ hr {
 .custom-select select option:checked {
   background-color: #15406e;
   color: #fff;
+}
+
+#myForm .red-label-r {
+  font-size: 16px;
+  color: rgb(161, 7, 7);
+  display: none;
+  margin-bottom: 5vh;
 }
 
 #myForm {
@@ -162,6 +184,7 @@ hr {
 .list-container {
   align-self: center;
 }
+
 // .list-container {
 //   display: flex;
 //   flex-direction: column;
@@ -264,7 +287,6 @@ textarea {
   flex-direction: row;
   padding: 0%;
   padding-top: 17px;
-  justify-content: center;
   width: 886px;
   border-radius: 5px;
   box-sizing: border-box;
@@ -273,9 +295,9 @@ textarea {
 
 .room,
 .description,
-.typeR {
+.typeR,
+.actions {
   padding: 0%;
-  margin-right: 300px;
   overflow-wrap: break-word;
   font-family: 'Poppins';
   font-weight: 500;
@@ -289,14 +311,38 @@ textarea {
   left: 110px;
 }
 
-.description {
+.rooms-bar .description {
+  overflow-wrap: break-word;
+  font-family: 'Poppins';
+  font-weight: 500;
+  font-size: 20px;
+  color: #181818;
   position: absolute;
-  left: 450px;
+  left: -14.5vw;
+}
+
+.red-label {
+  font-size: 16px;
+  color: rgb(161, 7, 7);
+  display: none;
+  margin-bottom: 5vh;
+}
+
+.red-label-2 {
+  font-size: 16px;
+  margin-bottom: 5vh;
+  color: rgb(161, 7, 7);
+  display: none;
+}
+
+.actions {
+  position: absolute;
+  left: 59.8vw;
 }
 
 .typeR {
   position: absolute;
-  left: 750px;
+  left: 45.5vw;
 }
 
 .roomT {
@@ -321,7 +367,6 @@ textarea {
   font-family: 'Poppins';
   cursor: pointer;
   width: 175px;
-  margin-top: 5%;
   padding-block: 0.5%;
   font-weight: 500;
   font-size: 18px;

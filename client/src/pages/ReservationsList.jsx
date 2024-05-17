@@ -8,6 +8,8 @@ import "../styles/reservation_list.scss"
 import { useNavigate } from 'react-router-dom';
 
 const ReservationsList = () => {
+  const { isLoggedIn } = useContext(AuthContext)
+
   const [selectedDateRange, setSelectedDateRange] = useState([
     new DateObject({ hour: 7 }),
     new DateObject({ hour: 18 })
@@ -135,78 +137,90 @@ const ReservationsList = () => {
 
   // Function to handle deletion of reservation
   const handleDelete = async (e, reservationId) => {
-    e.preventDefault(); // Prevent default form submission behavior
-    try {
-      // Fetch reservation data by ID
-      const reservationResponse = await axios.get(`/reservations/get_reservation_by_id${reservationId}`);
+    if (isLoggedIn) {
+      e.preventDefault(); // Prevent default form submission behavior
+      try {
+        // Fetch reservation data by ID
+        const reservationResponse = await axios.get(`/reservations/get_reservation_by_id${reservationId}`);
 
-      // Extract check-in date from response
-      const checkInDate = new Date(reservationResponse.data[0].check_in);
+        // Extract check-in date from response
+        const checkInDate = new Date(reservationResponse.data[0].check_in);
 
-      // Get current date
-      const currentDate = new Date();
+        // Get current date
+        const currentDate = new Date();
 
-      // Calculate time difference between check-in date and current date
-      const timeDifference = checkInDate.getTime() - currentDate.getTime();
+        // Calculate time difference between check-in date and current date
+        const timeDifference = checkInDate.getTime() - currentDate.getTime();
 
-      // Calculate days difference
-      const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
+        // Calculate days difference
+        const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
 
-      // If check-in is within 7 days, show warning
-      if (daysDifference <= 7) {
-        // Fetch payment data by payment ID
-        const paymentResponse = await axios.get(`/payments/payment_byPaymentID${reservationResponse.data[0].payment_id}`);
+        // If check-in is within 7 days, show warning
+        if (daysDifference <= 7) {
+          // Fetch payment data by payment ID
+          const paymentResponse = await axios.get(`/payments/payment_byPaymentID${reservationResponse.data[0].payment_id}`);
 
-        // Calculate refund amount
-        const refundAmount = Math.round(paymentResponse.data[0].price * 0.8);
+          // Calculate refund amount
+          const refundAmount = Math.round(paymentResponse.data[0].price * 0.8);
 
-        // Show warning dialog
-        const warningResult = await showWarningDialog("Warning", `Deleting reservation within 7 days of check-in, you'll only receive ${refundAmount} back.`);
+          // Show warning dialog
+          const warningResult = await showWarningDialog("Warning", `Deleting reservation within 7 days of check-in, you'll only receive ${refundAmount} back.`);
 
-        // If user cancels deletion, return
-        if (!warningResult) {
-          return;
+          // If user cancels deletion, return
+          if (!warningResult) {
+            return;
+          }
         }
+
+        // Delete reservation data with timeout
+        await deleteDataWithTimeout(`/reservations/delete${reservationId}`, 500);
+
+        // Fetch updated data
+        fetchData();
+
+        return;
+      } catch (error) {
+        // Show error dialog if an error occurs
+        showErrorDialog("An error occurred:", error);
       }
-
-      // Delete reservation data with timeout
-      await deleteDataWithTimeout(`/reservations/delete${reservationId}`, 500);
-
-      // Fetch updated data
-      fetchData();
-
+    } else {
       return;
-    } catch (error) {
-      // Show error dialog if an error occurs
-      showErrorDialog("An error occurred:", error);
     }
   }
 
   const [reservation, setReservation] = useState([]);
   const displayModal = async (id) => {
-    const response = await axios.get(`/reservations/get_reservation_by_id${id}`);
-    setReserved(response.data.map(res => {
-      const checkInString = res.check_in.slice(0, 19).replace('T', ' ');
-      const checkOutString = res.check_out.slice(0, 19).replace('T', ' ');
-      const [year, month, day] = [checkInString.substring(0, 4), checkInString.substring(5, 7), checkInString.substring(8, 10)]
-      const [hour, minute, second] = [7, 0, 0];
-      const date = new Date(year, month - 1, day, hour, minute, second);
-      const formattedCheckIn = new DateObject(date).format();
+    if (isLoggedIn) {
+      const response = await axios.get(`/reservations/get_reservation_by_id${id}`);
+      setReserved(response.data.map(res => {
+        const checkInString = res.check_in.slice(0, 19).replace('T', ' ');
+        const checkOutString = res.check_out.slice(0, 19).replace('T', ' ');
+        const [year, month, day] = [checkInString.substring(0, 4), checkInString.substring(5, 7), checkInString.substring(8, 10)]
+        const [hour, minute, second] = [7, 0, 0];
+        const date = new Date(year, month - 1, day, hour, minute, second);
+        const formattedCheckIn = new DateObject(date).format();
 
-      const [year2, month2, day2] = [checkOutString.substring(0, 4), checkOutString.substring(5, 7), checkOutString.substring(8, 10)]
-      const [hour2, minute2, second2] = [18, 0, 0];
-      const date2 = new Date(year2, month2 - 1, day2, hour2, minute2, second2);
-      const formattedCheckOut = new DateObject(date2).format();
+        const [year2, month2, day2] = [checkOutString.substring(0, 4), checkOutString.substring(5, 7), checkOutString.substring(8, 10)]
+        const [hour2, minute2, second2] = [18, 0, 0];
+        const date2 = new Date(year2, month2 - 1, day2, hour2, minute2, second2);
+        const formattedCheckOut = new DateObject(date2).format();
 
-      return [formattedCheckIn, formattedCheckOut];
-    }));
-    var modal = document.getElementById("calendar-modal-modify");
-    modal.style.display = "block";
+        return [formattedCheckIn, formattedCheckOut];
+      }));
+      var modal = document.getElementById("calendar-modal-modify");
+      modal.style.display = "block";
+    } else {
+      return;
+    }
   }
 
   function closeModal() {
-    var modal = document.getElementById("calendar-modal-modify");
-    modal.style.display = "none";
+    if (isLoggedIn) {
+      var modal = document.getElementById("calendar-modal-modify");
+      modal.style.display = "none";
+    } else {
+      return;
+    }
   }
 
   const [selectedRoomID, setSelectedRoomID] = useState(0);
@@ -214,46 +228,49 @@ const ReservationsList = () => {
   const [fetched, setFetched] = useState(false);
   let reservations = [];
   const fetchData = async () => {
-    // Selecting the services container
-    const servicesContainer = document.querySelector('.reservations-container');
+    if (isLoggedIn) {
+      // Selecting the services container
+      const servicesContainer = document.querySelector('.reservations-container');
 
-    try {
-      // Clearing the services container
-      emptyContainer(servicesContainer);
+      try {
+        // Clearing the services container
+        emptyContainer(servicesContainer);
 
-      // Fetching reservations data for the current user
-      const res = await axios.get(`/reservations/by_userID${userId}`);
+        // Fetching reservations data for the current user
+        const res = await axios.get(`/reservations/by_userID${userId}`);
 
-      // Iterating through each reservation
-      for (const reservation of res.data) {
-        // Formatting check-in and check-out dates
-        const checkIn = new Date(reservation.check_in).toISOString().slice(0, 19).replace('T', ' ');
-        const checkOut = new Date(reservation.check_out).toISOString().slice(0, 19).replace('T', ' ');
+        // Iterating through each reservation
+        for (const reservation of res.data) {
+          // Formatting check-in and check-out dates
+          const checkIn = new Date(reservation.check_in).toISOString().slice(0, 19).replace('T', ' ');
+          const checkOut = new Date(reservation.check_out).toISOString().slice(0, 19).replace('T', ' ');
 
-        // Fetching room data for the reservation
-        const res2 = await axios.get(`/rooms/by_roomID${reservation.id_room}`);
+          // Fetching room data for the reservation
+          const res2 = await axios.get(`/rooms/by_roomID${reservation.id_room}`);
 
-        // Fetching image data for the room
-        const image = await axios.get(`/files/get_image_by_id${res2.data[0].image_id}`);
-        const filepath = "/upload/" + image.data[0].filename;
+          // Fetching image data for the room
+          const image = await axios.get(`/files/get_image_by_id${res2.data[0].image_id}`);
+          const filepath = "/upload/" + image.data[0].filename;
 
-        // Fetching payment data for the reservation
-        const res3 = await axios.get(`/payments/payment_byPaymentID${reservation.payment_id}`);
+          // Fetching payment data for the reservation
+          const res3 = await axios.get(`/payments/payment_byPaymentID${reservation.payment_id}`);
 
-        // Adding reservation to the services container
-        addReservation(res2.data[0].title, checkIn, checkOut, filepath, res3.data[0].price, reservation.reservationid);
+          // Adding reservation to the services container
+          addReservation(res2.data[0].title, checkIn, checkOut, filepath, res3.data[0].price, reservation.reservationid);
 
-        // Updating the services container
-        updateContainer(servicesContainer);
+          // Updating the services container
+          updateContainer(servicesContainer);
+        }
+        return;
+      } catch (error) {
+        showErrorDialog("An error occurred:", error);
       }
+    } else {
       return;
-    } catch (error) {
-      showErrorDialog("An error occurred:", error);
     }
   };
 
   const navigate = useNavigate()
-  const { isLoggedIn } = useContext(AuthContext)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!isLoggedIn) {
@@ -267,92 +284,100 @@ const ReservationsList = () => {
 
   // Function to handle modification of reservation
   const handleModify = async (e, reservationId) => {
-    e.preventDefault(); // Preventing default form submission behavior
-    try {
-      // Fetching reservation details by ID
-      const reservationResponse = await axios.get(`/reservations/get_reservation_by_id${reservationId}`);
+    if (isLoggedIn) {
+      e.preventDefault(); // Preventing default form submission behavior
+      try {
+        // Fetching reservation details by ID
+        const reservationResponse = await axios.get(`/reservations/get_reservation_by_id${reservationId}`);
 
-      // Extract room ID from the response data and set it
-      const roomId = reservationResponse.data[0].id_room;
-      setSelectedRoomID(roomId);
+        // Extract room ID from the response data and set it
+        const roomId = reservationResponse.data[0].id_room;
+        setSelectedRoomID(roomId);
 
-      // Fetch reservations for the specific room
-      const roomReservationsResponse = await axios.get(`/reservations/get_reservations_by_room_id${roomId}`);
+        // Fetch reservations for the specific room
+        const roomReservationsResponse = await axios.get(`/reservations/get_reservations_by_room_id${roomId}`);
 
-      // Set reservations state with the fetched data
-      reservations = roomReservationsResponse.data;
-      setReservation(reservations)
+        // Set reservations state with the fetched data
+        reservations = roomReservationsResponse.data;
+        setReservation(reservations)
 
-      // Display modal for modification
-      displayModal(reservationId);
+        // Display modal for modification
+        displayModal(reservationId);
+        return;
+      } catch (error) {
+        // Displaying error dialog if an error occurs
+        showErrorDialog("An error occurred:", error);
+      }
+    } else {
       return;
-    } catch (error) {
-      // Displaying error dialog if an error occurs
-      showErrorDialog("An error occurred:", error);
     }
   };
 
   // State variable for room ID
   const handleModifyConfirm = async (e) => {
-    // Preventing the default form submission behavior
-    e.preventDefault();
+    if (isLoggedIn) {
+      // Preventing the default form submission behavior
+      e.preventDefault();
 
-    try {
-      // Fetching room data based on room ID
-      const res2 = await axios.get(`/rooms/by_roomID${selectedRoomID}`);
+      try {
+        // Fetching room data based on room ID
+        const res2 = await axios.get(`/rooms/by_roomID${selectedRoomID}`);
 
-      // Fetching room type data based on room type ID
-      const res3 = await axios.get(`/categories/room_type_ByID${res2.data[0].type_of_room}`);
+        // Fetching room type data based on room type ID
+        const res3 = await axios.get(`/categories/room_type_ByID${res2.data[0].type_of_room}`);
 
-      // Calculating new price based on selected dates and room type price
-      let new_price = (res3.data[0].price * (calculateNumberOfDays(selectedDateRange[0], selectedDateRange[1]) - 1));
+        // Calculating new price based on selected dates and room type price
+        let new_price = (res3.data[0].price * (calculateNumberOfDays(selectedDateRange[0], selectedDateRange[1]) - 1));
 
-      // Fetching payment data based on payment ID
-      const res4 = await axios.get(`/payments/payment_byPaymentID${reservation[0].payment_id}`);
+        // Fetching payment data based on payment ID
+        const res4 = await axios.get(`/payments/payment_byPaymentID${reservation[0].payment_id}`);
 
-      // Fetching total service price for the reservation
-      const res5 = await axios.get(`/amenities/get_sum${reservation[0].reservationid}`);
+        // Fetching total service price for the reservation
+        const res5 = await axios.get(`/amenities/get_sum${reservation[0].reservationid}`);
 
-      // Adding total service price to the new price
-      new_price = Math.floor(new_price + res5.data.totalServicePrice);
+        // Adding total service price to the new price
+        new_price = Math.floor(new_price + res5.data.totalServicePrice);
 
-      // Getting the old price from payment data
-      const old_price = Math.floor(res4.data[0].price);
+        // Getting the old price from payment data
+        const old_price = Math.floor(res4.data[0].price);
 
-      // Checking if the new price is greater or lesser than the original
-      if (Math.abs(old_price - new_price) > 1000) {
-        // Showing error message if the new price is not valid
-        showErrorDialog("Error: ", "Cannot select a range of dates greater or lesser than the original.");
+        // Checking if the new price is greater or lesser than the original
+        if (Math.abs(old_price - new_price) > 1000) {
+          // Showing error message if the new price is not valid
+          showErrorDialog("Error: ", "Cannot select a range of dates greater or lesser than the original.");
+          return;
+        }
+
+        // Creating request object with updated reservation data
+        const req = {
+          check_in: new Date(selectedDateRange[0]).toISOString().slice(0, 19).replace('T', ' '),
+          check_out: new Date(selectedDateRange[1]).toISOString().slice(0, 19).replace('T', ' '),
+          reservationID: reservation[0].reservationid,
+        };
+
+        // Updating reservation data on the server
+        putDataWithTimeout("/reservations/updateReservation", req);
+
+        // Closing modal
+        closeModal();
+
+        // Resetting date state
+        setSelectedDateRange(null);
+
+        // Fetching updated reservation data
+        fetchData();
+
+
+        // Reload Page
+        window.location.reload()
+
         return;
+      } catch (error) {
+        // Handling errors
+        showErrorDialog("An error occurred:", error);
       }
-
-      // Creating request object with updated reservation data
-      const req = {
-        check_in: new Date(selectedDateRange[0]).toISOString().slice(0, 19).replace('T', ' '),
-        check_out: new Date(selectedDateRange[1]).toISOString().slice(0, 19).replace('T', ' '),
-        reservationID: reservation[0].reservationid,
-      };
-
-      // Updating reservation data on the server
-      putDataWithTimeout("/reservations/updateReservation", req);
-
-      // Closing modal
-      closeModal();
-
-      // Resetting date state
-      setSelectedDateRange(null);
-
-      // Fetching updated reservation data
-      fetchData();
-
-
-      // Reload Page
-      window.location.reload()
-
+    } else {
       return;
-    } catch (error) {
-      // Handling errors
-      showErrorDialog("An error occurred:", error);
     }
   };
 
@@ -364,15 +389,19 @@ const ReservationsList = () => {
 
   const [activeButton, setActiveButton] = useState(false)
   const handleCalendarChange = (newDatesRange, event) => {
-    setSelectedDateRange(newDatesRange)
-    if (newDatesRange.length > 1) {
-      setActiveButton(true)
+    if (isLoggedIn) {
+      setSelectedDateRange(newDatesRange)
+      if (newDatesRange.length > 1) {
+        setActiveButton(true)
+      } else {
+        setActiveButton(false)
+      }
     } else {
-      setActiveButton(false)
+      return;
     }
   }
 
-  return (
+  return ((isLoggedIn ?  // Show page (html) if user is logged in
     <div>
       <div className="my-reservations">
         <div className="my-reservations-1">
@@ -439,6 +468,8 @@ const ReservationsList = () => {
         </div>
       </div>
     </div>
+    // Show error to user, that hasnt logged in
+    : <div>{showErrorDialog("Error: ", "Login to access", true, navigate)}</div>)
   )
 }
 

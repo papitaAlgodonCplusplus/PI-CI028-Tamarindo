@@ -129,7 +129,7 @@ export function showErrorDialog(title, description, exit_on_close = false, navig
   closeButton.addEventListener('click', () => {
     document.body.removeChild(overlay);
     if (exit_on_close) {
-      navigate("/");
+      // navigate("/register");
     }
   });
 

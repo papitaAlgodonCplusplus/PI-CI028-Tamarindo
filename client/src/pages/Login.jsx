@@ -1,13 +1,13 @@
-import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
-import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import axios from "axios";
+import { AuthContext } from '../AuthContext.js';
 import { Checkbox, IconButton } from '@mui/material';
 import { FormControlLabel } from '@mui/material';
-import React, { useState, useContext } from 'react';
-import { useNavigate } from "react-router-dom";
-import { AuthContext } from '../AuthContext.js';
 import { showErrorDialog } from "../Misc.js";
-import axios from "axios";
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { useNavigate } from "react-router-dom";
+import React, { useState, useContext } from 'react';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import '../styles/login.scss'
 
 const theme = createTheme({
@@ -23,6 +23,8 @@ const theme = createTheme({
 
 const Login = () => {
   const { login, logout } = useContext(AuthContext);
+
+  logout()
 
   // State to manage form inputs
   const [inputs, setInputs] = useState({

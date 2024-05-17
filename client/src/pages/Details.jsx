@@ -1,39 +1,41 @@
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import "../styles/details_page.scss"
+import { AuthContext } from "../AuthContext.js"
+import { Calendar } from "react-multi-date-picker"
 import { Context } from '../Context';
 import { DateObject } from "react-multi-date-picker"
-import { Calendar } from "react-multi-date-picker"
-import { AuthContext } from "../AuthContext.js"
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import { useNavigate } from "react-router-dom";
 import { showErrorDialog } from "../Misc.js";
-import Vector6 from "../vectors/Vector6_x2.svg";
+import React, { useState, useEffect, useContext, useRef } from 'react';
+import Vector from "../vectors/Vector_x2.svg";
+import Vector1 from "../vectors/Vector1_x2.svg";
 import Vector2 from "../vectors/Vector2_x2.svg";
 import Vector4 from "../vectors/Vector4_x2.svg";
-import Vector1 from "../vectors/Vector1_x2.svg";
+import Vector5 from "../vectors/Vector5_x2.svg";
+import Vector6 from "../vectors/Vector6_x2.svg";
 import Vector10 from "../vectors/Vector10_x2.svg";
 import Location from "../vectors/Location_x2.svg";
-import Vector from "../vectors/Vector_x2.svg";
-import Vector5 from "../vectors/Vector5_x2.svg";
 import GroupX2 from "../vectors/Group_x2.svg";
 import Group1_X2 from "../vectors/Group1_x2.svg";
 import Group2_X2 from "../vectors/Group2_x2.svg";
 import Group3_X2 from "../vectors/Group3_x2.svg";
 import Group4_X2 from "../vectors/Group4_x2.svg";
 import Group5_X2 from "../vectors/Group5_x2.svg";
+import "../styles/details_page.scss"
+
+const LocationIcon = () => <img alt="vector" className="location" src={Location} />;
 const Star = () => <div className="star"><img alt="vector" className="vector" src={Vector6} /></div>;
 const Star1 = () => <div className="star-1"><img alt="vector" className="vector-1" src={Vector2} /></div>;
 const Star2 = () => <div className="star-2"><img alt="vector" className="vector-2" src={Vector4} /></div>;
 const Star3 = () => <div className="star-3"><img alt="vector" className="vector-3" src={Vector1} /></div>;
 const Star4 = () => <div className="star-4"><img alt="vector" className="vector-4" src={Vector10} /></div>;
-const LocationIcon = () => <img alt="vector" className="location" src={Location} />;
 const Vector7 = () => <div className="style-layer"><img alt="vector" className="vector-7" src={Vector} /></div>;
 const Vector8 = () => <div className="style-layer-1"><img alt="vector" className="vector-8" src={Vector5} /></div>;
-const Wifi = () => (
+
+const Car = () => (
   <div className="icon-with-text">
     <div className="icon-container">
-      <div className="icon"><img className="vector-9" src={Group1_X2} alt="Wifi" /></div>
-      <div className="text">Wifi 5G</div>
+      <div className="icon"><img className="vector-12" src={Group3_X2} alt="Car" /></div>
+      <div className="text">Parking Lot</div>
     </div>
   </div>
 );
@@ -47,6 +49,16 @@ const Like = () => (
   </div>
 );
 
+const Lock = () => (
+  <div className="icon-with-text">
+    <div className="icon-container">
+      <div className="icon"><img className="vector-14" src={Group5_X2} alt="Lock" /></div>
+      <div className="text">Security</div>
+    </div>
+  </div>
+);
+
+
 const Pool = () => (
   <div className="icon-with-text">
     <div className="icon-container">
@@ -56,11 +68,11 @@ const Pool = () => (
   </div>
 );
 
-const Car = () => (
+const Wifi = () => (
   <div className="icon-with-text">
     <div className="icon-container">
-      <div className="icon"><img className="vector-12" src={Group3_X2} alt="Car" /></div>
-      <div className="text">Parking Lot</div>
+      <div className="icon"><img className="vector-9" src={Group1_X2} alt="Wifi" /></div>
+      <div className="text">Wifi 5G</div>
     </div>
   </div>
 );
@@ -74,16 +86,10 @@ const Wind = () => (
   </div>
 );
 
-const Lock = () => (
-  <div className="icon-with-text">
-    <div className="icon-container">
-      <div className="icon"><img className="vector-14" src={Group5_X2} alt="Lock" /></div>
-      <div className="text">Security</div>
-    </div>
-  </div>
-);
-
 const Details = () => {
+  // Bool that checks if user has logged in with valid user (client-worker-administrator)
+  const { isLoggedIn } = useContext(AuthContext);
+
   const navigate = useNavigate()
   const [dataLoaded, setDataLoaded] = useState(false); // State to track if data is loaded
   const { lastRoomClickedID } = useContext(Context); // Context for the ID of the last clicked room
@@ -94,14 +100,18 @@ const Details = () => {
   const { changeBookingDates } = useContext(Context)
 
   const handleFilterCalendarChange = async (newDatesRange, event) => {
-    try {
-      setValues(newDatesRange);
-      if (newDatesRange[1]) {
-        changeBookingDates(newDatesRange)
-        navigate("/pay")
+    if (isLoggedIn) {
+      try {
+        setValues(newDatesRange);
+        if (newDatesRange[1]) {
+          changeBookingDates(newDatesRange)
+          // navigate("/pay")
+        }
+      } catch (error) {
+        showErrorDialog("An error occurred:", error, false, navigate);
       }
-    } catch (error) {
-      showErrorDialog("An error occurred:", error, false, navigate);
+    } else {
+      return;
     }
   }
 
@@ -112,50 +122,61 @@ const Details = () => {
   ])
 
   const toggleModal = async (e) => {
-    const response = await axios.get(`/reservations/get_reservations_by_room_id${lastRoomClickedID}`);
-    setReserved(response.data.map(res => {
-      const checkInString = res.check_in.slice(0, 19).replace('T', ' ');
-      const checkOutString = res.check_out.slice(0, 19).replace('T', ' ');
-      const [year, month, day] = [checkInString.substring(0, 4), checkInString.substring(5, 7), checkInString.substring(8, 10)]
-      const [hour, minute, second] = [7, 0, 0];
-      const date = new Date(year, month - 1, day, hour, minute, second);
-      const formattedCheckIn = new DateObject(date).format();
+    if (isLoggedIn) {
+      const response = await axios.get(`/reservations/get_reservations_by_room_id${lastRoomClickedID}`);
+      setReserved(response.data.map(res => {
+        const checkInString = res.check_in.slice(0, 19).replace('T', ' ');
+        const checkOutString = res.check_out.slice(0, 19).replace('T', ' ');
+        const [year, month, day] = [checkInString.substring(0, 4), checkInString.substring(5, 7), checkInString.substring(8, 10)]
+        const [hour, minute, second] = [7, 0, 0];
+        const date = new Date(year, month - 1, day, hour, minute, second);
+        const formattedCheckIn = new DateObject(date).format();
 
-      const [year2, month2, day2] = [checkOutString.substring(0, 4), checkOutString.substring(5, 7), checkOutString.substring(8, 10)]
-      const [hour2, minute2, second2] = [18, 0, 0];
-      const date2 = new Date(year2, month2 - 1, day2, hour2, minute2, second2);
-      const formattedCheckOut = new DateObject(date2).format();
+        const [year2, month2, day2] = [checkOutString.substring(0, 4), checkOutString.substring(5, 7), checkOutString.substring(8, 10)]
+        const [hour2, minute2, second2] = [18, 0, 0];
+        const date2 = new Date(year2, month2 - 1, day2, hour2, minute2, second2);
+        const formattedCheckOut = new DateObject(date2).format();
 
-      return [formattedCheckIn, formattedCheckOut];
-    }));
-    setModalVisible(!modalVisible);
+        return [formattedCheckIn, formattedCheckOut];
+      }));
+      setModalVisible(!modalVisible);
+    } else {
+      return;
+    }
   };
 
   // Function to handle booking
   const handleBook = async e => {
-    toggleModal()
-    // navigate("/pay");
+    if (isLoggedIn) {
+      toggleModal()
+      // navigate("/pay");
+    } else {
+      return;
+    }
   }
 
   // Function to fetch data
   const fetchData = async () => {
-    try {
-      const roomID = lastRoomClickedID; // Get the ID of the room
-      const res = await axios.get(`/filters/retrieve_room${roomID}`); // Fetch room data
-      const image = await axios.get(`/files/get_image_by_id${res.data[0].image_id}`); // Fetch image
-      const price = await axios.get(`/categories/room_type_ByID${res.data[0].type_of_room}`) // Fetch price
-      imgRef.current = "/upload/" + image.data[0].filename; // Set image reference
-      titleRef.current = res.data[0].title; // Set title reference
-      descRef.current = res.data[0].description; // Set description reference
-      priceRef.current = price.data[0].price // Set the price per night
-      setDataLoaded(true); // Set data loaded to true
-    } catch (error) {
-      showErrorDialog("An error occurred:", error, false, navigate); // Show error dialog
+    if (isLoggedIn) {
+      try {
+        const roomID = lastRoomClickedID; // Get the ID of the room
+        const res = await axios.get(`/filters/retrieve_room${roomID}`); // Fetch room data
+        const image = await axios.get(`/files/get_image_by_id${res.data[0].image_id}`); // Fetch image
+        const price = await axios.get(`/categories/room_type_ByID${res.data[0].type_of_room}`) // Fetch price
+        imgRef.current = "/upload/" + image.data[0].filename; // Set image reference
+        titleRef.current = res.data[0].title; // Set title reference
+        descRef.current = res.data[0].description; // Set description reference
+        priceRef.current = price.data[0].price // Set the price per night
+        setDataLoaded(true); // Set data loaded to true
+      } catch (error) {
+        showErrorDialog("An error occurred:", error, false, navigate); // Show error dialog
+      }
+    } else {
+      return;
     }
   };
 
   // Effect hook to fetch data on component mount
-  const { isLoggedIn } = useContext(AuthContext)
   useEffect(() => {
     if (!isLoggedIn) {
       navigate("/")
@@ -164,8 +185,12 @@ const Details = () => {
   });
 
   const handleGoBack = async e => {
-    e.preventDefault()
-    navigate("/search")
+    if (isLoggedIn) {
+      e.preventDefault()
+      navigate("/search")
+    } else {
+      return;
+    }
   }
 
   const [reserved, setReserved] = useState([]);
@@ -173,7 +198,7 @@ const Details = () => {
     return reserved.some(([start, end]) => strDate >= start && strDate <= end);
   }
 
-  return (
+  return ((isLoggedIn ?  // Show page (html) if user is logged in
     <div className="details_page">
       <meta name="viewport" content="intial-scale=1"></meta>
       <img alt="back" onClick={handleGoBack} src={require("../assets/Image12.png")} className='image-12' />
@@ -309,6 +334,8 @@ const Details = () => {
         />
       )}
     </div>
+    // Show error to user, that hasnt logged in
+    : <div>{showErrorDialog("Error: ", "Login to access", true, navigate)}</div>)
   )
 }
 

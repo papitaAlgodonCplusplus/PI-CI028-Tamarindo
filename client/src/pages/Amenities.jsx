@@ -1,12 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState, useContext } from 'react';
+import axios from 'axios';
 import { AuthContext } from '../AuthContext.js';
 import { emptyContainer, showErrorDialog, postDataWithTimeout, putDataWithTimeout, updateContainer, deleteDataWithTimeout, showWarningDialog } from '../Misc';
-import '../styles/amenities.scss';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState, useContext } from 'react';
+import '../styles/amenities.scss';
 
 const Amenities = () => {
+  // Bool that checks if user has logged in with valid user (client-worker-administrator)
+  const { isLoggedIn } = useContext(AuthContext);
+
   // Function to add a new amenity to the UI
   const addAmenity = (title, fee, id, img) => {
     const newAmenityHTML = `
@@ -104,22 +107,30 @@ const Amenities = () => {
 
   let logs = 3;
   const handleLoggingChange = e => {
-    logs = e.target.value;
-    fetchData()
-    return;
+    if (isLoggedIn) {
+      logs = e.target.value;
+      fetchData()
+      return;
+    } else {
+      return;
+    }
   }
 
   // Function to handle deletion of a service
   const handleDelete = async (e, id, title) => {
-    try {
-      e.preventDefault();
-      const warningResult = await showWarningDialog("Delete Confirmation", "Are you sure you would like to delete the amenity <strong>" + title + "</strong>?")
-      if (!warningResult) return;
-      await deleteDataWithTimeout(`/amenities/delete${id}`, 500);
-      fetchData()
-      window.location.reload();
-    } catch (error) {
-      showErrorDialog("Error", error);
+    if (isLoggedIn) {
+      try {
+        e.preventDefault();
+        const warningResult = await showWarningDialog("Delete Confirmation", "Are you sure you would like to delete the amenity <strong>" + title + "</strong>?")
+        if (!warningResult) return;
+        await deleteDataWithTimeout(`/amenities/delete${id}`, 500);
+        fetchData()
+        window.location.reload();
+      } catch (error) {
+        showErrorDialog("Error", error);
+      }
+    } else {
+      return;
     }
   }
 
@@ -127,9 +138,9 @@ const Amenities = () => {
   const { userRol } = useContext(AuthContext);
   const navigate = useNavigate()
   const fetchData = async () => {
-    if (userRol !== "admin" && userRol !== "employee") {
-      // navigate("/home")
-      // return;
+    if ((userRol !== "admin" && userRol !== "employee") || !isLoggedIn) {
+      navigate("/reservations_list") // TODO: ERROR PAGE, CANT ACCESS AS USER
+      return;
     }
     const amenities_table = document.querySelector('.amenities-container');
     try {
@@ -169,235 +180,262 @@ const Amenities = () => {
 
   // Function to handle modification of a service
   const handleModify = async (e, title) => {
-    try {
-      e.preventDefault();
-      const res = await axios.get(`amenities/get_service${title}`)
-      setData(prevData => ({
-        ...prevData,
-        title: res.data[0].service_name
-      }));
-      setData(prevData => ({
-        ...prevData,
-        fee: res.data[0].service_price
-      }));
-      setData(prevData => ({
-        ...prevData,
-        file_path: res.data[0].image_path
-      }));
-      setData(prevData => ({
-        ...prevData,
-        id: res.data[0].serviceid
-      }));
-      const imagePreview2 = document.getElementById('image-preview2');
-      imagePreview2.src = res.data[0].image_path;
-      imagePreview2.style.visibility = 'visible';
-      displayModal2()
-    } catch (error) {
-      showErrorDialog("Error", error);
+    if (isLoggedIn) {
+      try {
+        e.preventDefault();
+        const res = await axios.get(`amenities/get_service${title}`)
+        setData(prevData => ({
+          ...prevData,
+          title: res.data[0].service_name
+        }));
+        setData(prevData => ({
+          ...prevData,
+          fee: res.data[0].service_price
+        }));
+        setData(prevData => ({
+          ...prevData,
+          file_path: res.data[0].image_path
+        }));
+        setData(prevData => ({
+          ...prevData,
+          id: res.data[0].serviceid
+        }));
+        const imagePreview2 = document.getElementById('image-preview2');
+        imagePreview2.src = res.data[0].image_path;
+        imagePreview2.style.visibility = 'visible';
+        displayModal2()
+      } catch (error) {
+        showErrorDialog("Error", error);
+      }
+    } else {
+      return;
     }
   }
 
   const [file, setFile] = useState(null);
 
   const handleChange = e => {
-    if (e.target.id === "fee") {
-      const newValue = e.target.value;
+    if (isLoggedIn) {
+      if (e.target.id === "fee") {
+        const newValue = e.target.value;
 
-      // Check if the entered value is negative
-      if (parseFloat(newValue) < 0) {
-        e.target.value = 0;
-        showErrorDialog("Error", "Fee can't be negative")
-        return;
+        // Check if the entered value is negative
+        if (parseFloat(newValue) < 0) {
+          e.target.value = 0;
+          showErrorDialog("Error", "Fee can't be negative")
+          return;
+        } else {
+          setInputs(prev => ({ ...prev, [e.target.name]: e.target.value }))
+        }
       } else {
         setInputs(prev => ({ ...prev, [e.target.name]: e.target.value }))
       }
     } else {
-      setInputs(prev => ({ ...prev, [e.target.name]: e.target.value }))
+      return;
     }
   }
 
   const handleModifyChange = e => {
-    if (e.target.id === "fee_modify") {
-      const newValue = e.target.value;
+    if (isLoggedIn) {
+      if (e.target.id === "fee_modify") {
+        const newValue = e.target.value;
 
-      // Check if the entered value is negative
-      if (parseFloat(newValue) < 0) {
-        e.target.value = 0;
-        showErrorDialog("Error", "Fee can't be negative")
-        return;
+        // Check if the entered value is negative
+        if (parseFloat(newValue) < 0) {
+          e.target.value = 0;
+          showErrorDialog("Error", "Fee can't be negative")
+          return;
+        } else {
+          setData(prev => ({ ...prev, [e.target.name]: e.target.value }))
+        }
       } else {
         setData(prev => ({ ...prev, [e.target.name]: e.target.value }))
       }
     } else {
-      setData(prev => ({ ...prev, [e.target.name]: e.target.value }))
+      return;
     }
   }
 
   // Function to handle form submission
   const handleSubmit = async e => {
-    e.preventDefault()
-    let isError = false;
-    const title = inputs.title.trim();
-    const fee = inputs.fee.trim();
+    if (isLoggedIn) {
+      e.preventDefault()
+      let isError = false;
+      const title = inputs.title.trim();
+      const fee = inputs.fee.trim();
 
-    if (title === '') {
-      document.getElementById("warning-title").style.display = "block";
-      isError = true;
-    } else {
-      document.getElementById("warning-title").style.display = "none";
-    }
-
-    if (fee === '') {
-      document.getElementById("warning-fee").style.display = "block";
-      isError = true;
-    } else {
-      document.getElementById("warning-fee").style.display = "none";
-    }
-
-    if (!file) {
-      document.getElementById("warning-photo").style.display = "block";
-      isError = true;
-    } else {
-      document.getElementById("warning-photo").style.display = "none";
-    }
-
-    if (isError) return;
-
-    try {
-      // Creating FormData object for form data
-      const formData = new FormData();
-      formData.append('image', file);
-      var filename = "";
-
-      // Uploading image file
-      filename = await axios.post('/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-
-      // Appending other form data to FormData object
-      Object.entries(inputs).forEach(([key, value]) => {
-        formData.append(key, value);
-      });
-
-      // Setting file_path in inputs
-      if (filename.data !== undefined) {
-        setInputs(prevData => ({
-          ...prevData,
-          file_path: "./upload/" + filename.data
-        }));
-        inputs.file_path = "./upload/" + filename.data
-      }
-
-      // Adding room data to database
-      await postDataWithTimeout("/amenities/add_amenity", inputs, 500);
-      fetchData();
-      closeModal();
-      setFileChanged(false);
-      window.location.reload();
-      return;
-    } catch (error) {
-      if (error.response && error.response.status === 404) {
-        // Handling specific error response
-        const errorMessage = error.response.data;
-        showErrorDialog("Error", errorMessage);
+      if (title === '') {
+        document.getElementById("warning-title").style.display = "block";
+        isError = true;
       } else {
-        // Handling generic error
-        showErrorDialog("Error", error);
+        document.getElementById("warning-title").style.display = "none";
       }
-    }
-  }
 
-  // Function to handle amenity modify
-  const handleUpdate = async e => {
-    e.preventDefault(); // Preventing default form submission behavior
-    try {
-      var file_path = data.file_path;
-      if (file_changed) {
+      if (fee === '') {
+        document.getElementById("warning-fee").style.display = "block";
+        isError = true;
+      } else {
+        document.getElementById("warning-fee").style.display = "none";
+      }
+
+      if (!file) {
+        document.getElementById("warning-photo").style.display = "block";
+        isError = true;
+      } else {
+        document.getElementById("warning-photo").style.display = "none";
+      }
+
+      if (isError) return;
+
+      try {
         // Creating FormData object for form data
         const formData = new FormData();
         formData.append('image', file);
+        var filename = "";
 
         // Uploading image file
-        const filename = await axios.post('/upload', formData, {
+        filename = await axios.post('/upload', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         });
 
-        // Setting file_path
-        file_path = "./upload/" + filename.data
-      }
+        // Appending other form data to FormData object
+        Object.entries(inputs).forEach(([key, value]) => {
+          formData.append(key, value);
+        });
 
-      // Update amenity on the database
-      const req = {
-        title: data.title,
-        fee: data.fee,
-        file_path: file_path,
-        service_id: data.id
+        // Setting file_path in inputs
+        if (filename.data !== undefined) {
+          setInputs(prevData => ({
+            ...prevData,
+            file_path: "./upload/" + filename.data
+          }));
+          inputs.file_path = "./upload/" + filename.data
+        }
+
+        // Adding room data to database
+        await postDataWithTimeout("/amenities/add_amenity", inputs, 500);
+        fetchData();
+        closeModal();
+        setFileChanged(false);
+        window.location.reload();
+        return;
+      } catch (error) {
+        if (error.response && error.response.status === 404) {
+          // Handling specific error response
+          const errorMessage = error.response.data;
+          showErrorDialog("Error", errorMessage);
+        } else {
+          // Handling generic error
+          showErrorDialog("Error", error);
+        }
       }
-      await putDataWithTimeout(`/amenities/update_amenity`, req, 500);
-      fetchData()
-      closeModal2();
-      setFileChanged(false);
+    } else {
       return;
-    } catch (error) {
-      if (error.response && error.response.status === 404) {
-        // Handling specific error response
-        const errorMessage = error.response.data;
-        showErrorDialog("Error", errorMessage);
-      } else {
-        // Handling generic error
-        showErrorDialog("Error", error);
+    }
+  }
+
+  // Function to handle amenity modify
+  const handleUpdate = async e => {
+    if (isLoggedIn) {
+      e.preventDefault(); // Preventing default form submission behavior
+      try {
+        var file_path = data.file_path;
+        if (file_changed) {
+          // Creating FormData object for form data
+          const formData = new FormData();
+          formData.append('image', file);
+
+          // Uploading image file
+          const filename = await axios.post('/upload', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          });
+
+          // Setting file_path
+          file_path = "./upload/" + filename.data
+        }
+
+        // Update amenity on the database
+        const req = {
+          title: data.title,
+          fee: data.fee,
+          file_path: file_path,
+          service_id: data.id
+        }
+        await putDataWithTimeout(`/amenities/update_amenity`, req, 500);
+        fetchData()
+        closeModal2();
+        setFileChanged(false);
+        return;
+      } catch (error) {
+        if (error.response && error.response.status === 404) {
+          // Handling specific error response
+          const errorMessage = error.response.data;
+          showErrorDialog("Error", errorMessage);
+        } else {
+          // Handling generic error
+          showErrorDialog("Error", error);
+        }
       }
+    } else {
+      return;
     }
   }
 
   // Function to handle file input change
   const handleFileChange = (e) => {
-    // Getting the file input element
-    const fileInput = e.target;
+    if (isLoggedIn) {
+      // Getting the file input element
+      const fileInput = e.target;
 
-    // Setting file_changed
-    setFileChanged(true);
+      // Setting file_changed
+      setFileChanged(true);
 
-    // Getting the selected file
-    const file = fileInput.files[0];
+      // Getting the selected file
+      const file = fileInput.files[0];
 
-    // Getting the image preview element
-    const imagePreview = document.getElementById('image-preview');
-    const imagePreview2 = document.getElementById('image-preview2');
+      // Getting the image preview element
+      const imagePreview = document.getElementById('image-preview');
+      const imagePreview2 = document.getElementById('image-preview2');
 
-    if (file) {
-      // If a file is selected
-      const reader = new FileReader();
+      if (file) {
+        // If a file is selected
+        const reader = new FileReader();
 
-      // Function to handle when file reading is completed
-      reader.onload = function (e) {
-        // Displaying the image preview
-        imagePreview.src = e.target.result;
-        imagePreview.style.visibility = 'visible';
-        imagePreview2.src = e.target.result;
-        imagePreview2.style.visibility = 'visible';
-      };
+        // Function to handle when file reading is completed
+        reader.onload = function (e) {
+          // Displaying the image preview
+          imagePreview.src = e.target.result;
+          imagePreview.style.visibility = 'visible';
+          imagePreview2.src = e.target.result;
+          imagePreview2.style.visibility = 'visible';
+        };
 
-      // Reading the selected file as data URL
-      reader.readAsDataURL(file);
+        // Reading the selected file as data URL
+        reader.readAsDataURL(file);
 
-      // Setting the file state
-      setFile(e.target.files[0]);
+        // Setting the file state
+        setFile(e.target.files[0]);
+      } else {
+        // If no file is selected, reset the image preview
+        imagePreview.src = '#';
+        imagePreview.style.visibility = 'hidden';
+        imagePreview2.src = '#';
+        imagePreview2.style.visibility = 'hidden';
+      }
     } else {
-      // If no file is selected, reset the image preview
-      imagePreview.src = '#';
-      imagePreview.style.visibility = 'hidden';
-      imagePreview2.src = '#';
-      imagePreview2.style.visibility = 'hidden';
+      return;
     }
   };
 
   // Fetch data on component mount
   useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/")
+    }
     fetchData();
   }, []);
 
@@ -435,7 +473,7 @@ const Amenities = () => {
     modal.style.display = "block";
   }
 
-  return (
+  return ((isLoggedIn && (userRol === "admin" || userRol === "employee") ?  // Show page (html) if user is logged in as an user with permissions
     <div className='amenities_page'>
       <meta name="viewport" content="intial-scale=1"></meta>
       <div className="amenities">
@@ -520,6 +558,8 @@ const Amenities = () => {
         </div>
       </div>
     </div >
+    // Show error to user, that hasnt logged in
+    : <div>{showErrorDialog("Error: ", "You must login as admin or employee to access this page", true, navigate)}</div>)
   )
 }
 export default Amenities;

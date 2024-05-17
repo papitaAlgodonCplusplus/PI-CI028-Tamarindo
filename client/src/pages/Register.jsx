@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
-import User from "../img/User.png"
-import hotel_login from "../assets/hotel_register.png"
-import "../styles/register.scss"
 import axios from "axios"
+import hotel_login from "../assets/hotel_register.png"
+import User from "../img/User.png"
+import React, { useState } from 'react'
 import { Link, useNavigate } from "react-router-dom"
 import { showErrorDialog } from '../Misc'
+import "../styles/register.scss"
 
 const Register = () => {
   const [isChecked, setChecked] = useState(false);

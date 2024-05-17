@@ -1,12 +1,14 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useContext, useEffect, useCallback } from 'react'
-import '../styles/rooms.scss';
 import axios from "axios"
-import { showWarningDialog, showErrorDialog, putDataWithTimeout, updateContainer, emptyContainer, postDataWithTimeout, deleteDataWithTimeout } from '../Misc';
 import { AuthContext } from '../AuthContext.js';
 import { useNavigate } from 'react-router-dom';
+import { showWarningDialog, showErrorDialog, putDataWithTimeout, updateContainer, emptyContainer, postDataWithTimeout, deleteDataWithTimeout } from '../Misc';
+import React, { useState, useContext, useEffect, useCallback } from 'react'
+import '../styles/rooms.scss';
 
 const Rooms = () => {
+  // Bool that checks if user has logged in with valid user (client-worker-administrator)
+  const { isLoggedIn } = useContext(AuthContext);
+
   const navigate = useNavigate()
   const { userRol } = useContext(AuthContext);
   const [roomTypeOption, setRoomTypeOption] = useState('');
@@ -25,99 +27,111 @@ const Rooms = () => {
   })
 
   const handleLoggingChange = e => {
-    logs = e.target.value;
-    fetchData()
-    return;
+    if (isLoggedIn) {
+      logs = e.target.value;
+      fetchData()
+      return;
+    } else {
+      return;
+    }
   }
 
 
   // Function to add a card to the UI
   const addCard = (title, description, room_type, filename, id) => {
-    // Truncating description to fit into card display
-    description = description.substring(0, 90);
+    if (isLoggedIn) {
+      // Truncating description to fit into card display
+      description = description.substring(0, 90);
 
-    // Selecting the container for cards
-    const cardsContainer = document.querySelector('.list-container');
+      // Selecting the container for cards
+      const cardsContainer = document.querySelector('.list-container');
 
-    // Generating HTML for the new card
-    const newCardHTML = `
-    <!-- Delete button for the card 
-    <button class="delete-button" id="delete-room-button-${title}">
-    </button>
-  -->
-  <div class="list-item">
-    <div style="display: flex; justify-content: space-between; align-items: center; width: 70%; padding: 10px;">
-      <img style="width: 150px; height: 100px; border-radius: 7px; " src="${filename}" alt="${filename}"/>
-      <div style="font-size: 18px; width: 100px; font-weight: bold; position:absolute; left: 200px;">${title}</div>
-      <div style="font-size: 16px; width: 200px; color: #333; position:absolute; left: 25vw;">${description}</div>
-      <div style="font-size: 16px; color: #333; position:absolute; left: 45vw;">${room_type}</div>
-      <div style="
-        display: flex;
-        flex-direction: row;
-        align-items: flex-end;
-        position: absolute;
-        right: 1vw;
+      // Generating HTML for the new card
+      const newCardHTML = `
+      <!-- Delete button for the card 
+      <button class="delete-button" id="delete-room-button-${title}">
+      </button>
+    -->
+    <div class="list-item">
+      <div style="display: flex; justify-content: space-between; align-items: center; width: 70%; padding: 10px;">
+        <img style="width: 150px; height: 100px; border-radius: 7px; " src="${filename}" alt="${filename}"/>
+        <div style="font-size: 18px; width: 100px; font-weight: bold; position:absolute; left: 200px;">${title}</div>
+        <div style="font-size: 16px; width: 200px; color: #333; position:absolute; left: 25vw;">${description}</div>
+        <div style="font-size: 16px; color: #333; position:absolute; left: 45vw;">${room_type}</div>
         <div style="
-          margin-top: 20px;
-          border-radius: 6px;
-          border: 1px solid #1E91B6;
-          background: #FFFFFF;
           display: flex;
           flex-direction: row;
-          justify-content: center;
-          cursor: pointer;
-          padding: 8px 0.4px 8px 0;
-          box-sizing: border-box;" id="delete-room-button-${id}">
-          <img style="
-            overflow-wrap: break-word;
-            font-family: 'Poppins';
-            font-weight: 400;
-            width: 4vw;
-            font-size: 15px;
-            letter-spacing: 0.3px;
+          align-items: flex-end;
+          position: absolute;
+          right: 1vw;
+          <div style="
+            margin-top: 20px;
+            border-radius: 6px;
+            border: 1px solid #1E91B6;
+            background: #FFFFFF;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
             cursor: pointer;
-            line-height: 1.333;" src="${require("../assets/Bin.jpg")}">
-          </img>
+            padding: 8px 0.4px 8px 0;
+            box-sizing: border-box;" id="delete-room-button-${id}">
+            <img style="
+              overflow-wrap: break-word;
+              font-family: 'Poppins';
+              font-weight: 400;
+              width: 4vw;
+              font-size: 15px;
+              letter-spacing: 0.3px;
+              cursor: pointer;
+              line-height: 1.333;" src="${require("../assets/Bin.jpg")}">
+            </img>
+          </div>
         </div>
+        <div style="
+            border-radius: 50px;
+            margin-left: 7.6vw;
+            border: solid 1.5px #045B78;
+            display: flex;
+            justify-content: center;
+            padding-left: 0.8vw;
+            padding-block: 2.5vh;
+            width: 3.5vw;
+            cursor: pointer;" id="modify-button-${id}">
+            <img style="
+              overflow-wrap: break-word;
+              font-family: 'Poppins';
+              font-weight: 400;
+              width: 2vw;
+              font-size: 15px;
+              letter-spacing: 0.3px;
+              color: #FFFFFF;" src="${require("../assets/Pencil.png")}">
+            </img>
+          </div>
       </div>
-      <div style="
-          border-radius: 50px;
-          margin-left: 7.6vw;
-          border: solid 1.5px #045B78;
-          display: flex;
-          justify-content: center;
-          padding-left: 0.8vw;
-          padding-block: 2.5vh;
-          width: 3.5vw;
-          cursor: pointer;" id="modify-button-${id}">
-          <img style="
-            overflow-wrap: break-word;
-            font-family: 'Poppins';
-            font-weight: 400;
-            width: 2vw;
-            font-size: 15px;
-            letter-spacing: 0.3px;
-            color: #FFFFFF;" src="${require("../assets/Pencil.png")}">
-          </img>
-        </div>
     </div>
-  </div>
-  <div style="padding-bottom: 20px;"></div>
-  
-  `;
+    <div style="padding-bottom: 20px;"></div>
+    
+    `;
 
-    // Inserting the new card HTML into the container
-    cardsContainer.insertAdjacentHTML('beforeend', newCardHTML);
+      // Inserting the new card HTML into the container
+      cardsContainer.insertAdjacentHTML('beforeend', newCardHTML);
 
-    // Adding event listener to the delete button
-    const deleteButton = document.getElementById("delete-room-button-" + id);
-    deleteButton.addEventListener('click', (e) => handleDelete(e, id, title));
-    const modifyButton = document.getElementById("modify-button-" + id);
-    modifyButton.addEventListener('click', (e) => handleModify(e, id, title));
+      // Adding event listener to the delete button
+      const deleteButton = document.getElementById("delete-room-button-" + id);
+      deleteButton.addEventListener('click', (e) => handleDelete(e, id, title));
+      const modifyButton = document.getElementById("modify-button-" + id);
+      modifyButton.addEventListener('click', (e) => handleModify(e, id, title));
+    } else {
+      return;
+    }
   };
 
   const handleRoomTypeChange = (e) => {
-    setRoomTypeOption(e.target.value);
+    if (isLoggedIn) {
+      setRoomTypeOption(e.target.value);
+    } else {
+      return;
+    }
   };
 
   const [data, setData] = useState({
@@ -130,46 +144,55 @@ const Rooms = () => {
 
   // Function to handle modification of a room
   const handleModify = async (e, id, title) => {
-    try {
-      e.preventDefault();
-      const res = await axios.get(`rooms/by_roomID${id}`)
-      setData(prevData => ({
-        ...prevData,
-        title: res.data[0].title
-      }));
-      setData(prevData => ({
-        ...prevData,
-        description: res.data[0].description
-      }));
-      setData(prevData => ({
-        ...prevData,
-        image_id: res.data[0].image_id
-      }));
-      setData(prevData => ({
-        ...prevData,
-        type_of_room: res.data[0].type_of_room
-      }));
-      setData(prevData => ({
-        ...prevData,
-        id: res.data[0].roomid
-      }));
-      displayModal2()
-    } catch (error) {
-      showErrorDialog("Error", error);
+    if (isLoggedIn) {
+      try {
+        e.preventDefault();
+        const res = await axios.get(`rooms/by_roomID${id}`)
+        setData(prevData => ({
+          ...prevData,
+          title: res.data[0].title
+        }));
+        setData(prevData => ({
+          ...prevData,
+          description: res.data[0].description
+        }));
+        setData(prevData => ({
+          ...prevData,
+          image_id: res.data[0].image_id
+        }));
+        setData(prevData => ({
+          ...prevData,
+          type_of_room: res.data[0].type_of_room
+        }));
+        setData(prevData => ({
+          ...prevData,
+          id: res.data[0].roomid
+        }));
+        displayModal2()
+      } catch (error) {
+        showErrorDialog("Error", error);
+      }
+    } else {
+      return;
     }
   }
 
 
   function displayModal2() {
-    var modal = document.getElementById("myFormModal2");
-    modal.style.display = "block";
+    if (isLoggedIn) {
+      var modal = document.getElementById("myFormModal2");
+      modal.style.display = "block";
+    } else {
+      return;
+    }
   }
 
   // Function to fetch data and populate UI
   const fetchData = useCallback(async () => {
-    // if (userRol !== "admin" && userRol !== "employee") {
-    //   return;
-    // }
+    if ((userRol !== "admin" && userRol !== "employee") || !isLoggedIn) {
+      navigate("/reservations_list") // TODO: ERROR PAGE, CANT ACCESS AS USER
+      return;
+    }
     // Selecting containers for room types and cards
     const cardsContainer = document.querySelector('.list-container');
 
@@ -225,211 +248,249 @@ const Rooms = () => {
 
 
   useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/")
+    }
     fetchData();
   }, []);
 
   const handleDelete = async (e, id, title) => {
-    e.preventDefault()
-    try {
-      e.preventDefault();
-      const warningResult = await showWarningDialog("Delete Confirmation", "Are you sure you would like to delete the room <strong>" + title + "</strong>?")
-      if (!warningResult) return;
-      await deleteDataWithTimeout(`/rooms/delete${id}`, 500);
-      fetchData()
-      window.location.reload();
-    } catch (error) {
-      showErrorDialog("An error occurred:", error);
+    if (isLoggedIn) {
+      e.preventDefault()
+      try {
+        e.preventDefault();
+        const warningResult = await showWarningDialog("Delete Confirmation", "Are you sure you would like to delete the room <strong>" + title + "</strong>?")
+        if (!warningResult) return;
+        await deleteDataWithTimeout(`/rooms/delete${id}`, 500);
+        fetchData()
+        window.location.reload();
+      } catch (error) {
+        showErrorDialog("An error occurred:", error);
+      }
+      fetchData();
+    } else {
+      return;
     }
-    fetchData();
   }
 
   // Function to handle file input change
   const handleFileChange = (e) => {
-    // Getting the file input element
-    const fileInput = e.target;
+    if (isLoggedIn) {
+      // Getting the file input element
+      const fileInput = e.target;
 
-    // Getting the selected file
-    const file = fileInput.files[0];
+      // Getting the selected file
+      const file = fileInput.files[0];
 
-    // Getting the image preview element
-    const imagePreview = document.getElementById('image-preview');
-    const imagePreview2 = document.getElementById('image-preview2');
+      // Getting the image preview element
+      const imagePreview = document.getElementById('image-preview');
+      const imagePreview2 = document.getElementById('image-preview2');
 
-    if (file) {
-      // If a file is selected
-      const reader = new FileReader();
+      if (file) {
+        // If a file is selected
+        const reader = new FileReader();
 
-      // Function to handle when file reading is completed
-      reader.onload = function (e) {
-        // Displaying the image preview
-        imagePreview.src = e.target.result;
-        imagePreview.style.visibility = 'visible';
-        imagePreview2.src = e.target.result;
-        imagePreview2.style.visibility = 'visible';
-      };
+        // Function to handle when file reading is completed
+        reader.onload = function (e) {
+          // Displaying the image preview
+          imagePreview.src = e.target.result;
+          imagePreview.style.visibility = 'visible';
+          imagePreview2.src = e.target.result;
+          imagePreview2.style.visibility = 'visible';
+        };
 
-      // Reading the selected file as data URL
-      reader.readAsDataURL(file);
+        // Reading the selected file as data URL
+        reader.readAsDataURL(file);
 
-      // Setting the file state
-      setFile(e.target.files[0]);
-      setFileChanged(true)
+        // Setting the file state
+        setFile(e.target.files[0]);
+        setFileChanged(true)
+      } else {
+        // If no file is selected, reset the image preview
+        imagePreview.src = '#';
+        imagePreview.style.visibility = 'none';
+        imagePreview.src = '#';
+        imagePreview2.style.visibility = 'none';
+      }
     } else {
-      // If no file is selected, reset the image preview
-      imagePreview.src = '#';
-      imagePreview.style.visibility = 'none';
-      imagePreview.src = '#';
-      imagePreview2.style.visibility = 'none';
+      return;
     }
   };
 
   // Function to handle form submission
   const handleSubmit = async e => {
-    e.preventDefault()
-    let isError = false;
-    const title = inputs.name.trim();
-    const description = inputs.desc.trim();
+    if (isLoggedIn) {
+      e.preventDefault()
+      let isError = false;
+      const title = inputs.name.trim();
+      const description = inputs.desc.trim();
 
-    if (title === '') {
-      document.getElementById("warning-title").style.display = "block";
-      isError = true;
-    } else {
-      document.getElementById("warning-title").style.display = "none";
-    }
-
-    if (description === '') {
-      document.getElementById("warning-desc").style.display = "block";
-      isError = true;
-    } else {
-      document.getElementById("warning-desc").style.display = "none";
-    }
-
-    if (!file) {
-      document.getElementById("warning-photo").style.display = "block";
-      isError = true;
-    } else {
-      document.getElementById("warning-photo").style.display = "none";
-    }
-
-    if (isError) return;
-
-    try {
-      // Creating FormData object for form data
-      const formData = new FormData();
-      formData.append('image', file);
-      var filename = "";
-
-      // Uploading image file
-      filename = await axios.post('/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-
-      // Appending other form data to FormData object
-      Object.entries(inputs).forEach(([key, value]) => {
-        formData.append(key, value);
-      });
-
-      // Setting filename in inputs
-      inputs.filename = filename;
-      inputs.room_type = roomTypeOption;
-
-      // Adding room data to database
-      await postDataWithTimeout("/rooms/add_room", inputs, 500);
-      setFileChanged(false);
-      fetchData();
-      closeModal();
-      return;
-    } catch (error) {
-      if (error.response && error.response.status === 404) {
-        // Handling specific error response
-        const errorMessage = error.response.data;
-        showErrorDialog("An error occurred:", errorMessage);
+      if (title === '') {
+        document.getElementById("warning-title").style.display = "block";
+        isError = true;
       } else {
-        // Handling generic error
-        showErrorDialog("An error occurred:", error);
+        document.getElementById("warning-title").style.display = "none";
       }
-    }
-  }
 
-  const handleModifyChange = e => {
-    setData(prev => ({ ...prev, [e.target.name]: e.target.value }))
-  }
+      if (description === '') {
+        document.getElementById("warning-desc").style.display = "block";
+        isError = true;
+      } else {
+        document.getElementById("warning-desc").style.display = "none";
+      }
 
-  function displayModal() {
-    var modal = document.getElementById("myFormModal");
-    modal.style.display = "block";
-  }
+      if (!file) {
+        document.getElementById("warning-photo").style.display = "block";
+        isError = true;
+      } else {
+        document.getElementById("warning-photo").style.display = "none";
+      }
 
-  function closeModal() {
-    var modal = document.getElementById("myFormModal");
-    modal.style.display = "none";
-  }
+      if (isError) return;
 
-  function closeModal2() {
-    var modal = document.getElementById("myFormModal2");
-    modal.style.display = "none";
-  }
-
-  const handleChange = e => {
-    setInputs(prev => ({ ...prev, [e.target.name]: e.target.value }))
-  }
-
-  const [file_changed, setFileChanged] = useState(false);
-  // Function to handle amenity modify
-  const handleUpdate = async e => {
-    try {
-      let image_id = data.image_id;
-      if (file_changed) {
+      try {
         // Creating FormData object for form data
         const formData = new FormData();
         formData.append('image', file);
+        var filename = "";
 
         // Uploading image file
-        const filename = await axios.post('/upload', formData, {
+        filename = await axios.post('/upload', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         });
 
-        const img_req = {
-          filename: filename.data
+        // Appending other form data to FormData object
+        Object.entries(inputs).forEach(([key, value]) => {
+          formData.append(key, value);
+        });
+
+        // Setting filename in inputs
+        inputs.filename = filename;
+        inputs.room_type = roomTypeOption;
+
+        // Adding room data to database
+        await postDataWithTimeout("/rooms/add_room", inputs, 500);
+        setFileChanged(false);
+        fetchData();
+        closeModal();
+        return;
+      } catch (error) {
+        if (error.response && error.response.status === 404) {
+          // Handling specific error response
+          const errorMessage = error.response.data;
+          showErrorDialog("An error occurred:", errorMessage);
+        } else {
+          // Handling generic error
+          showErrorDialog("An error occurred:", error);
         }
-
-        await postDataWithTimeout(`/files/`, img_req, 500);
-        const res_img = await axios.get(`/files/get_image_by_filename${filename.data}`)
-        image_id = res_img.data[0].imageid
       }
-
-      // Update amenity on the database
-      const req = {
-        title: data.title,
-        description: data.description,
-        image_id: image_id,
-        id: data.id,
-        type_of_room: roomTypeOption
-      }
-
-      await putDataWithTimeout(`/rooms/update_room`, req, 500);
-      fetchData()
-      closeModal2();
-      setFileChanged(false);
+    } else {
       return;
-    } catch (error) {
-      if (error.response && error.response.status === 404) {
-        // Handling specific error response
-        const errorMessage = error.response.data;
-        showErrorDialog("Error", errorMessage);
-      } else {
-        // Handling generic error
-        showErrorDialog("Error", error);
-      }
     }
   }
 
-  // userRol === "admin" || userRol === "employee" ?
-  return (
+  const handleModifyChange = e => {
+    if (isLoggedIn) {
+      setData(prev => ({ ...prev, [e.target.name]: e.target.value }))
+    } else {
+      return;
+    }
+  }
+
+  function displayModal() {
+    if (isLoggedIn) {
+      var modal = document.getElementById("myFormModal");
+      modal.style.display = "block";
+    } else {
+      return;
+    }
+  }
+
+  function closeModal() {
+    if (isLoggedIn) {
+      var modal = document.getElementById("myFormModal");
+      modal.style.display = "none";
+    } else {
+      return;
+    }
+  }
+
+  function closeModal2() {
+    if (isLoggedIn) {
+      var modal = document.getElementById("myFormModal2");
+      modal.style.display = "none";
+    } else {
+      return;
+    }
+  }
+
+  const handleChange = e => {
+    if (isLoggedIn) {
+      setInputs(prev => ({ ...prev, [e.target.name]: e.target.value }))
+    } else {
+      return;
+    }
+  }
+
+  const [file_changed, setFileChanged] = useState(false);
+  // Function to handle amenity modify
+  const handleUpdate = async e => {
+    if (isLoggedIn) {
+      try {
+        let image_id = data.image_id;
+        if (file_changed) {
+          // Creating FormData object for form data
+          const formData = new FormData();
+          formData.append('image', file);
+
+          // Uploading image file
+          const filename = await axios.post('/upload', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          });
+
+          const img_req = {
+            filename: filename.data
+          }
+
+          await postDataWithTimeout(`/files/`, img_req, 500);
+          const res_img = await axios.get(`/files/get_image_by_filename${filename.data}`)
+          image_id = res_img.data[0].imageid
+        }
+
+        // Update amenity on the database
+        const req = {
+          title: data.title,
+          description: data.description,
+          image_id: image_id,
+          id: data.id,
+          type_of_room: roomTypeOption
+        }
+
+        await putDataWithTimeout(`/rooms/update_room`, req, 500);
+        fetchData()
+        closeModal2();
+        setFileChanged(false);
+        return;
+      } catch (error) {
+        if (error.response && error.response.status === 404) {
+          // Handling specific error response
+          const errorMessage = error.response.data;
+          showErrorDialog("Error", errorMessage);
+        } else {
+          // Handling generic error
+          showErrorDialog("Error", error);
+        }
+      }
+    } else {
+      return;
+    }
+  }
+
+  return ((isLoggedIn && (userRol === "admin" || userRol === "employee") ?  // Show page (html) if user is logged in as an user with permissions
     <div className='body'>
       <meta name="viewport" content="intial-scale=1"></meta>
       {/* Form modal for adding rooms */}
@@ -534,8 +595,8 @@ const Rooms = () => {
           </div>
         </div>
       </div></center>
-    </div >)
-  // : <div>{showErrorDialog("Error: ", "You must login as admin or employee to access this page", true, navigate)}</div>);
+    </div >
+    : <div>{showErrorDialog("Error: ", "You must login as admin or employee to access this page", true, navigate)}</div>))
 };
 
 export default Rooms;

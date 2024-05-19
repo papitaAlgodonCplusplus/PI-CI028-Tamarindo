@@ -42,12 +42,12 @@ const ReservationsList = () => {
         font-size: 18px;
         font-weight: bold;
         position: relative; 
-        left: 10px;
+        left: 1.2vw;
         margin-top: -50px;">${title}</div>
       <div style="
         font-size: 16px;
         position: relative;
-        margin-left: -7.5vw;
+        margin-left: 0vw;
         color: #545454;
         margin-top: 15px;">Guests: 3 (2 adults, 1 child)</div>
       <div style="
@@ -73,58 +73,49 @@ const ReservationsList = () => {
       left: 24vw;">Active</div>
       <!-- Buttons Container -->
       <div style="
-      display: flex;
-      flex-direction: row;
-      align-items: flex-end;
-      position: absolute;">
-        <div style="
-        margin-top: 20px;
-        border-radius: 6px;
-        background: #FFFFFF;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        cursor: pointer;
-        padding: 8px 0.4px 8px 0;
-        margin-left: 74vw;
-        box-sizing: border-box;" id="delete-button-${id}">
-        <img style="
-          overflow-wrap: break-word;
-          font-family: 'Poppins';
-          font-weight: 400;
-          width: 4vw;
-          font-size: 15px;
-          letter-spacing: 0.3px;
-          cursor: pointer;
-          line-height: 1.333;" src="${require("../assets/Bin.jpg")}">
-        </img>
-      </div>
-    </div>
-    <div style="
-        border-radius: 50px;
-        margin-left: 31vw;
-        border: solid 1.5px #045B78;
-        display: flex;
-        justify-content: center;
-        padding-inline: 0.4vw;
-        margin-top: 3.5vh;
-        padding-block: 2vh;
-        width: 3vw;
-        cursor: pointer;" id="modify-button-${id}">
-        <img style="
-          overflow-wrap: break-word;
-          font-family: 'Poppins';
-          font-weight: 400;
-          width: 2vw;
-          font-size: 15px;
-          letter-spacing: 0.3px;
-          color: #FFFFFF;" src="${require("../assets/Pencil.png")}">
-        </img>
-      </div>
-      </div>
-    </div>
+            margin-top: 20px;
+            background: #FFFFFF;
+            margin-left: 36vw;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            cursor: pointer;
+            padding: 8px 0.4px 8px 0;
+            box-sizing: border-box;" id="delete-button-${id}">
+            <img style="
+              overflow-wrap: break-word;
+              font-family: 'Poppins';
+              font-weight: 400;
+              width: 4vw;
+              font-size: 15px;
+              letter-spacing: 0.3px;
+              cursor: pointer;
+              line-height: 1.333;" src="${require("../assets/Bin.jpg")}">
+            </img>
+          </div>
+          <div style="
+            border-radius: 50px;
+            margin-top: 3.6vh;
+            margin-left: -9vw;
+            border: solid 1.5px #045B78;
+            display: flex;
+            justify-content: center;
+            padding-left: 0vw;
+            padding-block: 2vh;
+            padding-inline: 0.15vw;
+            width: 3.5vw;
+            cursor: pointer;" id="modify-button-${id}">
+            <img style="
+              overflow-wrap: break-word;
+              font-family: 'Poppins';
+              font-weight: 400;
+              width: 2vw;
+              font-size: 15px;
+              letter-spacing: 0.3px;
+              color: #FFFFFF;" src="${require("../assets/Pencil.png")}">
+            </img>
+          </div>
   </div>
-  
   `;
 
     const reservations_table = document.querySelector('.reservations-container');
@@ -249,7 +240,7 @@ const ReservationsList = () => {
           const res2 = await axios.get(`/rooms/by_roomID${reservation.id_room}`);
 
           // Fetching image data for the room
-          const image = await axios.get(`/files/get_image_by_id${res2.data[0].image_id}`);
+          const image = await axios.get(`/files/get_image_by_id${res2.data[0].imageid}`);
           const filepath = "/upload/" + image.data[0].filename;
 
           // Fetching payment data for the reservation

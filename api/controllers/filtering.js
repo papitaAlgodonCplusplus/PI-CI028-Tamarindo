@@ -16,7 +16,7 @@ export const getRoomByID = (req, res) => {
 };
 
 export const retireveRoomByID = (req, res) => {
-  const q = 'SELECT * FROM rooms WHERE roomid = ?';
+  const q = 'SELECT r.*, i.imageid, i.filename, i.filepath, i.uploaded_at FROM hotel.rooms r LEFT JOIN hotel.images i ON r.roomid = i.room_id WHERE r.roomid = ?;';
   db.query(q, [req.params.roomID], (err, result) => {
     if (err) {
       return res.status(500).json({ message: 'Failed to fetch rooms from the database.' });

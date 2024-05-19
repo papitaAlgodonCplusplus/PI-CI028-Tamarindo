@@ -4,7 +4,7 @@ import { Calendar } from "react-multi-date-picker"
 import { Context } from '../Context';
 import { DateObject } from "react-multi-date-picker"
 import { useNavigate } from "react-router-dom";
-import { showErrorDialog } from "../Misc.js";
+import { showErrorDialog, showWarningDialog } from "../Misc.js";
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import Vector from "../vectors/Vector_x2.svg";
 import Vector1 from "../vectors/Vector1_x2.svg";
@@ -29,6 +29,7 @@ const Star2 = () => <div className="star-2"><img alt="vector" className="vector-
 const Star3 = () => <div className="star-3"><img alt="vector" className="vector-3" src={Vector1} /></div>;
 const Star4 = () => <div className="star-4"><img alt="vector" className="vector-4" src={Vector10} /></div>;
 const Vector7 = () => <div className="style-layer"><img alt="vector" className="vector-7" src={Vector} /></div>;
+const Vector7Pink = () => <div className="style-layer-heart"><img alt="vector" className="vector-7" src={require("../vectors/Vector_x2 - Pink.png")} /></div>;
 const Vector8 = () => <div className="style-layer-1"><img alt="vector" className="vector-8" src={Vector5} /></div>;
 
 const Car = () => (
@@ -93,7 +94,7 @@ const Details = () => {
   const navigate = useNavigate()
   const [dataLoaded, setDataLoaded] = useState(false); // State to track if data is loaded
   const { lastRoomClickedID } = useContext(Context); // Context for the ID of the last clicked room
-  const imgRef = useRef(null); // Ref for image
+  const imgRef = useRef([]); // Ref for image 
   const titleRef = useRef(null); // Ref for title
   const descRef = useRef(null); // Ref for description
   const priceRef = useRef(null); // Ref for description 
@@ -145,10 +146,26 @@ const Details = () => {
     }
   };
 
+  const { userId } = useContext(AuthContext)
+
   // Function to handle booking
   const handleBook = async e => {
     if (isLoggedIn) {
-      toggleModal()
+      let paymentData = { price: 700000, paymentMethodId: 1, cardType: 'Mastercard' };
+      const paymentRes = await axios.post('/payments/add_payment', paymentData);
+      await axios.post('/payments/add_card_payment', paymentData);
+      let paymentId = paymentRes.data.payment_id;
+      const reservationRequestData = {
+        check_in_date: '2024-12-11 7:00:00',           // Date of check-in
+        check_out_date: '2024-12-29 18:00:00',         // Date of check-out
+        room_id: lastRoomClickedID,           // ID of the room selected
+        payment_id: paymentId,                 // ID of the payment method
+        user_id: userId                       // ID of the user making the reservation
+      };
+
+      await axios.post("/reservations/add_reservation", reservationRequestData);
+      showErrorDialog("Payment Approved", "You'll receive an email with your reservation details.", navigate);
+      // toggleModal()
       // navigate("/pay");
     } else {
       return;
@@ -161,9 +178,17 @@ const Details = () => {
       try {
         const roomID = lastRoomClickedID; // Get the ID of the room
         const res = await axios.get(`/filters/retrieve_room${roomID}`); // Fetch room data
-        const image = await axios.get(`/files/get_image_by_id${res.data[0].image_id}`); // Fetch image
+        // Fetch images for each item in res.data
+        const imageRequests = res.data.map(async item => {
+          const image = await axios.get(`/files/get_image_by_id${item.imageid}`);
+          return {
+            ...item,
+            imagePath: "/upload/" + image.data[0].filename
+          };
+        });
+        const itemsWithImages = await Promise.all(imageRequests);
+        imgRef.current = itemsWithImages.map(item => item.imagePath);
         const price = await axios.get(`/categories/room_type_ByID${res.data[0].type_of_room}`) // Fetch price
-        imgRef.current = "/upload/" + image.data[0].filename; // Set image reference
         titleRef.current = res.data[0].title; // Set title reference
         descRef.current = res.data[0].description; // Set description reference
         priceRef.current = price.data[0].price // Set the price per night
@@ -193,6 +218,16 @@ const Details = () => {
     }
   }
 
+  const [isPink, setIsPink] = useState(false);
+
+  const handleHeartClick = () => {
+    setIsPink(!isPink);
+  };
+
+  const handleShareClick = () => {
+    window.open('https://mail.google.com', '_blank');
+  };
+
   const [reserved, setReserved] = useState([]);
   function isReserved(strDate) {
     return reserved.some(([start, end]) => strDate >= start && strDate <= end);
@@ -218,7 +253,7 @@ const Details = () => {
                 <Star4 />
               </div>
               <span className="star-hotel">
-                5 Star Hotel
+                5 Star Room
               </span>
             </div>
           </div>
@@ -251,10 +286,10 @@ const Details = () => {
             ${dataLoaded && priceRef.current.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {' '} / {' '} night
           </label>
           <div className="frame-134">
-            <div className="button-1">
-              <Vector7 />
+            <div className="button-1" onClick={handleHeartClick}>
+              {isPink ? <Vector7Pink /> : <Vector7 />}
             </div>
-            <div className="button-2">
+            <div className="button-2" onClick={handleShareClick}>
               <Vector8 />
             </div>
             <div onClick={handleBook} className="button-3">
@@ -268,28 +303,20 @@ const Details = () => {
         </div>
       </div>
 
-      {dataLoaded && <img alt="Principal Reference" src={imgRef.current} className="main-rectangle">
+      {dataLoaded && <img alt="Principal Reference" src={imgRef.current[0]} className="main-rectangle">
       </img>}
       <div className="frame-128">
         <div className="frame-126">
-          <img alt="Second Reference" src={require("../assets/Rectangle51.png")} className="rectangle">
+          <img alt="Second Reference" src={imgRef.current[1] ? imgRef.current[1] : require("../assets/white.png")} className="rectangle">
           </img>
-          <img alt="Third Reference" src={require("../assets/Rectangle5.png")} className="rectangle">
+          <img alt="Third Reference" src={imgRef.current[2] ? imgRef.current[2] : require("../assets/white.png")} className="rectangle">
           </img>
         </div>
         <div className="frame-127">
-          <img alt="Fourth Reference" src={require("../assets/Rectangle6.png")} className="rectangle">
+          <img alt="Fourth Reference" src={imgRef.current[3] ? imgRef.current[3] : require("../assets/white.png")} className="rectangle">
           </img>
-          <img alt="Fifth Reference" src={require("../assets/Rectangle61.png")} className="rectangle">
+          <img alt="Fifth Reference" src={imgRef.current[4] ? imgRef.current[4] : require("../assets/white.png")} className="rectangle">
           </img>
-        </div>
-      </div>
-
-      <div className="button">
-        <div className="style-layer">
-          <span className="button-1">
-            View all photos
-          </span>
         </div>
       </div>
 

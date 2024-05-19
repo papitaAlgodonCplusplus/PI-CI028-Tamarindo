@@ -215,11 +215,14 @@ const Rooms = () => {
       // Counter for lazy logging
       let logged = 0;
       // Adding cards for each room to UI
+      console.log(roomsResponse)
       roomsResponse.data.forEach(room => {
         if (logged >= logs) {
           updateContainer(cardsContainer);
           return;
         }
+
+        console.log(room)
         const filepath = "/upload/" + room.filename;
 
         let selectedRoomType;
@@ -279,48 +282,56 @@ const Rooms = () => {
       // Getting the file input element
       const fileInput = e.target;
 
-      // Getting the selected file
-      const file = fileInput.files[0];
+      // Getting the selected files
+      const files = fileInput.files;
 
-      // Getting the image preview element
-      const imagePreview = document.getElementById('image-preview');
-      const imagePreview2 = document.getElementById('image-preview2');
+      // Getting the image previews container
+      const imagePreviewsContainer = document.getElementById('image-previews');
 
-      if (file) {
-        // If a file is selected
-        const reader = new FileReader();
+      // Clear previous image previews
+      imagePreviewsContainer.innerHTML = '';
 
-        // Function to handle when file reading is completed
-        reader.onload = function (e) {
-          // Displaying the image preview
-          imagePreview.src = e.target.result;
-          imagePreview.style.visibility = 'visible';
-          imagePreview2.src = e.target.result;
-          imagePreview2.style.visibility = 'visible';
-        };
+      if (files.length > 0) {
+        Array.from(files).forEach((file, index) => {
+          // Create a FileReader for each file
+          const reader = new FileReader();
 
-        // Reading the selected file as data URL
-        reader.readAsDataURL(file);
+          // Function to handle when file reading is completed
+          reader.onload = function (e) {
+            // Create a new img element for each file
+            const imagePreview = document.createElement('img');
+            imagePreview.id = `image-preview-${index}`;
+            imagePreview.className = 'image-preview';
+            imagePreview.src = e.target.result;
+            imagePreview.alt = 'Preview';
+            imagePreview.style.visibility = 'visible';
+            imagePreviewsContainer.style.visibility = 'visible';
+
+            // Append the img element to the container
+            imagePreviewsContainer.appendChild(imagePreview);
+          };
+
+          // Read the selected file as a data URL
+          reader.readAsDataURL(file);
+        });
 
         // Setting the file state
-        setFile(e.target.files[0]);
-        setFileChanged(true)
+        setFile(e.target.files);
+        setFileChanged(true);
       } else {
-        // If no file is selected, reset the image preview
-        imagePreview.src = '#';
-        imagePreview.style.visibility = 'none';
-        imagePreview.src = '#';
-        imagePreview2.style.visibility = 'none';
+        // If no file is selected, reset the image previews
+        imagePreviewsContainer.innerHTML = '';
       }
     } else {
       return;
     }
   };
 
+
   // Function to handle form submission
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     if (isLoggedIn) {
-      e.preventDefault()
+      e.preventDefault();
       let isError = false;
       const title = inputs.name.trim();
       const description = inputs.desc.trim();
@@ -339,7 +350,7 @@ const Rooms = () => {
         document.getElementById("warning-desc").style.display = "none";
       }
 
-      if (!file) {
+      if (!file || file.length === 0) {
         document.getElementById("warning-photo").style.display = "block";
         isError = true;
       } else {
@@ -351,23 +362,28 @@ const Rooms = () => {
       try {
         // Creating FormData object for form data
         const formData = new FormData();
-        formData.append('image', file);
-        var filename = "";
+        const fileNames = [];
 
-        // Uploading image file
-        filename = await axios.post('/upload', formData, {
+        // Uploading image files
+        for (const f of file) {
+          formData.append('images', f);
+        }
+
+        const response = await axios.post('/upload', formData, {
           headers: {
-            'Content-Type': 'multipart/form-data'
-          }
+            'Content-Type': 'multipart/form-data',
+          },
         });
+
+        fileNames.push(...response.data.fileNames);
 
         // Appending other form data to FormData object
         Object.entries(inputs).forEach(([key, value]) => {
           formData.append(key, value);
         });
 
-        // Setting filename in inputs
-        inputs.filename = filename;
+        // Setting filenames in inputs
+        inputs.filenames = fileNames;
         inputs.room_type = roomTypeOption;
 
         // Adding room data to database
@@ -389,7 +405,8 @@ const Rooms = () => {
     } else {
       return;
     }
-  }
+  };
+
 
   const handleModifyChange = e => {
     if (isLoggedIn) {
@@ -500,9 +517,9 @@ const Rooms = () => {
           <form id="myForm">
             {/* File input for uploading image */}
             <div className="file-input-container">
-              <input type="file" id="file-input" className="file-input" onChange={handleFileChange} />
-              <label htmlFor="file-input" className="file-input-label">Choose an image</label>
-              <img id="image-preview" className="image-preview" src="#" alt="Preview" />
+              <input type="file" id="file-input" className="file-input" multiple onChange={handleFileChange} />
+              <label htmlFor="file-input" className="file-input-label">Choose images (5 max)</label>
+              <div id="image-previews" className="image-previews"></div>
             </div>
             <label id="warning-photo" className='red-label-r'>Please provide a photo</label>
             {/* Input field for room title */}
@@ -547,7 +564,7 @@ const Rooms = () => {
             <textarea placeholder={data.description} id="description" name="description" onChange={handleModifyChange} ></textarea>
             {/* Dropdown for selecting room type */}
             <label htmlFor="room_types_selector">Room Type</label><br />
-            <select name="room_types_selector" className="custom-select" id="room_types_selector_1"
+            <select name="room_types_selector" className="custom-select-2" id="room_types_selector_1"
               onChange={handleRoomTypeChange} value={roomTypeOption} required>
               {/* Mapping room types to options */}
               {room_types.map(room_type => (
@@ -581,8 +598,8 @@ const Rooms = () => {
               Actions
             </span>
           </div>
-          <label style={{"marginLeft": "-65.5vw"}}>Show: </label>
-          <select  style={{"marginTop": "-3.2vh"}} name="lazy-logger" className="custom-select" id="lazy-logger"
+          <label style={{ "marginLeft": "-65.5vw" }}>Show: </label>
+          <select style={{ "marginTop": "-6.5vh", marginLeft: "-33vw" }} name="lazy-logger" className="custom-select-2" id="lazy-logger"
             onChange={handleLoggingChange}>
             <option key={3} value={3}>3</option>
             <option key={10} value={10}>10</option>

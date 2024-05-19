@@ -278,7 +278,7 @@ const Search = () => {
           // Fetch room details by room ID
           const roomDetailsResponse = await axios.get(`/rooms/by_roomID${room.roomid}`);
           // Fetch room image by image ID
-          const roomImage = await axios.get(`/files/get_image_by_id${roomDetailsResponse.data[0].image_id}`);
+          const roomImage = await axios.get(`/files/get_image_by_id${roomDetailsResponse.data[0].imageid}`);
           // Construct room image path
           const roomImagePath = "/upload/" + roomImage.data[0].filename;
           // Add room card to the UI
@@ -378,7 +378,7 @@ const Search = () => {
             <span className="sort-by-recommended">
               Sort by
             </span>
-            <select className="custom-select-2">
+            <select className="custom-select-2" onChange={fetchDataFromServer}>
               <option value="Recommended">Recommended</option>
               <option value="Cheapest">Cheapest</option>
             </select>

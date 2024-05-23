@@ -23,7 +23,6 @@ const theme = createTheme({
 
 const Login = () => {
   const { login, logout } = useContext(AuthContext);
-
   logout()
 
   // State to manage form inputs
@@ -70,7 +69,6 @@ const Login = () => {
       }
 
       if(isError) return;
-
 
       // Attempt to log in using Axios
       await axios.post(`/auth/login`, inputs);
@@ -150,7 +148,6 @@ const Login = () => {
           </div></center>
         </div>
       </form>
-      {/* <p style={{marginLeft: "50%"}}>Footer</p> */}
     </div>
   );
 };

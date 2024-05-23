@@ -1,0 +1,136 @@
+html {
+  overflow-x: hidden;
+} 
+
+.forgetPass {
+  font-family: 'Poppins';
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.containerForgotPass {
+  width: 50%;
+  margin-top: 10vh;
+  margin-bottom: 10vh;
+}
+
+.forgotPassTitle {
+  position: relative;
+  margin: 0 1px 26px 0;
+  display: inline-block;
+  overflow-wrap: break-word;
+  font-weight: 900;
+  font-size: 34px;
+  color: #181818;
+}
+
+input:focus{
+  outline: none;
+}
+
+.email {
+  position: relative;
+  flex-direction: column;
+  width: 410px;
+  overflow-wrap: break-word;
+  font-family: 'Poppins';
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.emailText {
+  margin-bottom: 14px;
+  align-self: flex-start;
+  letter-spacing: 0.3px;
+  letter-spacing: 1px;
+  line-height: 0.3;
+  color: #181818;
+}
+
+#email {
+  padding-left: 15px;
+  font-family: 'Poppins';
+  font-size: 18px;
+  width: 395px;
+  height: 35px;
+  background-color: rgb(228, 228, 228);
+  letter-spacing: 1px;
+  border-radius: 3px;
+  border: none;
+  margin-bottom: 3vh;
+}
+
+.containerQuestions {
+  position: relative;
+  // margin: 0 0 63px 4px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 396px;
+  box-sizing: border-box;
+  color: #4F4F4F;
+  margin-bottom: 3vh;
+}
+
+a {
+  padding-top: 12px;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: bolder;
+  color: #1E91B6;
+}
+
+.resetButton {
+  border-radius: 6px;
+  border: none;
+  background: #1E91B6;
+  position: relative;
+  margin-bottom: 36px;
+  display: flex;
+  padding: 12px 0.5px 13px 0;
+  width: 400px;
+  box-sizing: border-box;
+  text-align: center;
+  vertical-align:middle;
+  text-indent: 130px;
+  color: #FFFFFF;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.separatorForgotPass {
+  position: relative;
+  height: 1px;
+  width: 400px;
+  background-color: #717171ae;
+  box-shadow: none;
+}
+
+.loginQuestion {
+  position: relative;
+  color: #4F4F4F;
+  display: flex;
+}
+
+.questionLogin {
+  // display: inline-block;
+  margin-left: 2.8%;
+}
+
+.linkLogin {
+  margin-left: 7px;
+}
+
+.backArrowImage {
+  cursor: pointer;
+  margin-top: 20px;
+  margin-left: 11px;
+  width: 15px;
+  height: 15px;
+  // display: inline-block;
+}

@@ -1,5 +1,4 @@
 .register-window {
-  background: #FFFFFF;
   display: flex;
   padding-left: 0px;
   box-sizing: border-box;
@@ -10,9 +9,10 @@
   flex: 1;
   background-image: url('../assets/hotel_register.png'); /* Ruta de tu imagen de fondo */
   background-size: cover;
-  height: 172vh;
+  height: 142vh;
   margin-top: -3.1vh;
   margin-bottom: -2.1vh;
+  z-index: -1;
 }
 
 .container-sign-up {
@@ -60,65 +60,74 @@
 
 .form .file-input-container {
   position: absolute;
-  top: 104vh;
-  left: 44vh;
+  top: 23vh;
+  left: 0vh;
+}
+
+.red-label-3 {
+  position: absolute;
+  font-size: 16px;
+  color: rgb(161, 7, 7);
+  display: none;
 }
 
 .form .image-preview {
-  position: relative;
-  left: 1.5vh; 
+  position: absolute;
+  left: -1vw; 
+  top: 3vh;
   width: 180px;
 }
 
 .name-user {
-  margin-top: -14%;
+  margin-top: -10vh;
   margin-left: -25%;
 }
 
 .last-name-user {
-  margin-top: 2%;
+  margin-top: 5vh;
   margin-left: -25%;
 }
 
 .email-user {
-  margin-top: 2%;
+  margin-top: 5vh;
   margin-left: -25%;
 }
 
 .phone-user {
-  margin-top: 2%;
+  margin-top: 5vh;
   margin-left: -25%;
 }
 
 .password-user {
-  margin-top: 2%;
+  margin-top: 5vh;
   margin-left: -25%;
 } 
 
 .password-confirm-user {
-  margin-top: 2%;
+  margin-top: 5vh;
   margin-left: -25%;
 }
 
 .container-terms {
   margin-left: 35%;
-  margin-top: 30vh;
+  margin-top: -5vh;
 }
 
 .already-account {
   margin-top: 0%;
   margin-left: 35%;
-  margin-top: 10vh;
+  margin-top: 13vh;
 }
 
 .sign-button {
   position: absolute;
   width: 10vw;
-  margin-top: 180vh;
+  margin-top: 112.5vh;
   margin-left: -3vw;
 }
 
 input[type="name"] {
+  margin-bottom: 1vh;
   width: 200%;
   padding: 8px;
   border: 1px solid #ccc;
@@ -128,6 +137,7 @@ input[type="name"] {
 }
 
 input[type="last_name"] {
+  margin-bottom: 1vh;
   width: 200%;
   padding: 8px;
   border: 1px solid #ccc;
@@ -137,6 +147,7 @@ input[type="last_name"] {
 }
 
 input[type="email"] {
+  margin-bottom: 1vh;
   width: 200%;
   padding: 8px;
   border: 1px solid #ccc;
@@ -146,6 +157,7 @@ input[type="email"] {
 }
 
 input[type="number"] {
+  margin-bottom: 1vh;
   width: 200%;
   padding: 8px;
   border: 1px solid #ccc;
@@ -156,6 +168,7 @@ input[type="number"] {
 
 
 #password_reg {
+  margin-bottom: 1vh;
   width: 200%;
   padding: 8px;
   margin-top: 10px;
@@ -166,6 +179,7 @@ input[type="number"] {
 }
 
 #password_confirm {
+  margin-bottom: 1vh;
   width: 200%;
   padding: 8px;
   margin-left: 0px;

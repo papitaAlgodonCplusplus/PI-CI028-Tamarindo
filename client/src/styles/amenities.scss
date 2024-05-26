@@ -84,6 +84,7 @@ hr {
 }
 
 .add-amenity-button {
+  margin-top: 10vh;
   border-radius: 6px;
   border: 1px solid #1E91B6;
   background: #1E91B6;
@@ -93,8 +94,9 @@ hr {
   margin-left: 44%;
   padding-block: 0.5%;
   font-weight: 500;
-  font-size: 23px;
+  font-size: 18px;
   color: #ffffff;
+  margin-bottom: -14vh;
 }
 
 .myForm .add-amenity-button {
@@ -130,7 +132,7 @@ hr {
 .file-input-container {
   margin-top: 5%;
   position: relative;
-  margin-left: 3%;
+  margin-left: 3vw;
   display: inline-block;
 }
 
@@ -190,6 +192,7 @@ hr {
   visibility: hidden;
   display: block;
   margin-top: 20%;
+  margin-left: -3vw;
   width: 205px;
   border-radius: 20px;
   height: auto;

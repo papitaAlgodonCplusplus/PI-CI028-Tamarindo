@@ -14,6 +14,7 @@ const Search = () => {
 
   let cardsContainer;
   const navigate = useNavigate();
+  const [sort, setSort] = useState('Recommended')
   const [modalVisible, setModalVisible] = useState(false);
   const [values, setValues] = useState([
     new DateObject(),
@@ -270,11 +271,48 @@ const Search = () => {
           return;
         }
 
+        if (sort === 'Cheapest') {
+          const roomsResponse = await axios.get("/rooms");
+          emptyContainer(cardsContainer);
+
+          const roomsData = [];
+          for (const room of roomsResponse.data) {
+            const roomTypeResponse = await axios.get(`/categories/room_type_ByID${room.type_of_room}`);
+            const price = roomTypeResponse.data[0].price;
+
+            const roomDetailsResponse = await axios.get(`/rooms/by_roomID${room.roomid}`);
+            const roomImageResponse = await axios.get(`/files/get_image_by_id${roomDetailsResponse.data[0].imageid}`);
+            const roomImagePath = "/upload/" + roomImageResponse.data[0].filename;
+
+            roomsData.push({
+              title: room.title,
+              description: room.description,
+              imagePath: roomImagePath,
+              roomId: room.roomid,
+              price: price
+            });
+          }
+
+          roomsData.sort((a, b) => b.price - a.price);
+
+          setNRooms(roomsData.length);
+          setTotalRooms(roomsData.length);
+
+          for (const room of roomsData) {
+            addCardToUI(room.title, room.description, room.imagePath, room.roomId);
+          }
+
+          updateContainer(cardsContainer);
+          return;
+        }
+
         const roomsResponse = await axios.get("/rooms");
         emptyContainer(cardsContainer);
         setNRooms(roomsResponse.data.length);
         setTotalRooms(roomsResponse.data.length);
         for (const room of roomsResponse.data) {
+          const room_type = await axios.get(`/categories/room_type_ByID${room.type_of_room}`)
+          const price = room_type.data[0].price;
           // Fetch room details by room ID
           const roomDetailsResponse = await axios.get(`/rooms/by_roomID${room.roomid}`);
           // Fetch room image by image ID
@@ -309,6 +347,12 @@ const Search = () => {
       setDataLoaded(true)
     }
   });
+
+  const handleSort = e => {
+    e.preventDefault()
+    setSort(e.target.value)
+    fetchDataFromServer()
+  }
 
   return ((isLoggedIn ?  // Show page (html) if user is logged in
     <div className="search">
@@ -378,7 +422,7 @@ const Search = () => {
             <span className="sort-by-recommended">
               Sort by
             </span>
-            <select className="custom-select-2" onChange={fetchDataFromServer}>
+            <select className="custom-select-2" onChange={handleSort}>
               <option value="Recommended">Recommended</option>
               <option value="Cheapest">Cheapest</option>
             </select>

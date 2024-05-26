@@ -369,7 +369,7 @@ const Rooms = () => {
           formData.append('images', f);
         }
 
-        const response = await axios.post('/upload', formData, {
+        const response = await axios.post('/upload_multiple', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -456,33 +456,41 @@ const Rooms = () => {
   const handleUpdate = async e => {
     if (isLoggedIn) {
       try {
-        let image_id = data.image_id;
+        const formData = new FormData();
+        const fileNames = [];
         if (file_changed) {
           // Creating FormData object for form data
-          const formData = new FormData();
           formData.append('image', file);
 
-          // Uploading image file
-          const filename = await axios.post('/upload', formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-          });
-
-          const img_req = {
-            filename: filename.data
+          // Uploading image files
+          for (const f of file) {
+            formData.append('images', f);
           }
 
-          await postDataWithTimeout(`/files/`, img_req, 500);
-          const res_img = await axios.get(`/files/get_image_by_filename${filename.data}`)
-          image_id = res_img.data[0].imageid
+          const response = await axios.post('/upload_multiple', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+
+
+          fileNames.push(...response.data.fileNames);
+
+          // Appending other form data to FormData object
+          Object.entries(inputs).forEach(([key, value]) => {
+            formData.append(key, value);
+          });
+
+          // Setting filenames in inputs
+          inputs.filenames = fileNames;
+          inputs.room_type = roomTypeOption;
         }
 
         // Update amenity on the database
         const req = {
           title: data.title,
           description: data.description,
-          image_id: image_id,
+          filenames: fileNames,
           id: data.id,
           type_of_room: roomTypeOption
         }
@@ -584,6 +592,16 @@ const Rooms = () => {
         <div>
           <div className='rooms-title'>Rooms</div>
           <hr className="solid"></hr>
+          <label style={{ "marginLeft": "-65.5vw" }}>Show: </label>
+          <select style={{ "marginTop": "-3vh", marginLeft: "-49vw" }} name="lazy-logger" className="custom-select" id="lazy-logger"
+            onChange={handleLoggingChange}>
+            <option key={3} value={3}>3</option>
+            <option key={10} value={10}>10</option>
+            <option key={25} value={25}>25</option>
+            <option key={50} value={50}>50</option>
+          </select>
+          {/* Button to display add room modal */}
+          <button style={{ "marginBottom": "-15vh"}} className="add-room-button" onClick={displayModal}><center>Add Room</center></button>
           <div className="rooms-bar">
             <span className="room">
               Rooms
@@ -598,16 +616,6 @@ const Rooms = () => {
               Actions
             </span>
           </div>
-          <label style={{ "marginLeft": "-65.5vw" }}>Show: </label>
-          <select style={{ "marginTop": "-6.5vh", marginLeft: "-33vw" }} name="lazy-logger" className="custom-select-2" id="lazy-logger"
-            onChange={handleLoggingChange}>
-            <option key={3} value={3}>3</option>
-            <option key={10} value={10}>10</option>
-            <option key={25} value={25}>25</option>
-            <option key={50} value={50}>50</option>
-          </select>
-          {/* Button to display add room modal */}
-          <button className="add-room-button" onClick={displayModal}><center>Add Room</center></button>
           <div className="list-container">
           </div>
         </div>

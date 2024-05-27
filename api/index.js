@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
     cb(null, '../client/public/upload/');
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + file.originalname);
+    cb(null, Date.now() + '-' + file.originalname);
   }
 });
 
@@ -28,6 +28,12 @@ const upload = multer({ storage: storage });
 app.post("/api/upload", upload.single("image"), function (req, res) {
   const file = req.file;
   res.status(200).json(file.filename);
+});
+
+app.post("/api/upload_multiple", upload.array("images", 5), function (req, res) {
+  const files = req.files;
+  const fileNames = files.map(file => file.filename);
+  res.status(200).json({ fileNames: fileNames });
 });
 
 app.use(express.json())

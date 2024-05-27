@@ -80,6 +80,32 @@
   cursor: pointer;
 }
 
+.success-modal-close:hover {
+  background-color: #045B78;
+  border: 1px solid #045B78;
+  color: white;
+}
+
+.success-modal-close:hover {
+  background-color: #045B78;
+  border: 1px solid #045B78;
+  color: white;
+}
+
+.success-modal-close {
+  background-color: #ffffff;
+  color: #1E90B6;
+  border: 1px solid #1E90B6;
+  border-radius: 6px;
+  padding: 8px 15px;
+  font-family: 'Poppins';
+  font-weight: 200;
+  font-size: 15px;
+  padding-block: 2%;
+  cursor: pointer;
+  margin-left: 39%;
+}
+
 .warning-modal-close:hover {
   background-color: #045B78;
   border: 1px solid #045B78;

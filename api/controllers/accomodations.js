@@ -23,34 +23,8 @@ export const updateRoom = (req, res) => {
 
 
 export const addRoom = (req, res) => {
-  const qi = "INSERT INTO images(`filename`, `filepath`) VALUES (?)"
-  const filepath = "client/public/upload/" + req.body.filename.data;
-
-  const values_0 = [
-    req.body.filename.data,
-    filepath
-  ]
-  db.query(qi, [values_0], (err, data) => {
-    if (err) return res.json(err);
-  })
-
-
-  var lastImageId = null;
-  const query = "SELECT imageid FROM images ORDER BY imageid DESC LIMIT 1";
-  db.query(query, (error, results) => {
-    if (error) {
-      return res.status(500).send("Internal Server Error");
-    }
-
-    if (results.length === 0) {
-      res.status(404).send("No images found");
-    } else {
-      lastImageId = results[0].imageid;
-    }
-  });
-
   const q = "SELECT * FROM rooms WHERE title = ?";
-
+  let roomID = null;
   db.query(q, [req.body.name], (err, data) => {
     if (err) {
       return res.json(err);
@@ -59,24 +33,72 @@ export const addRoom = (req, res) => {
       return res.status(409).json("Room already exists!");
     }
 
-    const q = "INSERT INTO rooms(`image_id`, `title`, `description`, `type_of_room`) VALUES (?)"
+    const q = "INSERT INTO rooms(`title`, `description`, `type_of_room`) VALUES (?)"
     const values = [
-      lastImageId,
       req.body.name,
       req.body.desc,
       req.body.room_type
     ]
+
     db.query(q, [values], (err, data) => {
       if (err) {
         return res.json(err);
       }
+      roomID = data.insertId;
+
+      console.log(roomID)
+      const qi = "INSERT INTO images(`filename`, `filepath`, `room_id`) VALUES ?";
+      const filenames = req.body.filenames;
+
+      const values2 = filenames.map(filename => [
+        filename,
+        "client/public/upload/" + filename,
+        roomID
+      ]);
+
+
+      db.query(qi, [values2], (err, data) => {
+        if (err) return res.json(err);
+      });
+
       return res.status(200);
     })
   })
 }
 
 export const updateRooms = (req, res) => {
-  const q = 'SELECT * FROM rooms LEFT JOIN images ON rooms.image_id = images.imageid';
+  const q = `
+  SELECT 
+  r.*, 
+  i.imageid, 
+  i.filename, 
+  i.filepath, 
+  i.uploaded_at
+FROM 
+  hotel.rooms r
+LEFT JOIN (
+  SELECT 
+      t1.imageid, 
+      t1.filename, 
+      t1.filepath, 
+      t1.uploaded_at, 
+      t1.room_id
+  FROM 
+      hotel.images t1
+  INNER JOIN (
+      SELECT 
+          MIN(imageid) AS min_imageid, 
+          room_id
+      FROM 
+          hotel.images
+      GROUP BY 
+          room_id
+  ) t2 
+  ON 
+      t1.imageid = t2.min_imageid
+) i 
+ON 
+  r.roomid = i.room_id;`;
   db.query(q, (err, result) => {
     if (err) {
       return res.status(500).json({ message: 'Failed to fetch rooms from the database.' });
@@ -88,9 +110,10 @@ export const updateRooms = (req, res) => {
 
 export const updateRoomsByID = (req, res) => {
   const roomID = req.params.roomID;
-  const q = 'SELECT * FROM rooms LEFT JOIN images ON rooms.image_id = images.imageid WHERE roomid = ?';
+  const q = 'SELECT r.*, i.imageid, i.filename, i.filepath, i.uploaded_at FROM hotel.rooms r LEFT JOIN ( SELECT t1.imageid, t1.filename, t1.filepath, t1.uploaded_at, t1.room_id FROM hotel.images t1 INNER JOIN ( SELECT MIN(imageid) AS min_imageid, room_id FROM hotel.images GROUP BY room_id ) t2 ON t1.imageid = t2.min_imageid ) i ON r.roomid = i.room_id WHERE r.roomid = ?;';
   db.query(q, [roomID], (err, result) => {
     if (err) {
+      console.log(err)
       return res.status(500).json({ message: 'Failed to fetch rooms from the database.' });
     }
 
@@ -124,8 +147,11 @@ export const searchImages = (req, res) => {
 export const deleteRoom = (req, res) => {
   const roomID = req.params.roomID;
 
-  const getRoomImageIDQuery = "SELECT image_id FROM rooms WHERE roomid = ?";
+  const getRoomImageIDQuery = "SELECT imageid FROM images WHERE room_id = ?";
   const deleteImagesQuery = "DELETE FROM images WHERE imageid = ?";
+  const checkReservationsQuery = "SELECT * FROM reservations WHERE id_room = ?";
+  const deleteReservationsQuery = "DELETE FROM reservations WHERE id_room = ?";
+  const deleteRoomQuery = "DELETE FROM rooms WHERE roomid = ?";
 
   db.query(getRoomImageIDQuery, [roomID], (err, roomData) => {
     if (err) {
@@ -136,24 +162,56 @@ export const deleteRoom = (req, res) => {
       return res.status(404).json("Room not found.");
     }
 
-    const imageId = roomData[0].image_id;
-
-    db.query(deleteImagesQuery, [imageId], (err, imagesData) => {
-      if (err) {
-        return res.status(500).json("Error deleting images.");
-      }
-
-      res.json("Images related to the room have been deleted!");
+    // Delete all images related to the room
+    const deleteImagePromises = roomData.map(image => {
+      return new Promise((resolve, reject) => {
+        db.query(deleteImagesQuery, [image.imageid], (err, imagesData) => {
+          if (err) {
+            return reject("Error deleting images.");
+          }
+          resolve();
+        });
+      });
     });
-  });
 
-  const q = "DELETE FROM rooms WHERE roomid = ?";
+    Promise.all(deleteImagePromises)
+      .then(() => {
+        // Check if reservations exist for the room
+        db.query(checkReservationsQuery, [roomID], (err, reservationsData) => {
+          if (err) {
+            return res.status(500).json("Error checking reservations.");
+          }
 
-  db.query(q, [roomID], (err, data) => {
-    if (err) {
-      return res.status(500).json("Error.");
-    }
+          if (reservationsData.length > 0) {
+            // Delete reservations related to the room if they exist
+            db.query(deleteReservationsQuery, [roomID], (err, deleteResData) => {
+              if (err) {
+                return res.status(500).json("Error deleting reservations.");
+              }
 
-    return res.status(200);
+              // Finally, delete the room
+              db.query(deleteRoomQuery, [roomID], (err, roomData) => {
+                if (err) {
+                  return res.status(500).json("Error deleting room.");
+                }
+
+                res.json("Room and its related data have been deleted!");
+              });
+            });
+          } else {
+            // If no reservations, just delete the room
+            db.query(deleteRoomQuery, [roomID], (err, roomData) => {
+              if (err) {
+                return res.status(500).json("Error deleting room.");
+              }
+
+              res.json("Room and its related data have been deleted!");
+            });
+          }
+        });
+      })
+      .catch((error) => {
+        res.status(500).json(error);
+      });
   });
 };

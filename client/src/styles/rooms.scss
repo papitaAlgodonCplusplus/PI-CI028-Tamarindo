@@ -39,6 +39,56 @@ hr {
 }
 
 
+.custom-select {
+  display: block;
+  width: 150px;
+  height: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  overflow: hidden;
+  border-radius: 5px;
+  margin-left: 18vw;
+  margin-bottom: 20px;
+}
+
+.body {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.custom-select-2 select {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  appearance: none;
+}
+
+.custom-select-2 select::-ms-expand {
+  display: none;
+}
+
+.custom-select-2::after {
+  content: '\25BC';
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  color: #626262;
+  font-size: 16px;
+}
+
+.custom-select-2  select option {
+  padding: 10px;
+}
+
+.custom-select-2 select option:checked {
+  background-color: #15406e;
+  color: #fff;
+}
+
 
 .custom-select-2 {
   display: block;
@@ -62,7 +112,7 @@ hr {
   background-color: #fff;
   overflow: hidden;
   border-radius: 5px;
-  margin-left: -48vw;
+  margin-left: 18vw;
   margin-bottom: 20px;
 }
 
@@ -123,6 +173,15 @@ hr {
   margin-bottom: 20px;
 }
 
+.image-previews {
+  visibility: hidden;
+  display: block;
+  margin-top: 20%;
+  width: 205px;
+  border-radius: 20px;
+  height: auto;
+}
+
 .image-preview {
   visibility: hidden;
   display: block;
@@ -141,7 +200,7 @@ hr {
 }
 
 
-.file-input-container {
+#myForm .file-input-container {
   position: relative;
   display: inline-block;
 }
@@ -151,11 +210,11 @@ hr {
   left: -9999px;
 }
 
-.file-input-label {
+#myForm .file-input-label {
   background-color: #3498db;
   color: #fff;
   padding: 10px 15px;
-  margin-left: 15px;
+  margin-left: -0.5vw;
   border-radius: 5px;
   cursor: pointer;
 }
@@ -325,14 +384,16 @@ textarea {
   font-size: 16px;
   color: rgb(161, 7, 7);
   display: none;
-  margin-bottom: 5vh;
+  margin-bottom: 9vh;
+  margin-left: -20vw;
 }
 
 .red-label-2 {
   font-size: 16px;
-  margin-bottom: 5vh;
+  margin-bottom: 9vh;
   color: rgb(161, 7, 7);
   display: none;
+  margin-left: -18.5vw;
 }
 
 .actions {

@@ -43,58 +43,58 @@ const Amenities = () => {
         position: relative;
         width: 10vw;
         left: 9vw;">$${fee}</div>
-      <div style="
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        position: absolute;
-        right: 20px;">
         <div style="
-        margin-top: 20px;
-        border-radius: 6px;
-        background: #FFFFFF;
         display: flex;
         flex-direction: row;
-        justify-content: center;
-        cursor: pointer;
-        padding: 8px 0.4px 8px 0;
-        margin-left: 74vw;
-        box-sizing: border-box;" id="delete-button-${id}">
-        <img style="
-          overflow-wrap: break-word;
-          font-family: 'Poppins';
-          font-weight: 400;
-          width: 4vw;
-          font-size: 15px;
-          letter-spacing: 0.3px;
+        align-items: flex-end;
+        position: absolute;
+        right: 2vw;
+        <div style="
+          margin-top: 20px;
+          border-radius: 6px;
+          border: 1px solid #1E91B6;
+          background: #FFFFFF;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
           cursor: pointer;
-          line-height: 1.333;" src="${require("../assets/Bin.jpg")}">
-        </img>
-      </div>
+          padding: 8px 0.4px 8px 0;
+          box-sizing: border-box;" id="delete-button-${id}">
+          <img style="
+            overflow-wrap: break-word;
+            font-family: 'Poppins';
+            font-weight: 400;
+            width: 4vw;
+            font-size: 15px;
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            line-height: 1.333;" src="${require("../assets/Bin.jpg")}">
+          </img>
+        </div>
+      <div style="
+          border-radius: 50px;
+          margin-left: 17.6vw;
+          border: solid 1.5px #045B78;
+          display: flex;
+          justify-content: center;
+          padding-left: 0.7vw;
+          padding-block: 2.5vh;
+          width: 3.5vw;
+          cursor: pointer;" id="modify-button-${id}">
+          <img style="
+            overflow-wrap: break-word;
+            font-family: 'Poppins';
+            font-weight: 400;
+            width: 2vw;
+            margin-left: -0.7vw;
+            font-size: 15px;
+            letter-spacing: 0.3px;
+            color: #FFFFFF;" src="${require("../assets/Pencil.png")}">
+          </img>
+        </div>
     </div>
-    <div style="
-        border-radius: 50px;
-        margin-left: 19vw;
-        border: solid 1.5px #045B78;
-        display: flex;
-        justify-content: center;
-        padding-inline: 0.4vw;
-        margin-top: 3.5vh;
-        padding-block: 2vh;
-        width: 3vw;
-        cursor: pointer;" id="modify-button-${id}">
-        <img style="
-          overflow-wrap: break-word;
-          font-family: 'Poppins';
-          font-weight: 400;
-          width: 2vw;
-          font-size: 15px;
-          letter-spacing: 0.3px;
-          color: #FFFFFF;" src="${require("../assets/Pencil.png")}">
-        </img>
-      </div>
-    </div>
-  </div>  
+  </div>
+  <div style="padding-bottom: 20px;"></div>
 `;
 
     const amenities_table = document.querySelector('.amenities-container');
@@ -481,6 +481,16 @@ const Amenities = () => {
       </div>
       <hr className="solid"></hr>
 
+      <label style={{ "marginLeft": "20vw" }}>Show: </label>
+      <select name="lazy-logger" style={{ "marginLeft": "25vw", "marginTop": "-3vh" }} className="custom-select" id="lazy-logger"
+        onChange={handleLoggingChange}>
+        <option key={3} value={3}>3</option>
+        <option key={10} value={10}>10</option>
+        <option key={25} value={25}>25</option>
+        <option key={50} value={50}>50</option>
+      </select>
+      <button style={{ "marginBottom": "-15vh"}} className="add-amenity-button" onClick={displayModal}><center>Add Amenity</center></button>
+
       <div className="amenities-bar">
         <div className="amenities-info-bar">
           <span className="amenity">
@@ -495,16 +505,6 @@ const Amenities = () => {
         </div>
       </div>
 
-
-      <label style={{ "marginLeft": "20vw" }}>Show: </label>
-      <select name="lazy-logger" style={{ "marginLeft": "25vw", "marginTop": "-3vh" }} className="custom-select" id="lazy-logger"
-        onChange={handleLoggingChange}>
-        <option key={3} value={3}>3</option>
-        <option key={10} value={10}>10</option>
-        <option key={25} value={25}>25</option>
-        <option key={50} value={50}>50</option>
-      </select>
-      <button className="add-amenity-button" onClick={displayModal}><center>Add Amenity</center></button>
       <div>
         <div className="amenities-container">
 

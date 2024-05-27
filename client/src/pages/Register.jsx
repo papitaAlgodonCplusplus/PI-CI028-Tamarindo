@@ -31,32 +31,60 @@ const Register = () => {
     setChecked(!isChecked);
   }
 
-  const openModal = () => {
-    setIsOpen(true);
-  }
-
-  const closeModal = () => {
-    setIsOpen(false);
-  }
 
   const handleSubmit = async (e) => {
+    let isError = false;
 
-    if (!file) {
-      showErrorDialog("An error occurred:", "Please upload an image");
-      return;
+    const name = inputs.name.trim();
+    const lastName = inputs.last_name.trim();
+    const email = inputs.email.trim();
+    const phone = inputs.phone.trim();
+    const password = inputs.password;
+    const confirmPassword = inputs.password_confirm.trim();
+
+    if (name === '') {
+      document.getElementById("warning-name").style.display = "block";
+      isError = true;
+    } else {
+      document.getElementById("warning-name").style.display = "none";
     }
 
-    if (!inputs.name) {
-      return;
+    if (lastName === '') {
+      document.getElementById("warning-last_name").style.display = "block";
+      isError = true;
+    } else {
+      document.getElementById("warning-last_name").style.display = "none";
     }
 
-    if (!inputs.last_name) {
-      return;
+    if (email === '') {
+      document.getElementById("warning-email_reg").style.display = "block";
+      isError = true;
+    } else {
+      document.getElementById("warning-email_reg").style.display = "none";
     }
 
-    if (!inputs.email) {
-      return;
+    if (phone === '') {
+      document.getElementById("warning-phone").style.display = "block";
+      isError = true;
+    } else {
+      document.getElementById("warning-phone").style.display = "none";
     }
+
+    if (password === '') {
+      document.getElementById("warning-password_reg").style.display = "block";
+      isError = true;
+    } else {
+      document.getElementById("warning-password_reg").style.display = "none";
+    }
+
+    if (confirmPassword === '') {
+      document.getElementById("warning-password_confirm").style.display = "block";
+      isError = true;
+    } else {
+      document.getElementById("warning-password_confirm").style.display = "none";
+    }
+
+    if(isError) return;
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(inputs.email)) {
@@ -64,15 +92,6 @@ const Register = () => {
       return;
     }
 
-    if (!inputs.phone) {
-      return;
-    }
-
-    if (!inputs.password) {
-      return;
-    }
-
-    const password = inputs.password;
     const passwordRegEx = /^^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
     if (inputs.password !== inputs.password_confirm) {
@@ -84,6 +103,7 @@ const Register = () => {
       showErrorDialog("An error occurred:", "It is necessary to accept our terms and conditions.");
       return;
     }
+
     // Creating FormData object for form data
     const formData = new FormData();
     formData.append('image', file);
@@ -183,49 +203,55 @@ const Register = () => {
             <label htmlFor="file-input" className="file-input-label">Choose an image</label>
             <img id="image-preview" className="image-preview" src="#" alt="Preview" />
           </div>
+          <label id="warning-image" className='red-label-3'>Please provide a user image</label>
 
           <div className='name-user'>
-            <label htmlFor="name"> Name </label>
+            <label htmlFor="name">Name</label>
             <br />
             <input type="name" id="name" name="name" onChange={handleChange} required />
+            <label id="warning-name" className='red-label-3'>Please provide your name</label>
           </div>
 
           <div className='last-name-user'>
-            <label htmlFor="last_name"> Last Name </label>
+            <label htmlFor="last_name">Last Name</label>
             <br />
-            <input type="last_name" id="last_name" name="last_name" onChange={handleChange} required />
+            <input type="name" id="last_name" name="last_name" onChange={handleChange} required />
+            <label id="warning-last_name" className='red-label-3'>Please provide your last name</label>
           </div>
 
           <div className='email-user'>
-            <label htmlFor="email_reg"> Email address </label>
+            <label htmlFor="email_reg">Email address</label>
             <br />
             <input type="email" id="email_reg" name="email" onChange={handleChange} required />
+            <label id="warning-email_reg" className='red-label-3'>Please provide your email address</label>
           </div>
 
           <div className='phone-user'>
-            <label htmlFor="phone"> Phone Number </label>
+            <label htmlFor="phone">Phone Number</label>
             <br />
             <input type="number" id="phone" name="phone" onChange={handleChange} required />
+            <label id="warning-phone" className='red-label-3'>Please provide your phone number</label>
           </div>
 
           <div className='password-user'>
             <label htmlFor="password_reg">Password</label>
             <br />
             <input type="password" id="password_reg" name="password" onChange={handleChange} required />
+            <label id="warning-password_reg" className='red-label-3'>Please provide a password</label>
           </div>
 
           <div className='password-confirm-user'>
-            <label htmlFor="password_confirm"> Confirm Password </label>
+            <label htmlFor="password_confirm">Confirm Password</label>
             <br />
-            <input type="password" id="password_confirm" name="password_confirm" className='password_confirm ' onChange={handleChange} required />
+            <input type="password" id="password_confirm" name="password_confirm" className='password_confirm' onChange={handleChange} required />
+            <label id="warning-password_confirm" className='red-label-3'>Please confirm your password</label>
           </div>
-
 
           <div className="sign-button">
             <button type="submit" className='create' onClick={handleSubmit}>Sign Up</button>
           </div>
-
         </form>
+
 
         <div className="container-terms">
           <input type="checkbox" id="checkbox" value="checkbox" checked={isChecked} onChange={handleCheckbox} />

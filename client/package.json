@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emailjs/browser": "^4.3.3",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@fontsource/roboto": "^5.0.13",
@@ -20,6 +21,7 @@
     "react-multi-date-picker": "^4.4.1",
     "react-router-dom": "^6.23.0",
     "react-scripts": "5.0.1",
+    "react-usestateref": "^1.0.9",
     "sass": "^1.72.0",
     "scss": "^0.2.4",
     "web-vitals": "^2.1.4"

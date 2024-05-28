@@ -4,65 +4,99 @@ html {
 
 .forgetPass {
   font-family: 'Poppins';
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 1px;
   align-items: center;
   width: 100%;
   height: 100%;
-  box-sizing: border-box;
-  position: relative;
+}
+
+.image {
+  display: block;
+  margin: 5px;
+  margin-left: 5vw;
+}
+
+.imageForgotPass {
+  width: 70%;
+  height: 70%;
 }
 
 .containerForgotPass {
-  width: 50%;
+  margin-left: 4vw;
+  width: 65%;
   margin-top: 10vh;
-  margin-bottom: 10vh;
+  margin-bottom: 5vh;
+  align-items: center;
 }
 
 .forgotPassTitle {
-  position: relative;
-  margin: 0 1px 26px 0;
-  display: inline-block;
   overflow-wrap: break-word;
   font-weight: 900;
-  font-size: 34px;
+  font-size: 2vw;
+  letter-spacing: 1.5px;
   color: #181818;
+}
+
+.descriptionFP {
+  margin: 0 0.5vw 5vh 0;
+  overflow-wrap: break-word;
+  font-weight: 900;
+  font-size: 1.5vw;
+  color: #181818;
+  padding-left: 12%;
+}
+
+.instruction {
+  width: 70%;
+  margin: 60px 0 30px 0;
+  overflow-wrap: break-word;
+  font-weight: 900;
+  font-size: 1.2vw;
+  color: #181818;
+  // text-align: center;
 }
 
 input:focus{
   outline: none;
 }
 
-.email {
+.emailFP {
   position: relative;
   flex-direction: column;
-  width: 410px;
+  width: 21vw;
   overflow-wrap: break-word;
   font-family: 'Poppins';
   font-weight: 500;
-  font-size: 20px;
+  font-size: 1.1vw;
 }
 
-.emailText {
-  margin-bottom: 14px;
+.emailTextFP {
+  // margin-bottom: 14px;
   align-self: flex-start;
-  letter-spacing: 0.3px;
   letter-spacing: 1px;
   line-height: 0.3;
   color: #181818;
 }
 
-#email {
+#inuptEmailFP {
   padding-left: 15px;
   font-family: 'Poppins';
-  font-size: 18px;
-  width: 395px;
-  height: 35px;
+  font-size: 1vw;
+  width: 20.1vw;
+  height: 5vh;
   background-color: rgb(228, 228, 228);
   letter-spacing: 1px;
   border-radius: 3px;
   border: none;
-  margin-bottom: 3vh;
+}
+
+.warningFP {
+  font-size: 0.8vi;
+  color: rgb(161, 7, 7);
+  display: none;
+  margin-top: 1vh;
 }
 
 .containerQuestions {
@@ -71,7 +105,7 @@ input:focus{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 396px;
+  width: 21vw;
   box-sizing: border-box;
   color: #4F4F4F;
   margin-bottom: 3vh;
@@ -86,27 +120,31 @@ a {
 }
 
 .resetButton {
-  border-radius: 6px;
+  font-family: 'Poppins';
+  font-size: 1.1vw;
+  color: #FFFFFF;
+  border-radius: 0.4vi;
   border: none;
   background: #1E91B6;
-  position: relative;
-  margin-bottom: 36px;
-  display: flex;
-  padding: 12px 0.5px 13px 0;
-  width: 400px;
   box-sizing: border-box;
+  vertical-align: middle;
+  display: flex;
+  display:table-cell;
+  position: relative;
+  width: 21vw;
+  height: 5.5vh;
+  margin-top: 5.8vh;
+  margin-bottom: 5vh;
   text-align: center;
-  vertical-align:middle;
-  text-indent: 130px;
-  color: #FFFFFF;
-  font-size: 18px;
   cursor: pointer;
 }
 
 .separatorForgotPass {
   position: relative;
-  height: 1px;
-  width: 400px;
+  margin-left: 0;
+  margin-bottom: 2vh;
+  height: 0.09vh;
+  width: 21vw;
   background-color: #717171ae;
   box-shadow: none;
 }
@@ -115,22 +153,29 @@ a {
   position: relative;
   color: #4F4F4F;
   display: flex;
+  text-align: center;
+  margin-left: 5.2vw;
 }
 
 .questionLogin {
-  // display: inline-block;
-  margin-left: 2.8%;
+  font-size: 1vw;
+  position: relative;
+  text-align: center;
+  margin-left: 1.2vw;
+  margin-top: 2.2vh;
 }
 
 .linkLogin {
-  margin-left: 7px;
+  position: relative;
+  text-align: center;
+  margin-left: 0.5vw;
 }
 
 .backArrowImage {
+  position: relative;
   cursor: pointer;
-  margin-top: 20px;
+  margin-top: 2.6vh;
   margin-left: 11px;
-  width: 15px;
-  height: 15px;
-  // display: inline-block;
+  width: 3%;
+  height: 3%;
 }

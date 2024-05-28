@@ -182,6 +182,8 @@ ALTER TABLE hotel.services ADD COLUMN image_path VARCHAR(255);
 
 select * from hotel.users;
 
+UPDATE hotel.users SET last_name = 'Brenes' WHERE email = 'sebas.venegas.brenes@gmail.com';
+
 alter table hotel.images drop column description
 
 ALTER TABLE hotel.users ADD COLUMN image_id int;

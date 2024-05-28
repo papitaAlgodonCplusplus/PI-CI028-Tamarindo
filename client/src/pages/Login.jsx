@@ -74,7 +74,7 @@ const Login = () => {
       await axios.post(`/auth/login`, inputs);
 
       // Retrieve user ID after successful login
-      const userID = await axios.get(`/auth/getUserID${inputs.email}`);
+      const userID = await axios.get(`/auth/getUserID:email${inputs.email}`);
 
       // Login the user using the AuthContext
       login(userID.data[0].userid);

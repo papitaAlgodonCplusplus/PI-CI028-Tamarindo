@@ -62,6 +62,30 @@ export const register = (req, res) => {
   })
 }
 
+export const changePassword = (req, res) => {
+  // Check if the user already exists
+  const q = "SELECT * FROM users WHERE email = ?";
+  db.query(q, [req.body.email], (err, data) => {
+    if (err) {
+      console.log(err)
+      return res.json(err);
+    }
+    if (data.length) {
+      // Hash the password and create the user
+      const salt = bcrypt.genSaltSync(10);
+      const hash = bcrypt.hashSync(req.body.password, salt);
+
+      const updateQuery = "UPDATE users SET password = ? WHERE userid = ?"
+      db.query(updateQuery, [hash, req.body.email], (err, data) => {
+        if (err) return res.json(err);
+        return res.status(200).json({ message: "User has been updated!" });
+      })
+    } else {
+      return res.status(409).json("User does not exists!")
+    }
+  })
+}
+
 export const login = (req, res) => {
   const q = "SELECT * FROM users WHERE email = ?"
 

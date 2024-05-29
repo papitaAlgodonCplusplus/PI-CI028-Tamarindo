@@ -33,6 +33,7 @@ const Register = () => {
 
 
   const handleSubmit = async (e) => {
+    e.preventDefault()
     let isError = false;
 
     const name = inputs.name.trim();
@@ -84,7 +85,7 @@ const Register = () => {
       document.getElementById("warning-password_confirm").style.display = "none";
     }
 
-    if(isError) return;
+    if (isError) return;
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(inputs.email)) {
@@ -125,8 +126,8 @@ const Register = () => {
     inputs.filename = filename;
 
     if (passwordRegEx.test(password)) {
-      e.preventDefault()
       try {
+        console.log("Register: ", inputs)
         await axios.post("/auth/register", inputs);
         navigate("/");
       } catch (error) {

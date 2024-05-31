@@ -100,7 +100,7 @@ const ForgotPass = () => {
         // navigate("/");
       }
     } catch (error) {
-      showErrorDialog(inputs.email, error);
+      showErrorDialog(inputs.email, "Email does not belong to any user");
     }
   };
 

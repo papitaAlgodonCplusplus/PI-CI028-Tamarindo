@@ -61,7 +61,8 @@ const Search = () => {
             // Fetch room details by room ID
             const roomDetailsResponse = await axios.get(`/rooms/by_roomID${room.roomid}`);
             // Fetch room image by image ID
-            const roomImage = await axios.get(`/files/get_image_by_id${roomDetailsResponse.data[0].image_id}`);
+            console.log(roomDetailsResponse)
+            const roomImage = await axios.get(`/files/get_image_by_id${roomDetailsResponse.data[0].imageid}`);
             // Construct room image path
             const roomImagePath = "/upload/" + roomImage.data[0].filename;
             // Add room card to the UI
@@ -263,7 +264,7 @@ const Search = () => {
           return;
         }
 
-        if (homeDates) {
+        if (homeDates.length > 0) {
           handleFilterCalendarChange(homeDates)
           emptyContainer(cardsContainer);
           const roomsResponse = await axios.get("/rooms");
@@ -311,8 +312,6 @@ const Search = () => {
         setNRooms(roomsResponse.data.length);
         setTotalRooms(roomsResponse.data.length);
         for (const room of roomsResponse.data) {
-          const room_type = await axios.get(`/categories/room_type_ByID${room.type_of_room}`)
-          const price = room_type.data[0].price;
           // Fetch room details by room ID
           const roomDetailsResponse = await axios.get(`/rooms/by_roomID${room.roomid}`);
           // Fetch room image by image ID

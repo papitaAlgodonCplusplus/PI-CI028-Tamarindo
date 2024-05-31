@@ -531,7 +531,7 @@
   box-sizing: border-box;
 }
 
-.custom-select-2 {
+.frame-201 .custom-select-2 {
   overflow-x: hidden;
   position: relative;
   top: 14px;
@@ -546,7 +546,7 @@
   color: white;
 }
 
-.custom-select-2 select {
+.frame-201 .custom-select-2 select {
   width: 100%;
   padding: 10px;
   border: none;
@@ -555,11 +555,11 @@
   appearance: none;
 }
 
-.custom-select-2 select::-ms-expand {
+.frame-201 .custom-select-2 select::-ms-expand {
   display: none;
 }
 
-.custom-select-2::after {
+.frame-201 .custom-select-2::after {
   content: '\25BC';
   position: absolute;
   top: 50%;
@@ -569,11 +569,11 @@
   font-size: 16px;
 }
 
-.custom-select-2 select option {
+.frame-201 .custom-select-2 select option {
   padding: 10px;
 }
 
-.custom-select-2 select option:checked {
+.frame-201 .custom-select-2 select option:checked {
   background-color: #15406e;
   color: #fff;
 }

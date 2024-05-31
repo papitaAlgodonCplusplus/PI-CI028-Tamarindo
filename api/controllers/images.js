@@ -39,9 +39,9 @@ export const geImageByID = (req, res) => {
 
 export const geImageByUserID = (req, res) => {
   const q = `
-    SELECT users.*, images.*
-    FROM users
-    LEFT JOIN images ON users.image_id = images.imageid
+    SELECT images.*
+    FROM images
+    INNER JOIN users ON users.imageid = images.imageid
     WHERE users.userid = ?
   `;
 

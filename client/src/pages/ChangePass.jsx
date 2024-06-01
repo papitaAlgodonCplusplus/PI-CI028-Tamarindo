@@ -136,7 +136,7 @@ const ChangePass = () => {
             // sends message confirming change, via email
             sendEmail();
             // Go to profile page
-            navigate("/reservations_list");
+            // navigate("/reservations_list");
           } else {
             showErrorDialog(inputs.email, "User does not exists");
           }

@@ -12,6 +12,7 @@
 El sistema por desarrollar será un sitio web para un hotel que permitirá a los usuarios realizar
 reservaciones, consultar disponibilidad de habitaciones, gestionar pagos, y acceder a información
 sobre servicios y comodidades ofrecidas por el hotel
+
 ## Como Ejecutar (Local)
 
 * Clonar: https://github.com/papitaAlgodonCplusplus/PI-CI028-Tamarindo
@@ -30,7 +31,7 @@ sobre servicios y comodidades ofrecidas por el hotel
 
 * Abrir esa conexión usando la contraseña creada en la instalación
 
-* Ir a la carpeta del proyecto clonado, abrir el archivo “query hotel.users creation” y copiar todo el contenido.
+* Ir a la carpeta del proyecto clonado, abrir el archivo “query hotel creation” y copiar todo el contenido.
 
 * Pegar el contenido en un nuevo query y ejecutar todo (CTRL + Shift + Enter)
 

@@ -71,12 +71,13 @@ export const changePassword = (req, res) => {
       return res.json(err);
     }
     if (data.length) {
-      // Hash the password and create the user
+      // Hash the password and update the user
       const salt = bcrypt.genSaltSync(10);
       const hash = bcrypt.hashSync(req.body.password, salt);
 
-      const updateQuery = "UPDATE users SET password = ? WHERE userid = ?"
+      const updateQuery = "UPDATE users SET password = ? WHERE email = ?"
       db.query(updateQuery, [hash, req.body.email], (err, data) => {
+        if (err) console.log(err)
         if (err) return res.json(err);
         return res.status(200).json({ message: "User has been updated!" });
       })

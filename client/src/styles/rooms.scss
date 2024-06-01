@@ -57,7 +57,7 @@ hr {
   margin: 0 auto;
 }
 
-.custom-select-2 select {
+.custom-select-4 select {
   width: 100%;
   padding: 10px;
   border: none;
@@ -66,11 +66,11 @@ hr {
   appearance: none;
 }
 
-.custom-select-2 select::-ms-expand {
+.custom-select-4 select::-ms-expand {
   display: none;
 }
 
-.custom-select-2::after {
+.custom-select-4::after {
   content: '\25BC';
   position: absolute;
   top: 50%;
@@ -80,17 +80,17 @@ hr {
   font-size: 16px;
 }
 
-.custom-select-2  select option {
+.custom-select-4  select option {
   padding: 10px;
 }
 
-.custom-select-2 select option:checked {
+.custom-select-4 select option:checked {
   background-color: #15406e;
   color: #fff;
 }
 
 
-.custom-select-2 {
+.custom-select-4 {
   display: block;
   width: 150px;
   height: 20px;
@@ -99,7 +99,7 @@ hr {
   background-color: #fff;
   overflow: hidden;
   border-radius: 5px;
-  margin-left: 18vw;
+  margin-left: 1vw;
   margin-bottom: 20px;
 }
 

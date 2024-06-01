@@ -1,6 +1,4 @@
 import axios from "axios"
-import hotel_login from "../assets/hotel_register.png"
-import User from "../img/User.png"
 import React, { useState } from 'react'
 import { Link, useNavigate } from "react-router-dom"
 import { showErrorDialog } from '../Misc'
@@ -8,7 +6,6 @@ import "../styles/register.scss"
 
 const Register = () => {
   const [isChecked, setChecked] = useState(false);
-  const [modalIsOpen, setIsOpen] = useState(false);
   const [inputs, setInputs] = useState({
     name: "",
     last_name: "",
@@ -20,7 +17,6 @@ const Register = () => {
     filename: ""
   });
 
-  const [err] = useState(null)
   const navigate = useNavigate()
 
   const handleChange = e => {
@@ -33,6 +29,7 @@ const Register = () => {
 
 
   const handleSubmit = async (e) => {
+    e.preventDefault()
     let isError = false;
 
     const name = inputs.name.trim();
@@ -41,6 +38,13 @@ const Register = () => {
     const phone = inputs.phone.trim();
     const password = inputs.password;
     const confirmPassword = inputs.password_confirm.trim();
+
+    if (file === null) {
+      document.getElementById("warning-user_image").style.display = "block";
+      isError = true;
+    } else {
+      document.getElementById("warning-user_image").style.display = "none";
+    }
 
     if (name === '') {
       document.getElementById("warning-name").style.display = "block";
@@ -84,7 +88,7 @@ const Register = () => {
       document.getElementById("warning-password_confirm").style.display = "none";
     }
 
-    if(isError) return;
+    if (isError) return;
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(inputs.email)) {
@@ -122,11 +126,11 @@ const Register = () => {
     });
 
     // Setting filename in inputs
-    inputs.filename = filename;
+    inputs.filename = filename.data;
 
     if (passwordRegEx.test(password)) {
-      e.preventDefault()
       try {
+        console.log("Register: ", inputs)
         await axios.post("/auth/register", inputs);
         navigate("/");
       } catch (error) {
@@ -143,13 +147,8 @@ const Register = () => {
     }
   }
 
-  const handleCancel = e => {
-    navigate("/")
-    return;
-  }
-
   const [file, setFile] = useState(null);
-  const [file_changed, setFileChanged] = useState(false);
+  const [, setFileChanged] = useState(false);
   // Function to handle file input change
   const handleFileChange = (e) => {
     // Getting the file input element
@@ -178,6 +177,9 @@ const Register = () => {
       // Setting the file state
       setFile(e.target.files[0]);
       setFileChanged(true)
+
+      // Hidding red label
+      document.getElementById("warning-user_image").style.display = "none";
     } else {
       // If no file is selected, reset the image preview
       imagePreview.src = '#';
@@ -203,7 +205,7 @@ const Register = () => {
             <label htmlFor="file-input" className="file-input-label">Choose an image</label>
             <img id="image-preview" className="image-preview" src="#" alt="Preview" />
           </div>
-          <label id="warning-image" className='red-label-3'>Please provide a user image</label>
+          <label id="warning-user_image" className='warning-user_image'>Please provide a user image</label>
 
           <div className='name-user'>
             <label htmlFor="name">Name</label>

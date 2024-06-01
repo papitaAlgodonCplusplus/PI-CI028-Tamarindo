@@ -87,20 +87,20 @@ const ForgotPass = () => {
 
     try {
       // Search if email exists in DB
-      const userID = await axios.get(`/auth/getUserID:email${inputs.email}`);
+      const userID = await axios.get(`/auth/getUserID${inputs.email}`);
       if (userID) {
         generatePass();
         // Update variables with user info (new password generated and input email)
         setInfo({...userInfo, email: email, password: newPassword});
         // Change user password
-        await axios.get(`/auth/changePassword`, infoRef.current);
+        await axios.post(`/auth/changePassword`, infoRef.current);
         // Generates new password and sends it via email
         sendEmail();
         // Go to login page
         // navigate("/");
       }
     } catch (error) {
-      showErrorDialog(inputs.email, "User does not exists");
+      showErrorDialog(inputs.email, "Email does not belong to any user");
     }
   };
 

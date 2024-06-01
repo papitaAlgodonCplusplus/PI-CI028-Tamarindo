@@ -3,8 +3,8 @@ import { logout, register, changePassword, login, getUserID, getEmail, getUserBy
 
 const router = express.Router();
 
-router.post("/register", register);
 router.post("/login", login);
+router.post("/register", register);
 router.post("/changePassword", changePassword);
 router.post("/logout", logout);
 router.get("/getUserID:email", getUserID);

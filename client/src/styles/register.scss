@@ -25,12 +25,13 @@
 
 .sign-up {
   font-size: 30px;
-  margin-left: 42%;
+  margin-left: 48%;
 }
 
 .create-an-account {
   font-size: 20px;
-  margin-left: 38%;
+  margin-block: 1%;
+  margin-left: 44.5%;
 }
 
 .form {
@@ -60,8 +61,25 @@
 
 .form .file-input-container {
   position: absolute;
-  top: 23vh;
-  left: 0vh;
+  background-color: #1E91B6;
+  padding: 1%;
+  border-radius: 20px;
+  color: white;
+  top: 24vh;
+  left: 3vh;
+}
+
+.form {
+  margin-left: 8vw;
+}
+
+.warning-user_image {
+  position: absolute;
+  margin-left: -52vw;
+  margin-bottom: 70vh;
+  font-size: 16px;
+  color: rgb(161, 7, 7);
+  display: none;
 }
 
 .red-label-3 {
@@ -73,8 +91,8 @@
 
 .form .image-preview {
   position: absolute;
-  left: -1vw; 
-  top: 3vh;
+  left: 2.3vw; 
+  top: 5vh;
   width: 180px;
 }
 
@@ -109,20 +127,20 @@
 }
 
 .container-terms {
-  margin-left: 35%;
-  margin-top: -5vh;
+  margin-left: 41%;
+  margin-top: -6vh;
 }
 
 .already-account {
   margin-top: 0%;
-  margin-left: 35%;
-  margin-top: 13vh;
+  margin-left: 41%;
+  margin-top: 12vh;
 }
 
 .sign-button {
   position: absolute;
   width: 10vw;
-  margin-top: 112.5vh;
+  margin-top: 109.5vh;
   margin-left: -3vw;
 }
 

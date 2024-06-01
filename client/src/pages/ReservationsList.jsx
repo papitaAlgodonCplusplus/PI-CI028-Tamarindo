@@ -23,7 +23,7 @@ const ReservationsList = () => {
       height: 100px;
       margin-left: 100px;
       margin-top: 2%;
-      width: 1040px;
+      width: 81vw;
       background-color: #fff;
       border-radius: 8px;
       box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
@@ -42,6 +42,7 @@ const ReservationsList = () => {
         font-size: 18px;
         font-weight: bold;
         position: relative; 
+        width: 1vw ;
         left: 1.2vw;
         margin-top: -50px;">${title}</div>
       <div style="
@@ -161,6 +162,12 @@ const ReservationsList = () => {
           if (!warningResult) {
             return;
           }
+        }
+
+        // Show warning dialog
+        const warningConf = await showWarningDialog("Confirm", "Are you sure you want to delete this reservation? (Cannot be undone)");
+        if (!warningConf) {
+          return;
         }
 
         // Delete reservation data with timeout

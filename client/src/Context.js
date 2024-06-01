@@ -7,6 +7,11 @@ export const Provider = ({ children }) => {
   const [checkInDate, setCheckInDate] = useState(null);
   const [checkOutDate, setCheckOutDate] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState(null);
+  const [homeDates, setHomeDates] = useState([]);
+
+  const changeHomeDates = (newDates) => {
+    setHomeDates(newDates)
+  }
 
   const changeLastRoomClickedID = (newValue) => {
     setLastRoomClickedID(newValue);
@@ -32,6 +37,8 @@ export const Provider = ({ children }) => {
       changeCheckInDate,
       checkOutDate,
       changeCheckOutDate,
+      homeDates,
+      changeHomeDates,
       paymentMethod,
       changePaymentMethod
     }}>

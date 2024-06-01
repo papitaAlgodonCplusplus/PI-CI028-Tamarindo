@@ -5,7 +5,7 @@
 -- Server version	8.0.36
 
 DROP SCHEMA hotel;
-CREATE SCHEMA hotel;usersusersimagesimagesroomsroomsimagesimages
+CREATE SCHEMA hotel;
 USE hotel;
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;

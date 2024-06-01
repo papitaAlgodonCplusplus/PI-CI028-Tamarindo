@@ -540,7 +540,7 @@ const Rooms = () => {
             <label id="warning-desc" className='red-label-r'>Please provide a description</label>
             {/* Dropdown for selecting room type */}
             <label htmlFor="room_types_selector">Room Type</label><br />
-            <select name="room_types_selector" className="custom-select-2" id="room_types_selector_1"
+            <select name="room_types_selector" className="custom-select-4" id="room_types_selector_1"
               onChange={handleRoomTypeChange} value={roomTypeOption} required>
               {/* Mapping room types to options */}
               {room_types.map(room_type => (
@@ -572,7 +572,7 @@ const Rooms = () => {
             <textarea placeholder={data.description} id="description" name="description" onChange={handleModifyChange} ></textarea>
             {/* Dropdown for selecting room type */}
             <label htmlFor="room_types_selector">Room Type</label><br />
-            <select name="room_types_selector" className="custom-select-2" id="room_types_selector_1"
+            <select name="room_types_selector" className="custom-select-4" id="room_types_selector_1"
               onChange={handleRoomTypeChange} value={roomTypeOption} required>
               {/* Mapping room types to options */}
               {room_types.map(room_type => (

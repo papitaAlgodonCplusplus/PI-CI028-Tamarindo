@@ -164,6 +164,12 @@ const ReservationsList = () => {
           }
         }
 
+        // Show warning dialog
+        const warningConf = await showWarningDialog("Confirm", "Are you sure you want to delete this reservation? (Cannot be undone)");
+        if (!warningConf) {
+          return;
+        }
+
         // Delete reservation data with timeout
         await deleteDataWithTimeout(`/reservations/delete${reservationId}`, 500);
 

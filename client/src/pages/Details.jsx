@@ -20,6 +20,7 @@ import Group2_X2 from "../vectors/Group2_x2.svg";
 import Group3_X2 from "../vectors/Group3_x2.svg";
 import Group4_X2 from "../vectors/Group4_x2.svg";
 import Group5_X2 from "../vectors/Group5_x2.svg";
+import emailjs from '@emailjs/browser';
 import "../styles/details_page.scss"
 
 const LocationIcon = () => <img alt="vector" className="location" src={Location} />;
@@ -164,7 +165,23 @@ const Details = () => {
       };
 
       await axios.post("/reservations/add_reservation", reservationRequestData);
-      showErrorDialog("Payment Approved", "You'll receive an email with your reservation details.", navigate);
+      const serviceId = "service_4g9saua";
+      const templateId = "template_lmum0vx"; 
+      const room = await axios.get(`/rooms/by_roomID${lastRoomClickedID}`);
+      const user = await axios.get(`/auth/getUserbyID${userId}`);
+      // send email
+      await emailjs.send(serviceId, templateId, {
+        email: "alexquesada22@gmail.com",
+        to_name: user.data[0].name,
+        from_name: "Hotel Tamarindo",
+        room_name: room.data[0].title,
+        total_price: paymentData.price,
+        check_in_date: reservationRequestData.check_in_date,
+        check_out_date: reservationRequestData.check_out_date
+      })
+
+      showErrorDialog("Reservation Approved", "You'll receive an email with your reservation details.", navigate);
+
       // toggleModal()
       // navigate("/pay");
     } else {
@@ -203,6 +220,7 @@ const Details = () => {
 
   // Effect hook to fetch data on component mount
   useEffect(() => {
+    emailjs.init("SJ4OEzBWXm7Df5Ni-")
     if (!isLoggedIn) {
       navigate("/")
     }

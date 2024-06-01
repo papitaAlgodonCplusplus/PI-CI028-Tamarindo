@@ -8,7 +8,7 @@ import useState from 'react-usestateref';
 import '../styles/forgot_pass.scss'
 
 const ForgotPass = () => {
-  const { login, logout } = useContext(AuthContext);
+  const { logout } = useContext(AuthContext);
   logout()
 
   // State to manage form inputs

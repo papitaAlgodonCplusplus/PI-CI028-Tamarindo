@@ -7,6 +7,7 @@ import Login from "./pages/Login"
 import RecoverPassword from "./pages/ForgotPass.jsx"
 // import Home from "./pages/Home"
 import ReservationsList from "./pages/ReservationsList.jsx"
+import ChangePassword from "./pages/ChangePass.jsx"
 import Search from "./pages/Search.jsx"
 import Rooms from "./pages/Rooms";
 import Details from "./pages/Details"
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
       {
         path: "/reservations_list",
         element: <ReservationsList />
+      },
+      {
+        path: "/pass_change",
+        element: <ChangePassword />
       },
       {
         path: "/details",

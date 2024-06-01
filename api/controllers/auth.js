@@ -83,7 +83,7 @@ export const changePassword = (req, res) => {
       return res.json(err);
     }
     if (data.length) {
-      // Hash the password and create the user
+      // Hash the password and update the user
       const salt = bcrypt.genSaltSync(10);
       const hash = bcrypt.hashSync(req.body.password, salt);
 

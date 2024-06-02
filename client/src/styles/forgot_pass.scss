@@ -1,0 +1,181 @@
+html {
+  overflow-x: hidden;
+} 
+
+.forgetPass {
+  font-family: 'Poppins';
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 1px;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.image {
+  display: block;
+  margin: 5px;
+  margin-left: 5vw;
+}
+
+.imageForgotPass {
+  width: 70%;
+  height: 70%;
+}
+
+.containerForgotPass {
+  margin-left: 4vw;
+  width: 65%;
+  margin-top: 10vh;
+  margin-bottom: 5vh;
+  align-items: center;
+}
+
+.forgotPassTitle {
+  overflow-wrap: break-word;
+  font-weight: 900;
+  font-size: 2vw;
+  letter-spacing: 1.5px;
+  color: #181818;
+}
+
+.descriptionFP {
+  margin: 0 0.5vw 5vh 0;
+  overflow-wrap: break-word;
+  font-weight: 900;
+  font-size: 1.5vw;
+  color: #181818;
+  padding-left: 12%;
+}
+
+.instruction {
+  width: 70%;
+  margin: 60px 0 30px 0;
+  overflow-wrap: break-word;
+  font-weight: 900;
+  font-size: 1.2vw;
+  color: #181818;
+  // text-align: center;
+}
+
+input:focus{
+  outline: none;
+}
+
+.emailFP {
+  position: relative;
+  flex-direction: column;
+  width: 21vw;
+  overflow-wrap: break-word;
+  font-family: 'Poppins';
+  font-weight: 500;
+  font-size: 1.1vw;
+}
+
+.emailTextFP {
+  // margin-bottom: 14px;
+  align-self: flex-start;
+  letter-spacing: 1px;
+  line-height: 0.3;
+  color: #181818;
+}
+
+#inuptEmailFP {
+  padding-left: 15px;
+  font-family: 'Poppins';
+  font-size: 1vw;
+  width: 20.1vw;
+  height: 5vh;
+  background-color: rgb(228, 228, 228);
+  letter-spacing: 1px;
+  border-radius: 3px;
+  border: none;
+}
+
+.warningFP {
+  font-size: 0.8vi;
+  color: rgb(161, 7, 7);
+  display: none;
+  margin-top: 1vh;
+}
+
+.containerQuestions {
+  position: relative;
+  // margin: 0 0 63px 4px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 21vw;
+  box-sizing: border-box;
+  color: #4F4F4F;
+  margin-bottom: 3vh;
+}
+
+a {
+  padding-top: 12px;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: bolder;
+  color: #1E91B6;
+}
+
+.resetButton {
+  font-family: 'Poppins';
+  font-size: 1.1vw;
+  color: #FFFFFF;
+  border-radius: 0.4vi;
+  border: none;
+  background: #1E91B6;
+  box-sizing: border-box;
+  vertical-align: middle;
+  display: flex;
+  display:table-cell;
+  position: relative;
+  width: 21vw;
+  height: 5.5vh;
+  margin-top: 5.8vh;
+  margin-bottom: 5vh;
+  text-align: center;
+  cursor: pointer;
+}
+
+.separatorForgotPass {
+  position: relative;
+  margin-left: 0;
+  margin-bottom: 2vh;
+  height: 0.09vh;
+  width: 21vw;
+  background-color: #717171ae;
+  box-shadow: none;
+}
+
+.loginQuestion {
+  position: relative;
+  color: #4F4F4F;
+  display: flex;
+  text-align: center;
+  margin-left: 5.2vw;
+}
+
+.questionLogin {
+  font-size: 1vw;
+  position: relative;
+  text-align: center;
+  margin-left: 1.2vw;
+  margin-top: 2.2vh;
+}
+
+.linkLogin {
+  position: relative;
+  text-align: center;
+  margin-left: 0.5vw;
+}
+
+.backArrowImage {
+  position: relative;
+  cursor: pointer;
+  margin-top: 2.6vh;
+  margin-left: 11px;
+  width: 3%;
+  height: 3%;
+}

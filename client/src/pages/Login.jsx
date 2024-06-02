@@ -23,7 +23,6 @@ const theme = createTheme({
 
 const Login = () => {
   const { login, logout } = useContext(AuthContext);
-
   logout()
 
   // State to manage form inputs
@@ -48,8 +47,8 @@ const Login = () => {
 
   // Function to handle form submission
   const handleSubmit = async e => {
+    e.preventDefault()
     try {
-      e.preventDefault()
       const email = inputs.email.trim();
       const password = inputs.password.trim();
 
@@ -69,18 +68,18 @@ const Login = () => {
         document.getElementById("warning-pass").style.display = "none";
       }
 
-      if(isError) return;
-
+      if (isError) return;
 
       // Attempt to log in using Axios
-      await axios.post(`/auth/login`, inputs);
+      const response = await axios.post('/auth/login', inputs);
+      console.log(response.data); // Log the response from the server
 
       // Retrieve user ID after successful login
       const userID = await axios.get(`/auth/getUserID${inputs.email}`);
 
       // Login the user using the AuthContext
       login(userID.data[0].userid);
-      navigate("/reservations_list");
+      navigate("/home");
     } catch (error) {
       showErrorDialog("An error occurred:", "Wrong email or password");
       logout()
@@ -150,7 +149,6 @@ const Login = () => {
           </div></center>
         </div>
       </form>
-      {/* <p style={{marginLeft: "50%"}}>Footer</p> */}
     </div>
   );
 };

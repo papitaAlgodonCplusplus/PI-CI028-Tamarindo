@@ -1,0 +1,284 @@
+
+.my-reservations .my-reservations {
+  margin: 0 7px 6.5px 7px;
+  display: inline-block;
+  align-self: flex-start;
+  overflow-wrap: break-word;
+  font-family: 'Poppins';
+  font-weight: 700;
+  font-size: 45px;
+  color: #000000;
+}
+
+.my-reservations input {
+  width: 800px;
+  outline: none;
+  border: none;
+}
+
+.my-reservations .line-2 {
+  background: #7D7D7D;
+  margin-bottom: 47.5px;
+  width: 1202px;
+  height: 2px;
+}
+
+.my-reservations .input-text-1 {
+  overflow-wrap: break-word;
+  font-family: 'Poppins';
+  font-weight: 400;
+  font-size: 20px;
+  color: #000000;
+}
+
+.my-reservations .input-text {
+  display: flex;
+  box-sizing: border-box;
+}
+
+.my-reservations .label-text-1 {
+  overflow-wrap: break-word;
+  font-family: 'Poppins';
+  font-weight: 400;
+  font-size: 14px;
+  color: #1C1B1F;
+}
+
+.my-reservations .label-text {
+  background: var(--neutrals-white, #FFFFFF);
+  position: absolute;
+  left: 12px;
+  top: -8px;
+  display: flex;
+  padding: 0 4.8px 0 4px;
+  box-sizing: border-box;
+}
+
+.my-reservations .text-field {
+  border-radius: 4px;
+  border: 1px solid #79747E;
+  background: #FFFFFF;
+  position: relative;
+  padding: 12px 47px;
+  box-sizing: border-box;
+}
+
+.my-reservations .text-field-1 {
+  border-radius: 4px 4px 0 0;
+  margin-right: 16px;
+  width: 959px;
+  box-sizing: border-box;
+}
+
+.my-reservations .vector {
+  width: 28px;
+  height: 26px;
+  margin-top: -6px;
+  margin-left: -5px;
+}
+
+.my-reservations .material-symbolssearch-rounded {
+  margin: 4.5px 7.4px 4.9px 0;
+  display: flex;
+  width: 17.6px;
+  height: 17.6px;
+  box-sizing: border-box;
+}
+
+.my-reservations .button {
+  overflow-wrap: break-word;
+  font-family: 'Poppins';
+  font-weight: 600;
+  font-size: 18px;
+  color: #FFFFFF;
+}
+
+.my-account {
+  background-color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  padding: 117px 73px 495px 65px;
+  width: 1440px;
+  box-sizing: border-box;
+
+  .personal-info {
+    border-radius: 50px;
+    background-color: #181818;
+    position: relative;
+    margin: 0 63px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 120px 67px 105px 28px;
+    width: 1176px;
+    box-sizing: border-box;
+  }
+
+  .line-2 {
+    background-color: #FFFFFF;
+    margin: 0 360px 15px 0;
+    width: 1px;
+    height: 310px;
+  }
+
+  .line-3 {
+    background-color: #FFFFFF;
+    width: 1081px;
+    height: 1px;
+  }
+
+  .line-21 {
+    background-color: #7D7D7D;
+    margin: 0 0 105.5px 0;
+    width: 1302px;
+    height: 2px;
+  }
+
+  .my-account-1 {
+    margin: 0 7px 6.5px 7px;
+    display: inline-block;
+    align-self: flex-start;
+    word-break: break-word;
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+    font-size: 45px;
+    color: #000000;
+  }
+
+  
+}
+
+
+.cuadrado {
+  width: 80%;
+  height: 400px;
+  margin-left: 10%;
+  margin-bottom: 5%;
+  background-color: black;
+  border-radius: 20px;
+  position: relative; 
+}
+
+.imagen {
+  width: 20%;
+  height: 50%;
+  margin-left: 6%;
+  margin-top: 5%;
+  border-radius: 20px;
+  position: absolute; 
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: rgb(228, 228, 228);
+}
+
+.db-name {
+  position: absolute; 
+  width: 55px;
+  height: 20px;
+  color: white;
+  margin-top: 5%;
+  margin-left: 32%;
+  font-family: 'Poppins';
+}
+
+.datos-name {
+  margin-top: 8%;
+  margin-left: 32%;
+  width: 25%;
+  height: 10%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: rgb(228, 228, 228);
+  position: absolute;
+}
+
+.db-last{
+  position: absolute; 
+  width: 100px;
+  height: 20px;
+  color: white;
+  margin-top: 5%;
+  margin-left: 60%;
+  font-family: 'Poppins';
+}
+
+.datos-last{
+  margin-top: 8%;
+  margin-left: 60%;
+  width: 25%;
+  height: 10%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: rgb(228, 228, 228);
+  position: absolute;
+}
+
+.db-email{
+  position: absolute; 
+  width: 100px;
+  height: 50px;
+  color: white;
+  margin-top: 15%;
+  margin-left: 32%;
+  font-family: 'Poppins';
+}
+
+.datos-email{
+  margin-top: 18%;
+  margin-left: 32%;
+  width: 53%;
+  height: 10%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: rgb(228, 228, 228);
+  position: absolute;
+  font-family: 'Poppins';
+}
+
+.db-phone{
+  position: absolute; 
+  width: 150px;
+  height: 20px;
+  color: white;
+  margin-top: 25%;
+  margin-left: 32%;
+  font-family: 'Poppins';
+}
+
+.datos-phone{
+  margin-top: 28%;
+  margin-left: 32%;
+  width: 25%;
+  height: 10%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: rgb(228, 228, 228);
+  position: absolute;
+}
+
+.change{
+  margin-left: 70%;
+  margin-top: -2%;
+  margin-bottom: 3%;
+}
+
+.change_pass{
+  font-family: 'Poppins';
+  font-weight: 500;
+  font-size: 20px;
+  background-color: #1E91B6;
+  border: none;
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}

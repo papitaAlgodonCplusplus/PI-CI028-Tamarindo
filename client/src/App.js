@@ -11,6 +11,7 @@ import ChangePassword from "./pages/ChangePass.jsx"
 import Search from "./pages/Search.jsx"
 import Rooms from "./pages/Rooms";
 import Details from "./pages/Details"
+import MyAccount from "./pages/MyAccount.jsx"
 // import Reservation from "./pages/Reservation.jsx";
 // import Payment from "./pages/Payment.jsx";
 import Amenities from "./pages/Amenities.jsx";
@@ -73,6 +74,11 @@ const router = createBrowserRouter([
         path: "/search",
         element: <Search />
       },
+      {
+        path: "/my_account",
+        element: <MyAccount />,
+      },
+
     ],
     //   {
     //     path: "/rooms",

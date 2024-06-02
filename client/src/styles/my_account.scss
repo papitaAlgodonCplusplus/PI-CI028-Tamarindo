@@ -1,5 +1,5 @@
 
-.my-reservations {
+.myAccount .my-reservations {
   margin: 0 7px 6.5px 7px;
   display: inline-block;
   align-self: flex-start;
@@ -10,7 +10,7 @@
   color: #000000;
 }
 
-.my-account {
+.myAccount .my-account {
   background-color: #FFFFFF;
   display: flex;
   flex-direction: column;
@@ -18,7 +18,7 @@
   width: 1440px;
   box-sizing: border-box;
 
-  .personal-info {
+  .myAccount .personal-info {
     border-radius: 50px;
     background-color: #181818;
     position: relative;
@@ -31,7 +31,7 @@
     box-sizing: border-box;
   }
 
-  .line-2 {
+  .myAccount .line-2 {
     background-color: #FFFFFF;
     margin: 0 360px 15px 0;
     width: 1px;
@@ -41,7 +41,7 @@
 }
 
 
-.square {
+.myAccount .square {
   width: 80%;
   height: 400px;
   margin-left: 10%;
@@ -51,7 +51,7 @@
   position: relative; 
 }
 
-.image {
+.myAccount .image {
   width: 20%;
   height: 50%;
   margin-left: 6%;
@@ -64,7 +64,7 @@
   position: absolute; 
 }
 
-.db-name {
+.myAccount .db-name {
   width: 55px;
   height: 20px;
   margin-top: 5%;
@@ -74,7 +74,7 @@
   position: absolute; 
 }
 
-.datos-name {
+.myAccount .datos-name {
   width: 25%;
   height: 10%;
   margin-top: 8%;
@@ -87,7 +87,7 @@
   position: absolute;
 }
 
-.db-last{ 
+.myAccount .db-last{ 
   width: 100px;
   height: 20px;
   margin-top: 5%;
@@ -97,7 +97,7 @@
   position: absolute;
 }
 
-.datos-last{
+.myAccount .datos-last{
   width: 25%;
   height: 10%;
   margin-top: 8%;
@@ -110,7 +110,7 @@
   position: absolute;
 }
 
-.db-email{
+.myAccount .db-email{
   width: 100px;
   height: 50px;
   margin-top: 15%;
@@ -120,7 +120,7 @@
   position: absolute; 
 }
 
-.datos-email{
+.myAccount .datos-email{
   width: 53%;
   height: 10%;
   margin-top: 18%;
@@ -133,7 +133,7 @@
   position: absolute;
 }
 
-.db-phone{ 
+.myAccount .db-phone{ 
   width: 150px;
   height: 20px;
   margin-top: 25%;
@@ -143,7 +143,7 @@
   position: absolute;
 }
 
-.datos-phone{
+.myAccount .datos-phone{
   width: 25%;
   height: 10%;
   margin-top: 28%;
@@ -156,13 +156,13 @@
   position: absolute;
 }
 
-.change_botton{
+.myAccount .change_botton{
   margin-left: 70%;
   margin-top: -2%;
   margin-bottom: 3%;
 }
 
-.change_pass{
+.myAccount .change_pass{
   font-weight: 500;
   font-size: 20px;
   font-family: 'Poppins';

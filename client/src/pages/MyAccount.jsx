@@ -31,8 +31,8 @@ const MyAccount = () => {
         </div>
       </div>
     
-      <div class="cuadrado">
-        <div class="imagen"> Aqui va la imagen </div>
+      <div class="square">
+        <div class="image"> Aqui va la imagen </div>
 
         <div class="db-name"> Name </div>
         <div class="datos-name">
@@ -55,7 +55,7 @@ const MyAccount = () => {
         </div>
       </div>
       
-      <div class="change">
+      <div class="change_botton">
         <a href="/reservations_list" className='change_pass'>Change password</a>
       </div>
       

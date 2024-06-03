@@ -332,3 +332,5 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2024-06-01 10:00:34
+
+SELECT * FROM hotel.users

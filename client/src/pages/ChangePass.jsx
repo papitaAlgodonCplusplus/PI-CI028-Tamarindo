@@ -132,7 +132,7 @@ const ChangePass = () => {
           const userID = await axios.get(`/auth/getUserID${inputs.email}`);
           if (userID) {
             // Check if email matches current password
-            const response = await axios.post('/auth/login', inputs);
+            await axios.post('/auth/login', inputs);
             // Change user password
             await axios.post('/auth/changePassword', inputs);
             // sends message confirming change, via email

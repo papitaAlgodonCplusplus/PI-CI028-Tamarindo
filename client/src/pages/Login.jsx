@@ -114,7 +114,8 @@ const Login = () => {
               </div>
               <div className="inputPassword">
                 <input type={showPassword ? "text" : "password"} name="pass"
-                  required onChange={handleChange} className="inputPass1" id="password"></input>
+                  required onChange={handleChange} className={`password ${showPassword ? 'visible': '' }`}
+                  id="password"></input>
                 <div className="showPass">
                   {/* Password Toggle */}
                   <IconButton
@@ -122,7 +123,8 @@ const Login = () => {
                     onClick={handleClickShowPassword}
                     edge="end"
                   >
-                    {showPassword ? <VisibilityOffOutlinedIcon /> : <VisibilityOutlinedIcon />}
+                    {showPassword ? <VisibilityOffOutlinedIcon style={{height: '1.2vi', width: '1.2vi'}}/>
+                    : <VisibilityOutlinedIcon style={{height: '1.2vi', width: '1.2vi'}}/>}
                   </IconButton>
                 </div>
               </div>

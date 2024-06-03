@@ -103,11 +103,11 @@ export const login = (req, res) => {
   const q = "SELECT * FROM users WHERE email = ?";
 
   db.query(q, [req.body.email], (err, data) => {
-    if (err) console.log(err)
+    if (err) console.log(err);
     if (err) return res.json(err);
     if (data.length === 0) return res.status(404).json("Wrong email or password");
 
-    const isPasswordCorrect = bcrypt.compareSync(req.body.password, data[0].password);
+    const isPasswordCorrect = bcrypt.compareSync(req.body.pass, data[0].password);
 
     if (!isPasswordCorrect) return res.status(404).json("Wrong email or password");
 

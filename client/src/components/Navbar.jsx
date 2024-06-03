@@ -46,8 +46,8 @@ const Navbar = () => {
           <div className="modal">
             <ul>
               <li><a href="/reservations_list">My Reservations</a></li>
-              <li><a href="/my_profile">My Profile</a></li>
-              <li><a href="/change_pass">Change Password</a></li>
+              <li><a href="/my_account">My Account</a></li>
+              <li><a href="/pass_change">Change Password</a></li>
               <li><a href="/">Log out</a></li>
             </ul>
           </div>

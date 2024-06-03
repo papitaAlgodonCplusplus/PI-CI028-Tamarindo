@@ -28,7 +28,7 @@ const Login = () => {
   // State to manage form inputs
   const [inputs, setInputs] = useState({
     email: "",
-    password: "",
+    pass: "",
   });
 
   // Hook for navigating between pages
@@ -50,7 +50,7 @@ const Login = () => {
     e.preventDefault()
     try {
       const email = inputs.email.trim();
-      const password = inputs.password.trim();
+      const password = inputs.pass.trim();
 
       let isError = false;
 
@@ -113,7 +113,7 @@ const Login = () => {
                 <p>Password</p>
               </div>
               <div className="inputPassword">
-                <input type={showPassword ? "text" : "password"} name="password"
+                <input type={showPassword ? "text" : "password"} name="pass"
                   required onChange={handleChange} className="inputPass1" id="password"></input>
                 <div className="showPass">
                   {/* Password Toggle */}

@@ -53,7 +53,7 @@ const ChangePass = () => {
   useEffect(() => emailjs.init("paFNUOkm_RVctv3GH"), []);
   const sendEmail = async () => {
     const serviceId = "service_dvvjgue";
-    const templateId = "template_hb4ie6n";
+    const templateId = "template_s9bc7fw";
 
     const email = inputs.email.trim();
     const password = inputs.password.trim();
@@ -64,7 +64,7 @@ const ChangePass = () => {
     })
     .then(
       () => {
-        alert('Email sent successfully!');
+        alert('Password changed successfully!');
       },
       (error) => {
         alert('Error sending email');
@@ -75,7 +75,7 @@ const ChangePass = () => {
 
   // Function to handle form submission
   const handleSubmitChangeP = async e => {
-    // if (isLoggedIn) {
+    if (isLoggedIn) {
       // Set inputs
       const email = inputs.email.trim();
       const password = inputs.pass.trim();
@@ -131,26 +131,28 @@ const ChangePass = () => {
           // Search if email exists in DB
           const userID = await axios.get(`/auth/getUserID${inputs.email}`);
           if (userID) {
+            // Check if email matches current password
+            const response = await axios.post('/auth/login', inputs);
             // Change user password
-            await axios.post(`/auth/changePassword`, inputs);
+            await axios.post('/auth/changePassword', inputs);
             // sends message confirming change, via email
             sendEmail();
             // Go to profile page
-            // navigate("/reservations_list");
+            navigate("/my_account");
           } else {
             showErrorDialog(inputs.email, "User does not exists");
           }
         } catch (error) {
-          showErrorDialog("An error occurred:", error);
+          showErrorDialog("An error occurred:", "Wrong email or password");
         }
       } else {
         showErrorDialog("An error occurred:", "Password must be minimum eight characters, have at least one letter and one number");
         return;
       }
-    // } else {
-    //   showErrorDialog("Error: ", "Login to access");
-    //   return;
-    // }
+    } else {
+      showErrorDialog("Error: ", "Login to access");
+      return;
+    }
   };
 
   // Function to return to last page (profile page)
@@ -159,9 +161,9 @@ const ChangePass = () => {
     navigate("/reservations_list")
   }
 
-  return (/* (isLoggedIn ?  // Show page (html) if user is logged in */
+  return ((isLoggedIn ?  // Show page (html) if user is logged in
     <div className="changePass">
-      <div className='image'>
+      <div className='imageChangeP'>
         {/* Image */}
         <img src={require("../assets/change_pass.png")} alt="" className='imageChangePass'/> 
       </div>
@@ -261,7 +263,7 @@ const ChangePass = () => {
       </div>
     </div>
     // Show error to user, that hasnt logged in
-    // : <div>{showErrorDialog("Error: ", "Login to access", true, navigate)}</div>)
+    : <div>{showErrorDialog("Error: ", "Login to access", true, navigate)}</div>)
   );
 };
 

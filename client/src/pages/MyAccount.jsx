@@ -6,12 +6,16 @@ import "../styles/my_account.scss"
 const MyAccount = () => {
   const [data_user, setData] = useState({});
   const { userId } = useContext(AuthContext);
+  const { isLoggedIn } = useContext(AuthContext)
+  const [img_source, setImg] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await axios.get(`/auth/getUserbyID${userId}`);
-        setData(res.data);
+        setData(res.data[0]);
+        const image = await axios.get(`/files/get_image_by_userID${userId}`);
+        setImg("/upload/" + image.data[0].filename)
       } catch (err) {
         console.log(err);
       }
@@ -20,7 +24,8 @@ const MyAccount = () => {
   }, [userId]);
 
   return (
-    <div>
+    isLoggedIn ?
+    <div className="myAccount">
       <div className="my-reservations">
         <div className="my-reservations-1">
           <div className="my-reservations">
@@ -32,7 +37,7 @@ const MyAccount = () => {
       </div>
     
       <div class="square">
-        <div class="image"> Aqui va la imagen </div>
+        <img src={img_source} className="image" alt="pfp"/>
 
         <div class="db-name"> Name </div>
         <div class="datos-name">
@@ -49,20 +54,19 @@ const MyAccount = () => {
           {data_user.email}
         </div>
 
-        <div class="db-phone"> Phone Number </div>
+        <div class="db-phone"> Rol </div>
         <div class="datos-phone">
-          {data_user.phone}
+          {data_user.rol}
         </div>
       </div>
       
       <div class="change_botton">
-        <a href="/reservations_list" className='change_pass'>Change password</a>
+        <a href="/pass_change" className='change_pass'>Change password</a>
       </div>
       
     </div>
-    
-    
-    
+      :
+    <div></div>
   )
 }
 

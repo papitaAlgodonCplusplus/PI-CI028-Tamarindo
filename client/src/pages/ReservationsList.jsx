@@ -42,13 +42,13 @@ const ReservationsList = () => {
         font-size: 18px;
         font-weight: bold;
         position: relative; 
-        width: 1vw ;
+        max-width: 10vw;
         left: 1.2vw;
         margin-top: -50px;">${title}</div>
       <div style="
         font-size: 16px;
         position: relative;
-        margin-left: 0vw;
+        margin-left: -4vw;
         color: #545454;
         margin-top: 15px;">Guests: 3 (2 adults, 1 child)</div>
       <div style="
@@ -187,9 +187,36 @@ const ReservationsList = () => {
   }
 
   const [reservation, setReservation] = useState([]);
+  const [title, setTitle] = useState('')
+  const [check_in, setCheckIn] = useState('')
+  const [check_out, setCheckOut] = useState('')
+  const [desc, setDesc] = useState('')
+  const [type, setType] = useState('')
+  const [totalPrice, setTotalPrice] = useState()
+  const [imgPath, setImg] = useState()
+  const [amenitiesList, setList] = useState([])
   const displayModal = async (id) => {
     if (isLoggedIn) {
       const response = await axios.get(`/reservations/get_reservation_by_id${id}`);
+      const response2 = await axios.get(`/rooms/by_roomID${response.data[0].id_room}`)
+      const responseImg = await axios.get(`/files/get_image_by_roomid${response.data[0].id_room}`)
+      const response3 = await axios.get(`/categories/room_type_ByID${response2.data[0].type_of_room}`)
+      const response4 = await axios.get(`/payments/payment_byPaymentID${response.data[0].payment_id}`)
+      const response5 = await axios.get(`/amenities/get_all${id}`)
+      setTitle(response2.data[0].title)
+      setCheckIn(response.data[0].check_in)
+      setCheckOut(response.data[0].check_out)
+      setDesc(response2.data[0].description)
+      setType(response3.data[0].class_name)
+      setTotalPrice(response4.data[0].price)
+      setImg("upload/" + responseImg.data[0].filename)
+      const promises = response5.data.results.map(async (res) => {
+        const response6 = await axios.get(`/filters/get_serviceByID${res.service_id}`);
+        return [response6.data[0].image_path, response6.data[0].service_name];
+      });
+      const names = await Promise.all(promises);
+      setList(names);
+      console.log(names)
       setReserved(response.data.map(res => {
         const checkInString = res.check_in.slice(0, 19).replace('T', ' ');
         const checkOutString = res.check_out.slice(0, 19).replace('T', ' ');
@@ -440,6 +467,59 @@ const ReservationsList = () => {
       <div id="calendar-modal-modify" className="form-modal-2">
         <div className="form-modal-content-2">
           <span className="close-modal-x" onClick={closeModal}>&times;</span>
+          <div>
+            <div className="MDtittle">
+              {title}
+            </div>
+
+            <div>
+              <img className="MDimages" src={imgPath} alt={title}></img>
+              <br></br>
+
+              <div className="MDtext">
+                <div className="MDdata-check-inspace">
+                  Check-In: {check_in.slice(0, 19).replace('T', ' ')}
+                </div>
+                <br></br>
+
+                <div className="MDdata-ckeck-outspace">
+                  Check-Out: {check_out.slice(0, 19).replace('T', ' ')}
+                </div>
+                <br></br>
+
+                <div className="MDdata-descriptionspace">
+                  Description: {desc}
+                </div>
+                <br></br>
+
+                <div className="MDdata-typespace">
+                  Type of room: {type}
+                </div>
+                <br></br>
+
+                <div className="MDdata-totalspace">
+                  Total: ${totalPrice}
+                </div>
+
+                <br></br>
+                Amenities:
+
+              </div>
+
+              <div className="amenities-flex">
+                {amenitiesList.map((dataAmenidades, index) => (
+                  <div className="MDdata-amenitiesspace" key={index}>
+                    <div>
+                        {dataAmenidades[1]}
+                      <p className='MDAP'>
+                        <img className="MDPI" src={dataAmenidades[0]} alt={dataAmenidades[1]} />
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
           {(
             <Calendar className="modification-calendar"
               value={selectedDateRange}

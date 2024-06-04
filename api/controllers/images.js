@@ -26,6 +26,17 @@ export const addImage = (req, res) => {
   })
 };
 
+export const geImageByRoomID = (req, res) => {
+  const q = 'SELECT * FROM images WHERE room_id = ?';
+  db.query(q, [req.params.roomID], (err, result) => {
+    if (err) {
+      return res.status(500);
+    }
+
+    return res.status(200).json(result);
+  });
+};
+
 export const geImageByID = (req, res) => {
   const q = 'SELECT * FROM images WHERE imageid = ?';
   db.query(q, [req.params.imageID], (err, result) => {

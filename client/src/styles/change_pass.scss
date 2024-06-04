@@ -1,6 +1,6 @@
 html {
   overflow-x: hidden;
-} 
+}
 
 .changePass {
   font-family: 'Poppins';
@@ -39,7 +39,7 @@ html {
   color: #181818;
 }
 
-input:focus{
+input:focus {
   outline: none;
 }
 
@@ -63,7 +63,7 @@ input:focus{
 #inputEmailChangePass {
   padding-left: 15px;
   font-family: 'Poppins';
-  font-size: 1vw;
+  font-size: 18px;
   width: 22.19vw;
   height: 4vh;
   background-color: rgb(228, 228, 228);
@@ -110,13 +110,13 @@ input:focus{
   font-family: 'Poppins';
   font-weight: 500;
   font-size: 1vw;
-  
+
   box-sizing: border-box;
   background-color: rgb(228, 228, 228);
   border-radius: 3px;
 }
 
-#pass {
+.changePass #pass {
   font-size: 18px;
   width: 22vw;
   font-family: 'Poppins';
@@ -125,12 +125,13 @@ input:focus{
   background-color: transparent;
   border: none;
 
- &.visible {
-  padding-bottom: 1.8vh;
- }
+  &.visible {
+    margin-top: 0.2vh;
+    margin-left: -0.5vw;
+  }
 }
 
-#password {
+.changePass #password {
   font-size: 18px;
   width: 22vw;
   font-family: 'Poppins';
@@ -138,8 +139,11 @@ input:focus{
   border-radius: 3px;
   background-color: transparent;
   border: none;
+  margin-top: -1vh;
+
   &.visible {
-    padding-bottom: 2.4vh;
+    margin-top: -0.8vh;
+    margin-left: -0.5vw;
   }
 }
 
@@ -151,8 +155,10 @@ input:focus{
   border-radius: 3px;
   background-color: transparent;
   border: none;
+
   &.visible {
-    padding-bottom: 1.8vh;
+    margin-top: 0.2vh;
+    margin-left: -0.4vw;
   }
 }
 
@@ -183,7 +189,7 @@ a {
   box-sizing: border-box;
   vertical-align: middle;
   display: flex;
-  display:table-cell;
+  display: table-cell;
   position: relative;
   width: 23vw;
   height: 5.5vh;

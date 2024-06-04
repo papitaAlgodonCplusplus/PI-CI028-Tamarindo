@@ -251,9 +251,6 @@ const Rooms = () => {
 
 
   useEffect(() => {
-    if (!isLoggedIn) {
-      navigate("/")
-    }
     fetchData();
   }, []);
 
@@ -621,7 +618,7 @@ const Rooms = () => {
         </div>
       </div></center>
     </div >
-    : <div>{showErrorDialog("Error: ", "You must login as admin or employee to access this page", true, navigate)}</div>))
+    : <div></div>))
 };
 
 export default Rooms;

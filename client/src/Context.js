@@ -6,12 +6,18 @@ export const Provider = ({ children }) => {
   const [lastRoomClickedID, setLastRoomClickedID] = useState(0);
   const [checkInDate, setCheckInDate] = useState(null);
   const [checkOutDate, setCheckOutDate] = useState(null);
+  const [homeSearch, setHomeSearch] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [homeDates, setHomeDates] = useState([]);
 
   const changeHomeDates = (newDates) => {
     setHomeDates(newDates)
   }
+
+  const changeHomeSearch = (newSearch) => {
+    setHomeSearch(newSearch)
+  }
+
 
   const changeLastRoomClickedID = (newValue) => {
     setLastRoomClickedID(newValue);
@@ -39,6 +45,8 @@ export const Provider = ({ children }) => {
       changeCheckOutDate,
       homeDates,
       changeHomeDates,
+      homeSearch,
+      changeHomeSearch,
       paymentMethod,
       changePaymentMethod
     }}>

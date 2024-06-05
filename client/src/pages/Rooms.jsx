@@ -251,9 +251,6 @@ const Rooms = () => {
 
 
   useEffect(() => {
-    if (!isLoggedIn) {
-      navigate("/")
-    }
     fetchData();
   }, []);
 
@@ -539,7 +536,7 @@ const Rooms = () => {
             <textarea required id="desc" name="desc" onChange={handleChange} ></textarea>
             <label id="warning-desc" className='red-label-r'>Please provide a description</label>
             {/* Dropdown for selecting room type */}
-            <label htmlFor="room_types_selector">Room Type</label><br />
+            <label htmlFor="room_types_selector_1">Room Type</label><br />
             <select name="room_types_selector" className="custom-select-4" id="room_types_selector_1"
               onChange={handleRoomTypeChange} value={roomTypeOption} required>
               {/* Mapping room types to options */}
@@ -548,7 +545,7 @@ const Rooms = () => {
               ))}
             </select>
             {/* Button to add room */}
-            <button type='submit' className="MODAL-BUTTON" onClick={handleSubmit}><center>Add Room</center></button>
+            <button type='submit' className="MODAL-BUTTON" onClick={handleSubmit}><center>Add</center></button>
           </form>
         </div>
       </div>
@@ -565,13 +562,13 @@ const Rooms = () => {
               <img id="image-preview2" className="image-preview" src="#" alt="Preview" />
             </div>
             {/* Input field for room title */}
-            <label htmlFor="name">Title</label><br />
+            <label htmlFor="name">New Title</label><br />
             <input placeholder={data.title} type="text" id="title" name="title" onChange={handleModifyChange} /><br />
             {/* Textarea for room description */}
-            <label htmlFor="desc">Description</label><br />
+            <label htmlFor="desc">New Description</label><br />
             <textarea placeholder={data.description} id="description" name="description" onChange={handleModifyChange} ></textarea>
             {/* Dropdown for selecting room type */}
-            <label htmlFor="room_types_selector">Room Type</label><br />
+            <label htmlFor="room_types_selector">New Room Type</label><br />
             <select name="room_types_selector" className="custom-select-4" id="room_types_selector_1"
               onChange={handleRoomTypeChange} value={roomTypeOption} required>
               {/* Mapping room types to options */}
@@ -621,7 +618,7 @@ const Rooms = () => {
         </div>
       </div></center>
     </div >
-    : <div>{showErrorDialog("Error: ", "You must login as admin or employee to access this page", true, navigate)}</div>))
+    : <div></div>))
 };
 
 export default Rooms;

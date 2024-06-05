@@ -121,11 +121,10 @@ export function showErrorDialog(title, description, exit_on_close = false, navig
   const descriptionElement = document.createElement('div');
   descriptionElement.classList.add('modal-description');
   descriptionElement.textContent = description;
-  console.log(description)
 
   const closeButton = document.createElement('button');
   closeButton.classList.add('error-modal-close');
-  closeButton.textContent = 'CLOSE';
+  closeButton.textContent = 'OK';
   closeButton.addEventListener('click', () => {
     document.body.removeChild(overlay);
     if (exit_on_close) {

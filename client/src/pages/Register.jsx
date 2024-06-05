@@ -1,6 +1,6 @@
 import axios from "axios"
 import React, { useState } from 'react'
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { showErrorDialog } from '../Misc'
 import "../styles/register.scss"
 
@@ -159,6 +159,7 @@ const Register = () => {
 
     // Getting the image preview element
     const imagePreview = document.getElementById('image-preview');
+    const uploadIcon = document.getElementById('upload-icon');
 
     if (file) {
       // If a file is selected
@@ -169,13 +170,15 @@ const Register = () => {
         // Displaying the image preview
         imagePreview.src = e.target.result;
         imagePreview.style.visibility = 'visible';
+        uploadIcon.style.display = 'none';
       };
 
       // Reading the selected file as data URL
       reader.readAsDataURL(file);
 
       // Setting the file state
-      setFile(e.target.files[0]);
+      // setFile(e.target.files[0]);
+      setFile(file);
       setFileChanged(true)
 
       // Hidding red label
@@ -183,27 +186,30 @@ const Register = () => {
     } else {
       // If no file is selected, reset the image preview
       imagePreview.src = '#';
-      imagePreview.style.visibility = 'none';
+      // imagePreview.style.visibility = 'none';
+      imagePreview.style.visibility = 'hidden';
+      uploadIcon.style.display = 'block'
     }
   };
 
   return (
     <div className='register-window'>
       <div className='container-sign-up'>
-        <div className="sign-up">
-          Sign Up
-        </div>
-
-        <div className="create-an-account">
-          Create An Account!
-        </div>
+          <div className="sign-up">
+            - Sign Up -
+          </div>
+          <div className="create-an-account">
+            Choose a profile picture!
+          </div>
 
         <form className='form'>
-          {/* File input for uploading image */}
-          <div className="file-input-container">
+        <div className="file-input-container">
             <input type="file" id="file-input" className="file-input" onChange={handleFileChange} />
-            <label htmlFor="file-input" className="file-input-label">Choose an image</label>
-            <img id="image-preview" className="image-preview" src="#" alt="Preview" />
+            <label htmlFor="file-input" className="file-input-label">
+            {/* <img id="image-preview" className="image-preview" src="#" alt="Preview" /> */}
+            <img id="image-preview" className="image-preview image-preview-adjusted" src="/default-profile.png" alt="Preview" />
+            <div id="upload-icon" className="upload-icon">+</div>
+            </label>
           </div>
           <label id="warning-user_image" className='warning-user_image'>Please provide a user image</label>
 
@@ -254,14 +260,13 @@ const Register = () => {
           </div>
         </form>
 
-
         <div className="container-terms">
           <input type="checkbox" id="checkbox" value="checkbox" checked={isChecked} onChange={handleCheckbox} />
-          <label for="checkbox">Accept Terms and Conditions</label>
+          <label htmlFor="checkbox">Accept Terms and Conditions</label>
         </div>
 
         <p className="already-account">
-          <span> Already have an account? <Link to="/"> Log in</Link>
+          <span href="/"> Already have an account? Log in
           </span>
         </p>
       </div>
@@ -270,8 +275,6 @@ const Register = () => {
       </div>
 
     </div>
-
-
   )
 }
 

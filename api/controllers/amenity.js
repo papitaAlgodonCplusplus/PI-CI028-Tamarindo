@@ -82,6 +82,17 @@ export const getService = (req, res) => {
   });
 };
 
+export const getServiceByID = (req, res) => {
+  const q = 'SELECT * FROM services WHERE serviceid = ?';
+  db.query(q, [req.params.serviceID], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: 'Failed to fetch service from the database.' });
+    }
+
+    return res.status(200).json(result);
+  });
+};
+
 export const deleteService = (req, res) => {
   const serviceID = req.params.serviceID;
   const q = "DELETE FROM services WHERE serviceid = ?";
@@ -133,5 +144,22 @@ export const getSumByReservationID = (req, res) => {
       const totalServicePrice = results.reduce((total, result) => total + result.service_price, 0);
       res.json({ totalServicePrice });
     });
+  });
+};
+
+export const getListByReservationID = (req, res) => {
+  const reservationID = req.params.reservationID;
+  const getServiceIDsQuery = `
+    SELECT service_id
+    FROM services_log
+    WHERE reservation_id = ?
+  `;
+
+  db.query(getServiceIDsQuery, [reservationID], (error, results) => {
+    if (error) {
+      res.status(500).send("Error retrieving service IDs");
+      return;
+    }
+    return res.json({ results });
   });
 };

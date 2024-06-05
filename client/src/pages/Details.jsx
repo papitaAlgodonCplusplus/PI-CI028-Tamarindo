@@ -152,7 +152,7 @@ const Details = () => {
   // Function to handle booking
   const handleBook = async e => {
     if (isLoggedIn) {
-      let paymentData = { price: 700000, paymentMethodId: 1, cardType: 'Mastercard' };
+      let paymentData = { price: 1050, paymentMethodId: 1, cardType: 'Mastercard' };
       const paymentRes = await axios.post('/payments/add_payment', paymentData);
       await axios.post('/payments/add_card_payment', paymentData);
       let paymentId = paymentRes.data.payment_id;
@@ -183,7 +183,7 @@ const Details = () => {
       showErrorDialog("Reservation Approved", "You'll receive an email with your reservation details.", navigate);
 
       // toggleModal()
-      // navigate("/pay");
+      navigate("/reservations_list");
     } else {
       return;
     }

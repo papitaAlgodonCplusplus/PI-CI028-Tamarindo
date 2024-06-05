@@ -5,7 +5,7 @@ import { Context } from '../Context.js';
 import { DateObject } from "react-multi-date-picker"
 import { useNavigate } from "react-router-dom";
 import { emptyContainer, updateContainer, showErrorDialog } from "../Misc.js";
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useRef, useState, useEffect, useContext } from 'react';
 import '../styles/search_page.scss'
 
 const Search = () => {
@@ -23,6 +23,8 @@ const Search = () => {
   const [nRooms, setNRooms] = useState(0);
   const [totalRooms, setTotalRooms] = useState(0);
   const { changeLastRoomClickedID } = useContext(Context);
+  var inDate = useRef('--/--/----');
+  var outDate = useRef('--/--/----');
   const { homeDates, homeSearch } = useContext(Context)
   const { changeHomeDates, changeHomeSearch } = useContext(Context)
 
@@ -31,8 +33,9 @@ const Search = () => {
       cardsContainer = document.querySelector('.container-2');
       // Update selected dates
       setValues(newDatesRange);
-
       let requestParams;
+      if (newDatesRange[0]) inDate.current = newDatesRange[0].toString()
+      if (newDatesRange[1]) outDate.current = newDatesRange[1].toString()
       if (newDatesRange[1]) {
         // Set default time for check-in and check-out dates
         const checkInDateTime = newDatesRange[0].set({
@@ -199,25 +202,24 @@ const Search = () => {
           const searchResults = await axios.get(`/filters/search_by_title${searchTerm}`);
           // Retrieve image files using Axios
           const imageFiles = await axios.get(`/files/retrieve_images`);
-          let imageIndex = 0;
           // Filter image files array to include only images of rooms matching search results
           imageFiles.data = imageFiles.data.filter(image => {
             return searchResults.data.some(resImage => resImage.image_id === image.imageid);
           });
           emptyContainer(cardsContainer);
           setNRooms(searchResults.data.length);
-          searchResults.data.forEach(room => {
-            // If no more images are available, update container and exit loop
-            if (imageIndex >= imageFiles.data.length) {
-              updateContainer(cardsContainer);
-              return;
-            }
-            const imagePath = "/upload/" + imageFiles.data[imageIndex].filename;
-            addCardToUI(room.title, room.description, imagePath, room.roomid);
-            imageIndex++;
-          });
+
+          for (const room of searchResults.data) {
+            // Fetch room details by room ID
+            const roomDetailsResponse = await axios.get(`/rooms/by_roomID${room.roomid}`);
+            // Fetch room image by image ID
+            const roomImage = await axios.get(`/files/get_image_by_id${roomDetailsResponse.data[0].imageid}`);
+            // Construct room image path
+            const roomImagePath = "/upload/" + roomImage.data[0].filename;
+            // Add room card to the UI
+            addCardToUI(room.title, room.description, roomImagePath, room.roomid);
+          }
           updateContainer(cardsContainer);
-          changeHomeSearch(null);
           return;
         } catch (error) {
           showErrorDialog("An error occurred:", error, false, navigate);
@@ -258,7 +260,6 @@ const Search = () => {
           inputs.searchQuery = homeSearch;
           inputElement.value = homeSearch;
           handleSearch();
-          emptyContainer(cardsContainer);
           const roomsResponse = await axios.get("/rooms");
           setTotalRooms(roomsResponse.data.length);
           return;
@@ -266,7 +267,8 @@ const Search = () => {
 
         if (homeDates.length > 0) {
           handleFilterCalendarChange(homeDates)
-          emptyContainer(cardsContainer);
+          if (homeDates[0]) inDate.current = homeDates[0].toString()
+          if (homeDates[1]) outDate.current = homeDates[1].toString()
           const roomsResponse = await axios.get("/rooms");
           setTotalRooms(roomsResponse.data.length);
           return;
@@ -369,7 +371,7 @@ const Search = () => {
               Rooms
             </span>
           </div>
-          <input type="text" name="searchQuery" maxLength={33} onChange={handleChange} className='input_searchQuery'></input>
+          <input autoComplete="new-password" type="text" name="searchQuery" maxLength={33} onChange={handleChange} className='input_searchQuery'></input>
         </div>
         <div className="check-in">
           <div className="text-field-1">
@@ -379,6 +381,7 @@ const Search = () => {
             <span className="label-text-3">
               Check-in
             </span>
+            <p style={{ position: "absolute", marginTop: "4.3vh" }}>{inDate.current}</p>
           </div>
         </div>
         <div onClick={toggleModal} className="check_in_icon"></div>
@@ -390,6 +393,7 @@ const Search = () => {
             <span className="label-text-5">
               Check-out
             </span>
+            <p style={{ position: "absolute", marginTop: "4.3vh" }}>{outDate.current}</p>
           </div>
         </div>
         {/* Modal for filter options, visible if modalVisible is true */}

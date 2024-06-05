@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "cookieparser": "^0.1.0",
+    "jest-dom": "^4.0.0",
     "react-scripts": "^5.0.1",
     "ts-jest": "^29.1.2"
   },

@@ -55,7 +55,8 @@ const ChangePass = () => {
       navigate("/")
     }
     emailjs.init("paFNUOkm_RVctv3GH") 
-  }, []);
+  });
+  
   const sendEmail = async () => {
     const serviceId = "service_dvvjgue";
     const templateId = "template_s9bc7fw";

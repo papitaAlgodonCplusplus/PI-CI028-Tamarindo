@@ -1,25 +1,12 @@
 import axios from "axios";
 import { AuthContext } from '../AuthContext.js';
-import { Checkbox, IconButton } from '@mui/material';
-import { FormControlLabel } from '@mui/material';
+import { IconButton } from '@mui/material';
 import { showErrorDialog } from "../Misc.js";
-import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { useNavigate } from "react-router-dom";
 import React, { useState, useContext } from 'react';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import '../styles/login.scss'
-
-const theme = createTheme({
-  typography: {
-    allVariants: {
-      fontFamily: 'Poppins',
-      textTransform: 'none',
-      fontSize: 18,
-      color: '#4F4F4F'
-    },
-  },
-});
 
 const Login = () => {
   const { login, logout } = useContext(AuthContext);
@@ -55,17 +42,17 @@ const Login = () => {
       let isError = false;
 
       if (email === '') {
-        document.getElementById("warning-email").style.display = "block";
+        document.getElementById("warningEmailLogin").style.display = "block";
         isError = true;
       } else {
-        document.getElementById("warning-email").style.display = "none";
+        document.getElementById("warningEmailLogin").style.display = "none";
       }
 
       if (password === '') {
-        document.getElementById("warning-pass").style.display = "block";
+        document.getElementById("warningPassLogin").style.display = "block";
         isError = true;
       } else {
-        document.getElementById("warning-pass").style.display = "none";
+        document.getElementById("warningPassLogin").style.display = "none";
       }
 
       if (isError) return;
@@ -105,7 +92,7 @@ const Login = () => {
               <div className="inputEmail">
                 <input autoComplete="new-password" placeholder="Email" type="email-login" id="email" name="email" required onChange={handleChange}></input>
               </div>
-              <label id="warning-email" className='red-label'>Please provide an email</label>
+              <label id="warningEmailLogin" className='red-label'>Please provide an email</label>
             </div>
             {/* Password */}
             <div className="password">
@@ -113,7 +100,7 @@ const Login = () => {
                 <p>Password</p>
               </div>
               <div className="inputPassword">
-                <input autoComplete="new-password" placeholder="Password" type={showPassword ? "text" : "password"} name="password"
+                <input autoComplete="new-password" placeholder="Password" type={showPassword ? "text" : "password"} name="pass"
                   required onChange={handleChange} className={`inputPass1 ${showPassword ? 'visible' : ''}`} id="password"></input>
                 <div className="showPass">
                   {/* Password Toggle */}
@@ -128,7 +115,7 @@ const Login = () => {
                 </div>
               </div>
             </div>
-            <label id="warning-pass" className='red-label-2'>Please provide a password</label>
+            <label id="warningPassLogin" className='red-label-2'>Please provide a password</label>
             {/* Questions: Checkbox - Forgot Pass */}
             <div className="containerQuestions">
               <a href="/pass_recover" className='forgotPass'>Forgot password?</a>

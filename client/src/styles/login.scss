@@ -68,9 +68,10 @@ input:focus{
 }
 
 #email {
+  padding-left: 15px;
   font-family: 'Poppins';
   font-size: 1vw;
-  width: 20.5vw;
+  width: 20vw;
   height: 35px;
   background-color: rgb(228, 228, 228);
   letter-spacing: 1px;
@@ -129,7 +130,7 @@ input:focus{
 
   &.visible {
     padding-left: 0;
-    padding-top: 1vh;
+    padding-bottom: 1.6vh;
   }
 }
 
@@ -143,26 +144,13 @@ input:focus{
 }
 
 .containerQuestions {
-  position: relative;
-  // margin: 0 0 63px 4px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 35vw;
-  box-sizing: border-box;
-  color: #4F4F4F;
+  text-align: end;
   margin-top: -1vh;
-  margin-right: -7vw;
+  margin-right: -11.5vw;
 }
 
 .forgotPass {
   width: 15vw;
-  margin-right: 1vw;
-}
-
-.checkbox {
-  width: 15vw;
-  margin-left: -1.5vw;
 }
 
 a {
@@ -181,7 +169,7 @@ a {
   margin-bottom: 36px;
   display: flex;
   padding: 12px 0.5px 13px 0;
-  width: 400px;
+  width: 20.5vw;
   box-sizing: border-box;
   text-align: center;
   vertical-align:middle;
@@ -194,7 +182,7 @@ a {
 .separator {
   position: relative;
   height: 1px;
-  width: 400px;
+  width: 20.5vw;
   background-color: #717171;
   box-shadow: none;
 }

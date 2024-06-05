@@ -114,7 +114,7 @@ const Login = () => {
               </div>
               <div className="inputPassword">
                 <input autoComplete="new-password" placeholder="Password" type={showPassword ? "text" : "password"} name="password"
-                  required onChange={handleChange} className="inputPass1" id="password"></input>
+                  required onChange={handleChange} className={`inputPass1 ${showPassword ? 'visible' : ''}`} id="password"></input>
                 <div className="showPass">
                   {/* Password Toggle */}
                   <IconButton

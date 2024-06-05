@@ -53,11 +53,6 @@ const MyAccount = () => {
         <div class="datos-email">
           {data_user.email}
         </div>
-
-        <div class="db-phone"> Rol </div>
-        <div class="datos-phone">
-          {data_user.rol}
-        </div>
       </div>
       
       <div class="change_botton">

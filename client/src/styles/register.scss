@@ -20,7 +20,7 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
-  margin-top: 5%;
+  margin-top: 2%;
 }
 
 .sign-up {
@@ -31,7 +31,7 @@
 .create-an-account {
   font-size: 20px;
   margin-block: 1%;
-  margin-left: 44.5%;
+  margin-left: 43%;
 }
 
 .form {
@@ -59,15 +59,65 @@
   height: 0.00005px;
 }
 
-.form .file-input-container {
-  position: absolute;
-  background-color: #1E91B6;
-  padding: 1%;
-  border-radius: 20px;
-  color: white;
-  top: 24vh;
-  left: 3vh;
+// .form .file-input-container {
+//   position: absolute;
+//   background-color: #1E91B6;
+//   padding: 1%;
+//   border-radius: 20px;
+//   color: white;
+//   top: 24vh;
+//   left: 3vh;
+// }
+
+
+.file-input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  // margin-bottom: 2rem;
 }
+
+.file-input {
+  display: none;
+}
+
+.file-input-label {
+  position: absolute;
+  top: -3vh;
+  left: -17vh;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-color: #f0f0f0;
+  overflow: hidden;
+}
+
+// .image-preview {
+//   position: absolute;
+//   top: -100vh;
+//   width: 100%;
+//   height: 100%;
+//   object-fit: cover;
+//   border-radius: 50%;
+//   visibility: hidden; /* Initially hidden */
+// }
+
+.image-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  visibility: hidden;
+  position: absolute;
+  top: 10%; 
+  left: 10%; 
+  transform: translate(0%, -40%);
+}
+
 
 .form {
   margin-left: 8vw;
@@ -75,8 +125,8 @@
 
 .warning-user_image {
   position: absolute;
-  margin-left: -52vw;
-  margin-bottom: 70vh;
+  margin-left: -4.5vw;
+  margin-bottom: 54vh;
   font-size: 16px;
   color: rgb(161, 7, 7);
   display: none;
@@ -97,7 +147,7 @@
 }
 
 .name-user {
-  margin-top: -10vh;
+  margin-top: 20vh;
   margin-left: -25%;
 }
 
@@ -128,7 +178,7 @@
 
 .container-terms {
   margin-left: 41%;
-  margin-top: -6vh;
+  margin-top: 6vh;
 }
 
 .already-account {
@@ -140,7 +190,7 @@
 .sign-button {
   position: absolute;
   width: 10vw;
-  margin-top: 109.5vh;
+  margin-top: 130.5vh;
   margin-left: -3vw;
 }
 

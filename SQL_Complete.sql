@@ -345,3 +345,5 @@ ADD CONSTRAINT services_log_ibfk_2
 FOREIGN KEY (service_id) REFERENCES hotel.services(serviceid);
 
 -- Dump completed on 2024-06-01 10:00:34
+
+SELECT * FROM hotel.users

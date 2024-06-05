@@ -36,11 +36,11 @@ html {
 
 .loginTitle {
   position: relative;
-  margin: 0 1px 26px 0;
+  margin: 0 1px 15px 0;
   display: inline-block;
   overflow-wrap: break-word;
   font-weight: 900;
-  font-size: 34px;
+  font-size: 1.8vw;
   color: #181818;
 }
 
@@ -51,11 +51,11 @@ input:focus{
 .email {
   position: relative;
   flex-direction: column;
-  width: 410px;
+  width: 22vw;
   overflow-wrap: break-word;
   font-family: 'Poppins';
   font-weight: 500;
-  font-size: 20px;
+  font-size: 1.1vw;
 }
 
 .emailText {
@@ -68,10 +68,9 @@ input:focus{
 }
 
 #email {
-  padding-left: 15px;
   font-family: 'Poppins';
-  font-size: 18px;
-  width: 395px;
+  font-size: 1vw;
+  width: 20.5vw;
   height: 35px;
   background-color: rgb(228, 228, 228);
   letter-spacing: 1px;
@@ -83,14 +82,15 @@ input:focus{
 .password {
   position: relative;
   flex-direction: column;
-  width: 410px;
+  width: 20.5vw;
   overflow-wrap: break-word;
   font-family: 'Poppins';
   font-weight: 500;
-  font-size: 20px;
+  font-size: 1.1vw;
 }
 
 .passwordText {
+  font-size: 1.1vw;
   margin-top: 30px;
   margin-bottom: 14px;
   align-self: flex-start;
@@ -105,11 +105,13 @@ input:focus{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 410px;
+  width: 20.5vw;
+  height: 4vh;
   overflow-wrap: break-word;
   font-family: 'Poppins';
   font-weight: 500;
-  font-size: 20px;
+  font-size: 1vw;
+  
   box-sizing: border-box;
   background-color: rgb(228, 228, 228);
   border-radius: 3px;
@@ -118,13 +120,17 @@ input:focus{
 
 #password {
   font-size: 18px;
-  width: 300px;
+  width: 19.5vw;
   font-family: 'Poppins';
   letter-spacing: 1px;
-  height: 35px;
   border-radius: 3px;
-  background-color: rgb(228, 228, 228);
+  background-color: transparent;
   border: none;
+
+  &.visible {
+    padding-left: 0;
+    padding-top: 1vh;
+  }
 }
 
 .showPass {
@@ -155,8 +161,8 @@ input:focus{
 }
 
 .checkbox {
-  width: 25vw;
-  margin-left: -6vw;
+  width: 15vw;
+  margin-left: -1.5vw;
 }
 
 a {
@@ -196,6 +202,8 @@ a {
 .register {
   position: relative;
   color: #4F4F4F;
+  margin-bottom: 4vh;
+  margin-top: 4vh;
 }
 
 .linkRegister {

@@ -58,7 +58,7 @@ const ChangePass = () => {
   }, []);
   const sendEmail = async () => {
     const serviceId = "service_dvvjgue";
-    const templateId = "template_hb4ie6n";
+    const templateId = "template_s9bc7fw";
 
     const email = inputs.email.trim();
     const password = inputs.password.trim();
@@ -67,15 +67,15 @@ const ChangePass = () => {
       email: email,
       password: password
     })
-      .then(
-        () => {
-          alert('Email sent successfully!');
-        },
-        (error) => {
-          alert('Error sending email');
-          console.log('FAILED EMAIL SEND', error.text);
-        },
-      );
+    .then(
+      () => {
+        alert('Password changed successfully!');
+      },
+      (error) => {
+        alert('Error sending email');
+        console.log('FAILED EMAIL SEND', error.text);
+      },
+    );
   }
 
   // Function to handle form submission
@@ -136,17 +136,19 @@ const ChangePass = () => {
           // Search if email exists in DB
           const userID = await axios.get(`/auth/getUserID${inputs.email}`);
           if (userID) {
+            // Check if email matches current password
+            await axios.post('/auth/login', inputs);
             // Change user password
-            await axios.post(`/auth/changePassword`, inputs);
+            await axios.post('/auth/changePassword', inputs);
             // sends message confirming change, via email
             sendEmail();
             // Go to profile page
-            // navigate("/reservations_list");
+            navigate("/my_account");
           } else {
             showErrorDialog(inputs.email, "User does not exists");
           }
         } catch (error) {
-          showErrorDialog("An error occurred:", error);
+          showErrorDialog("An error occurred:", "Wrong email or password");
         }
       } else {
         showErrorDialog("An error occurred:", "Password must be minimum eight characters, have at least one letter and one number");
@@ -164,10 +166,9 @@ const ChangePass = () => {
     navigate("/home")
   }
 
-  return (
-  (isLoggedIn ?  // Show page (html) if user is logged in */
+  return ((isLoggedIn ?  // Show page (html) if user is logged in
     <div className="changePass">
-      <div className='image'>
+      <div className='imageChangeP'>
         {/* Image */}
         <img src={require("../assets/change_pass.png")} alt="" className='imageChangePass' />
       </div>

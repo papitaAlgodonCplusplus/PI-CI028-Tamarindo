@@ -28,7 +28,7 @@ const Login = () => {
   // State to manage form inputs
   const [inputs, setInputs] = useState({
     email: "",
-    password: "",
+    pass: "",
   });
 
   // Hook for navigating between pages
@@ -50,7 +50,7 @@ const Login = () => {
     e.preventDefault()
     try {
       const email = inputs.email.trim();
-      const password = inputs.password.trim();
+      const password = inputs.pass.trim();
 
       let isError = false;
 
@@ -122,7 +122,8 @@ const Login = () => {
                     onClick={handleClickShowPassword}
                     edge="end"
                   >
-                    {showPassword ? <VisibilityOffOutlinedIcon /> : <VisibilityOutlinedIcon />}
+                    {showPassword ? <VisibilityOffOutlinedIcon style={{height: '1.2vi', width: '1.2vi'}}/>
+                    : <VisibilityOutlinedIcon style={{height: '1.2vi', width: '1.2vi'}}/>}
                   </IconButton>
                 </div>
               </div>

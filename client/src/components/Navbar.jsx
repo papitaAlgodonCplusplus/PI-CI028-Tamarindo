@@ -29,7 +29,7 @@ const Navbar = () => {
   const { isLoggedIn } = useContext(AuthContext)
   const navigate = useNavigate()
   const handleReturn = () => {
-    navigate("/reservations_list")
+    navigate("/home")
   }
   return (
     isLoggedIn ?

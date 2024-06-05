@@ -103,7 +103,7 @@ const Login = () => {
                 <p>Email address</p>
               </div>
               <div className="inputEmail">
-                <input type="email-login" id="email" name="email" required onChange={handleChange}></input>
+                <input autoComplete="new-password" placeholder="Email" type="email-login" id="email" name="email" required onChange={handleChange}></input>
               </div>
               <label id="warning-email" className='red-label'>Please provide an email</label>
             </div>
@@ -113,7 +113,7 @@ const Login = () => {
                 <p>Password</p>
               </div>
               <div className="inputPassword">
-                <input type={showPassword ? "text" : "password"} name="password"
+                <input autoComplete="new-password" placeholder="Password" type={showPassword ? "text" : "password"} name="password"
                   required onChange={handleChange} className="inputPass1" id="password"></input>
                 <div className="showPass">
                   {/* Password Toggle */}
@@ -130,17 +130,12 @@ const Login = () => {
             <label id="warning-pass" className='red-label-2'>Please provide a password</label>
             {/* Questions: Checkbox - Forgot Pass */}
             <div className="containerQuestions">
-              <div className="checkbox">
-                <ThemeProvider theme={theme}>
-                  <FormControlLabel control={<Checkbox />} label="Keep me signed in" />
-                </ThemeProvider>
-              </div>
               <a href="/pass_recover" className='forgotPass'>Forgot password?</a>
             </div>
             {/* Button */}
             <button type="submit" onClick={handleSubmit} className='loginButton'>Log In</button>
           </div></center>
-          <hr class="separator" />
+          <hr className="separator" />
           {/* Go to Register Page */}
           <center><div className="register">
             <p className="question">Don't have an account?

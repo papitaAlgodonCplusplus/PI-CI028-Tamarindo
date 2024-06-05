@@ -1,6 +1,6 @@
 import axios from "axios"
 import React, { useState } from 'react'
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { showErrorDialog } from '../Misc'
 import "../styles/register.scss"
 
@@ -191,7 +191,7 @@ const Register = () => {
     <div className='register-window'>
       <div className='container-sign-up'>
         <div className="sign-up">
-          Sign Up
+          - Sign Up -
         </div>
 
         <div className="create-an-account">
@@ -201,7 +201,7 @@ const Register = () => {
         <form className='form'>
           {/* File input for uploading image */}
           <div className="file-input-container">
-            <input type="file" id="file-input" className="file-input" onChange={handleFileChange} />
+            <input type="file" id="file-input" placeholder="na" className="file-input" onChange={handleFileChange} />
             <label htmlFor="file-input" className="file-input-label">Choose an image</label>
             <img id="image-preview" className="image-preview" src="#" alt="Preview" />
           </div>
@@ -254,14 +254,13 @@ const Register = () => {
           </div>
         </form>
 
-
         <div className="container-terms">
           <input type="checkbox" id="checkbox" value="checkbox" checked={isChecked} onChange={handleCheckbox} />
-          <label for="checkbox">Accept Terms and Conditions</label>
+          <label htmlFor="checkbox">Accept Terms and Conditions</label>
         </div>
 
         <p className="already-account">
-          <span> Already have an account? <Link to="/"> Log in</Link>
+          <span href="/"> Already have an account? Log in
           </span>
         </p>
       </div>
@@ -270,8 +269,6 @@ const Register = () => {
       </div>
 
     </div>
-
-
   )
 }
 

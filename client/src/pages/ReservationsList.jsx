@@ -41,22 +41,11 @@ const ReservationsList = () => {
       <div style="
         font-size: 18px;
         font-weight: bold;
-        position: relative; 
-        max-width: 10vw;
+        position: relative;
+        word-break: break-all;
+        width: 10vw;
         left: 1.2vw;
-        margin-top: -50px;">${title}</div>
-      <div style="
-        font-size: 16px;
-        position: relative;
-        margin-left: -4vw;
-        color: #545454;
-        margin-top: 15px;">Guests: 3 (2 adults, 1 child)</div>
-      <div style="
-        font-size: 16px;
-        position: relative;
-        margin-left: -14.5vw;
-        color: #545454;
-        margin-top: 100px;">• Extra Services</div>
+        margin-top: -10px;">${title}</div>
       <div style="
         font-size: 16px;
         color: #333;
@@ -490,8 +479,10 @@ const ReservationsList = () => {
                 <div className="MDdata-descriptionspace">
                   Description: {desc}
                 </div>
-                <br></br>
+              </div>
 
+
+              <div className="MDtext2">
                 <div className="MDdata-typespace">
                   Type of room: {type}
                 </div>
@@ -500,17 +491,13 @@ const ReservationsList = () => {
                 <div className="MDdata-totalspace">
                   Total: ${totalPrice}
                 </div>
-
-                <br></br>
-                Amenities:
-
               </div>
 
               <div className="amenities-flex">
                 {amenitiesList.map((dataAmenidades, index) => (
                   <div className="MDdata-amenitiesspace" key={index}>
                     <div>
-                        {dataAmenidades[1]}
+                      {dataAmenidades[1]}
                       <p className='MDAP'>
                         <img className="MDPI" src={dataAmenidades[0]} alt={dataAmenidades[1]} />
                       </p>

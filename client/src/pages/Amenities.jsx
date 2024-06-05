@@ -433,9 +433,6 @@ const Amenities = () => {
 
   // Fetch data on component mount
   useEffect(() => {
-    if (!isLoggedIn) {
-      navigate("/")
-    }
     fetchData();
   }, []);
 
@@ -559,7 +556,7 @@ const Amenities = () => {
       </div>
     </div >
     // Show error to user, that hasnt logged in
-    : <div>{showErrorDialog("Error: ", "You must login as admin or employee to access this page", true, navigate)}</div>)
+    : <div></div>)
   )
 }
 export default Amenities;

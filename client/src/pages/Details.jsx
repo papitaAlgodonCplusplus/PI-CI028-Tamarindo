@@ -13,6 +13,7 @@ import Vector4 from "../vectors/Vector4_x2.svg";
 import Vector5 from "../vectors/Vector5_x2.svg";
 import Vector6 from "../vectors/Vector6_x2.svg";
 import Vector10 from "../vectors/Vector10_x2.svg";
+import Vector11 from "../vectors/Vector11_x2.svg";
 import Location from "../vectors/Location_x2.svg";
 import GroupX2 from "../vectors/Group_x2.svg";
 import Group1_X2 from "../vectors/Group1_x2.svg";
@@ -32,6 +33,7 @@ const Star4 = () => <div className="star-4"><img alt="vector" className="vector-
 const Vector7 = () => <div className="style-layer"><img alt="vector" className="vector-7" src={Vector} /></div>;
 const Vector7Pink = () => <div className="style-layer-heart"><img alt="vector" className="vector-7" src={require("../vectors/Vector_x2 - Pink.png")} /></div>;
 const Vector8 = () => <div className="style-layer-1"><img alt="vector" className="vector-8" src={Vector5} /></div>;
+const Starb = () => <div className="star-b"><img alt="vector" className="vector-11" src={Vector11} /></div>;
 
 const Car = () => (
   <div className="icon-with-text">
@@ -284,6 +286,7 @@ const Details = () => {
             </div>
             <div className="frame-57">
               <div className="button">
+                <Starb />
                 <div className="frame-1">
                   <span className="button-4">
                     4.7

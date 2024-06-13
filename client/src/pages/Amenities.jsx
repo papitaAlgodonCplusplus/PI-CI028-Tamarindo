@@ -478,15 +478,16 @@ const Amenities = () => {
       </div>
       <hr className="solid"></hr>
 
-      <label style={{ "marginLeft": "20vw" }}>Show: </label>
-      <select name="lazy-logger" style={{ "marginLeft": "25vw", "marginTop": "-3vh" }} className="custom-select" id="lazy-logger"
+      <input autoComplete="new-password" placeholder="Search Room by Name" type="text" name="searchQuery" maxLength={33} className='input_RoomFilter'></input>
+      <label className='custom-show'>Show: </label>
+      <select name="lazy-logger" className="custom-select" id="lazy-logger"
         onChange={handleLoggingChange}>
         <option key={3} value={3}>3</option>
         <option key={10} value={10}>10</option>
         <option key={25} value={25}>25</option>
         <option key={50} value={50}>50</option>
       </select>
-      <button style={{ "marginBottom": "-15vh"}} className="add-amenity-button" onClick={displayModal}><center>Add Amenity</center></button>
+      <button className="add-amenity-button" onClick={displayModal}><center>Add Amenity</center></button>
 
       <div className="amenities-bar">
         <div className="amenities-info-bar">

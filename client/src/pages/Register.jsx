@@ -132,6 +132,7 @@ const Register = () => {
       try {
         console.log("Register: ", inputs)
         await axios.post("/auth/register", inputs);
+        showErrorDialog("Status", "Account created succesfully!", true, navigate)
         navigate("/");
       } catch (error) {
         if (error.response && error.response.status === 409) {
@@ -195,20 +196,20 @@ const Register = () => {
   return (
     <div className='register-window'>
       <div className='container-sign-up'>
-          <div className="sign-up">
-            - Sign Up -
-          </div>
-          <div className="create-an-account">
-            Choose a profile picture!
-          </div>
+        <div className="sign-up">
+          - Sign Up -
+        </div>
+        <div className="create-an-account">
+          Choose a profile picture!
+        </div>
 
         <form className='form'>
-        <div className="file-input-container">
+          <div className="file-input-container">
             <input type="file" id="file-input" className="file-input" onChange={handleFileChange} />
             <label htmlFor="file-input" className="file-input-label">
-            {/* <img id="image-preview" className="image-preview" src="#" alt="Preview" /> */}
-            <img id="image-preview" className="image-preview image-preview-adjusted" src="/default-profile.png" alt="Preview" />
-            <div id="upload-icon" className="upload-icon">+</div>
+              {/* <img id="image-preview" className="image-preview" src="#" alt="Preview" /> */}
+              <img id="image-preview" className="image-preview image-preview-adjusted" src="/default-profile.png" alt="Preview" />
+              <div id="upload-icon" className="upload-icon">+</div>
             </label>
           </div>
           <label id="warning-user_image" className='warning-user_image'>Please provide a user image</label>
@@ -266,14 +267,12 @@ const Register = () => {
         </div>
 
         <p className="already-account">
-          <span href="/"> Already have an account? Log in
+          <span> Already have an account? <a href="/"> Log in </a>
           </span>
         </p>
       </div>
-
       <div className="ima_register">
       </div>
-
     </div>
   )
 }

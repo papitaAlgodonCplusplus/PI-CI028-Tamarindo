@@ -3,13 +3,15 @@
   padding-left: 0px;
   box-sizing: border-box;
   font-family: 'Poppins';
+  margin-bottom: -0.2vh;
+  margin-left: -7vw;
 }
 
 .ima_register {
   flex: 1;
   background-image: url('../assets/hotel_register.png'); /* Ruta de tu imagen de fondo */
   background-size: cover;
-  height: 142vh;
+  height: 165vh;
   margin-top: -3.1vh;
   margin-bottom: -2.1vh;
   z-index: -1;
@@ -40,7 +42,7 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
-  font-size: 20px;
+  font-size: 17px;
 }
 
 .container-name-lastname{
@@ -74,7 +76,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  // margin-bottom: 2rem;
+  margin-bottom: 2vh;
 }
 
 .file-input {
@@ -83,8 +85,8 @@
 
 .file-input-label {
   position: absolute;
-  top: -3vh;
-  left: -17vh;
+  top: -1vh;
+  left: -18vh;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -120,13 +122,15 @@
 
 
 .form {
+  margin-top: 8vh;
   margin-left: 8vw;
+  margin-bottom: 12vh;
 }
 
 .warning-user_image {
   position: absolute;
-  margin-left: -4.5vw;
-  margin-bottom: 54vh;
+  margin-left: -2.5vw;
+  margin-bottom: 57vh;
   font-size: 16px;
   color: rgb(161, 7, 7);
   display: none;
@@ -147,7 +151,7 @@
 }
 
 .name-user {
-  margin-top: 20vh;
+  margin-top: 24vh;
   margin-left: -25%;
 }
 
@@ -178,7 +182,7 @@
 
 .container-terms {
   margin-left: 41%;
-  margin-top: 6vh;
+  margin-top: 15vh;
 }
 
 .already-account {
@@ -190,7 +194,7 @@
 .sign-button {
   position: absolute;
   width: 10vw;
-  margin-top: 130.5vh;
+  margin-top: 151.5vh;
   margin-left: -3vw;
 }
 

@@ -109,8 +109,8 @@ const Login = () => {
                     onClick={handleClickShowPassword}
                     edge="end"
                   >
-                    {showPassword ? <VisibilityOffOutlinedIcon style={{height: '1.2vi', width: '1.2vi'}}/>
-                    : <VisibilityOutlinedIcon style={{height: '1.2vi', width: '1.2vi'}}/>}
+                    {showPassword ? <VisibilityOffOutlinedIcon style={{marginLeft: "-1vw", height: '1.2vi', width: '1.2vi'}}/>
+                    : <VisibilityOutlinedIcon style={{marginLeft: "-0.7vw", height: '1.2vi', width: '1.2vi'}}/>}
                   </IconButton>
                 </div>
               </div>

@@ -2,8 +2,7 @@ import { render, screen, fireEvent, waitFor, cleanup } from '@testing-library/re
 import { AuthContext } from '../src/AuthContext.js';
 import Amenities from "../src/pages/Amenities.jsx"
 import axios from 'axios';
-import React, { useState as useStateMock } from 'react';
-
+import React from 'react';
 module.exports = 'test-file-stub';
 
 afterEach(() => {

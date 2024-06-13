@@ -1,6 +1,6 @@
 html {
   overflow-x: hidden;
-} 
+}
 
 .login {
   font-family: 'Poppins';
@@ -44,7 +44,7 @@ html {
   color: #181818;
 }
 
-input:focus{
+input:focus {
   outline: none;
 }
 
@@ -74,12 +74,13 @@ input:focus{
   letter-spacing: 1px;
   line-height: 0.3;
   color: #181818;
+  text-align: left;
 }
 
 #email {
   padding-left: 15px;
   font-family: 'Poppins';
-  font-size: 1vw;
+  font-size: 14px;
   width: 20vw;
   height: 35px;
   background-color: rgb(228, 228, 228);
@@ -106,6 +107,7 @@ input:focus{
   font-family: 'Poppins';
   font-weight: 500;
   font-size: 1.1vw;
+  text-align: left;
 }
 
 .passwordText {
@@ -124,13 +126,14 @@ input:focus{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 20.5vw;
-  height: 4vh;
+  width: 21.5vw;
+  margin-left: -0.5vw;
+  height: 6vh;
   overflow-wrap: break-word;
   font-family: 'Poppins';
   font-weight: 500;
   font-size: 1vw;
-  
+
   box-sizing: border-box;
   background-color: rgb(228, 228, 228);
   border-radius: 3px;
@@ -138,7 +141,7 @@ input:focus{
 }
 
 #password {
-  font-size: 18px;
+  font-size: 14px;
   width: 19.5vw;
   font-family: 'Poppins';
   letter-spacing: 1px;
@@ -148,7 +151,7 @@ input:focus{
 
   &.visible {
     padding-left: 0;
-    padding-bottom: 1.6vh;
+    padding-bottom: 2.5vh;
   }
 }
 
@@ -164,12 +167,12 @@ input:focus{
 .containerQuestions {
   text-align: end;
   margin-top: 3vh;
-  margin-right: -11.5vw;
+  margin-right: -0.5vw;
 }
 
 .forgotPass {
-
   width: 15vw;
+  font-size: 16px;
 }
 
 a {
@@ -185,16 +188,13 @@ a {
   border: none;
   background: #1E91B6;
   position: relative;
-  margin-bottom: 36px;
-  display: flex;
+  margin-bottom: 4vh;
   padding: 12px 0.5px 13px 0;
-  width: 20.5vw;
-  box-sizing: border-box;
+  width: 21vw;
   text-align: center;
-  vertical-align:middle;
-  text-indent: 175px;
   color: #FFFFFF;
-  font-size: 18px;
+  font-size: 14px;
+  height: 7vh;
   cursor: pointer;
 }
 

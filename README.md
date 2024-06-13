@@ -49,6 +49,11 @@ sobre servicios y comodidades ofrecidas por el hotel
 * Se debería abrir automáticamente la página en el navegador, sino, ir al link:
 - localhost:3000/
 
+## Como ejecutar los test suites
+
+* Dentro de la raíz del repositorio, ejecutar npm install --save-dev jest
+* Luego ejecutar npm test
+
 ## Contacto
 - Alexander Quesada Quesada: alexander.quesadaquesada@ucr.ac.cr
 - Sebastian Venegas: sebastian.venegas@ucr.ac.cr

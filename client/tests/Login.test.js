@@ -8,7 +8,6 @@ import axios from 'axios';
 jest.mock('axios');
 const login = jest.fn();
 const logout = jest.fn();
-const mockFile = new File(['(⌐□_□)'], 'test.png', { type: 'image/png' });
 
 // Mock the useNavigate hook
 jest.mock('react-router-dom', () => ({

@@ -195,7 +195,7 @@ const ChangePass = () => {
               <p>Current Password</p>
             </div>
             <div className="inputPasswordChangeP">
-              <input type={showPassword ? "text" : "password"} name="pass"
+              <input autoComplete="new-password" type={showPassword ? "text" : "password"} name="pass"
                 required onChange={handleChange} className={`pass ${showPassword ? 'visible' : ''}`} id="pass"></input>
               <div className="showPassChangePass">
                 {/* Password Toggle */}

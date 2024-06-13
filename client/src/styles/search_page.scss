@@ -168,7 +168,7 @@
   position: relative;
   z-index: 0;
   margin-bottom: 4px;
-  width: 215px;
+  width: 215px; 
   height: 59px;
 }
 
@@ -305,7 +305,7 @@
   overflow-wrap: break-word;
   font-family: 'Poppins';
   font-weight: 500;
-  font-size: 20px;
+  font-size: 17px;
   margin-left: 7px;
   margin-right: 4px;
   color: #FFFFFF;
@@ -323,6 +323,19 @@
   box-sizing: border-box;
 }
 
+.search .custom-show {
+  position: absolute;
+  margin-left: 13vw;
+  margin-top: 3vh;
+}
+
+.search .custom-select {
+  position: absolute;
+  top: 47.5vh;
+  left: 18vw;
+}
+
+
 .style-layer-2 {
   position: absolute;
   margin-top: 185px;
@@ -339,7 +352,7 @@
   overflow-wrap: break-word;
   font-family: 'Poppins';
   font-weight: 500;
-  font-size: 20px;
+  font-size: 17px;
   margin-left: 21px;
   color: #FFFFFF;
 }

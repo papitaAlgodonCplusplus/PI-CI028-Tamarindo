@@ -154,7 +154,7 @@ export function showSuccessDialog(title, description, navigate) {
   overlay.classList.add('modal-overlay');
 
   const dialog = document.createElement('div');
-  dialog.classList.add('success-modal-dialog');
+  dialog.classList.add('modal-dialog');
 
   const titleElement = document.createElement('div');
   titleElement.classList.add('modal-title');
@@ -166,8 +166,8 @@ export function showSuccessDialog(title, description, navigate) {
   console.log(description)
 
   const closeButton = document.createElement('button');
-  closeButton.classList.add('success-modal-close');
-  closeButton.textContent = 'Close';
+  closeButton.classList.add('error-modal-close');
+  closeButton.textContent = 'OK';
   closeButton.addEventListener('click', () => {
     document.body.removeChild(overlay);
     navigate("/home")

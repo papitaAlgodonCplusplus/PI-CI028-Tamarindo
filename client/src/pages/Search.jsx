@@ -453,7 +453,6 @@ const Search = () => {
 
         <div className="frame-201">
           <p className="showing-4-of-108-places">
-            Showing {nRooms} of <label className="blue">{totalRooms} Rooms</label>
           </p>
           <div className="frame-49">
             <span className="sort-by-recommended">

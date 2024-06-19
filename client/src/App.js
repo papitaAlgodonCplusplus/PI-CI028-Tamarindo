@@ -12,8 +12,9 @@ import Search from "./pages/Search.jsx";
 import Rooms from "./pages/Rooms";
 import Details from "./pages/Details";
 import MyAccount from "./pages/MyAccount.jsx";
+import Billing from "./pages/Billing.jsx";
 // import Reservation from "./pages/Reservation.jsx";
-// import Payment from "./pages/Payment.jsx";
+import Payment from "./pages/Payment.jsx";
 import Amenities from "./pages/Amenities.jsx";
 // import ReservationsAdmin from "./pages/ReservationsAdmin.jsx";
 
@@ -78,6 +79,14 @@ const router = createBrowserRouter([
         path: "/home",
         element: <Home />,
       },
+      {
+        path: "/pay",
+        element: <Payment />,
+      },
+      {
+        path: "/billing",
+        element: <Billing />,
+      },
     ],
     //   {
     //     path: "/rooms",
@@ -86,10 +95,6 @@ const router = createBrowserRouter([
     //   {
     //     path: "/reservation",
     //     element: <Reservation />,
-    //   },
-    //   {
-    //     path: "/pay",
-    //     element: <Payment />,
     //   },
     //   {
     //     path: "/reservations_admin",

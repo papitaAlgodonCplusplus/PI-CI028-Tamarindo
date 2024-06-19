@@ -580,7 +580,7 @@ const ReservationsList = () => {
             const checkIn = new Date(reservation.check_in).toISOString().slice(0, 19).replace('T', ' ');
             const checkOut = new Date(reservation.check_out).toISOString().slice(0, 19).replace('T', ' ');
 
-            if (isDateBetween(requestParams.check_in_date, checkIn, checkOut) || isDateBetween(requestParams.check_out_date, checkIn, checkOut)) {
+            if (!(isDateBetween(requestParams.check_in_date, checkIn, checkOut) || isDateBetween(requestParams.check_out_date, checkIn, checkOut))) {
               continue;
             }
 

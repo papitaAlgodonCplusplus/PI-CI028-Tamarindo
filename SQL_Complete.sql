@@ -344,6 +344,40 @@ ALTER TABLE hotel.services_log
 ADD CONSTRAINT services_log_ibfk_2
 FOREIGN KEY (service_id) REFERENCES hotel.services(serviceid);
 
+ALTER TABLE hotel.payments
+ADD COLUMN timestamp_column TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+ALTER TABLE hotel.payments
+ADD COLUMN user_id INT;
+
+ALTER TABLE hotel.payments
+ADD CONSTRAINT payments_ibfk_1
+FOREIGN KEY (user_id) REFERENCES hotel.users(userid);
+
+
+ALTER TABLE hotel.payments
+ADD COLUMN room_id INT;
+
+ALTER TABLE hotel.payments
+ADD CONSTRAINT payments_ibfk_2
+FOREIGN KEY (room_id) REFERENCES hotel.rooms(roomid);
+
+
+ALTER TABLE hotel.card
+ADD COLUMN user_id INT;
+
+ALTER TABLE hotel.card
+ADD CONSTRAINT card_ibfk_2
+FOREIGN KEY (user_id) REFERENCES hotel.users(userid);
+
+ALTER TABLE hotel.card
+ADD COLUMN card_number VARCHAR(60);
+
+ALTER TABLE hotel.card
+ADD COLUMN month VARCHAR(10);
+
+ALTER TABLE hotel.card
+ADD COLUMN year VARCHAR(10);
+
 -- Dump completed on 2024-06-01 10:00:34
 
-SELECT * FROM hotel.users

@@ -478,7 +478,6 @@ const Amenities = () => {
       </div>
       <hr className="solid"></hr>
 
-      <input autoComplete="new-password" placeholder="Search Room by Name" type="text" name="searchQuery" maxLength={33} className='input_RoomFilter'></input>
       <label className='custom-show'>Show: </label>
       <select name="lazy-logger" className="custom-select" id="lazy-logger"
         onChange={handleLoggingChange}>

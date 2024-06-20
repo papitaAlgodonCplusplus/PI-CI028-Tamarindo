@@ -23,6 +23,7 @@ const ReservationsList = () => {
       height: 100px;
       margin-left: 100px;
       margin-top: 2%;
+      margin-bottom: 2vh;
       width: 81vw;
       background-color: #fff;
       border-radius: 8px;
@@ -60,7 +61,8 @@ const ReservationsList = () => {
       font-size: 16px;
       color: #333;
       position: relative;
-      left: 24vw;">Active</div>
+      width: 4.5vw;
+      left: 24vw;">${status}</div>
       <!-- Buttons Container -->
       <div style="
             margin-top: 20px;
@@ -275,8 +277,13 @@ const ReservationsList = () => {
           // Fetching payment data for the reservation
           const res3 = await axios.get(`/payments/payment_byPaymentID${reservation.payment_id}`);
 
+          let status = 'Awaiting'
+          if (res3.data[0].id_method === 1) {
+            status = 'Approved'
+          }
+
           // Adding reservation to the services container
-          addReservation(res2.data[0].title, checkIn, checkOut, filepath, res3.data[0].price, reservation.reservationid);
+          addReservation(res2.data[0].title, checkIn, checkOut, filepath, status, reservation.reservationid);
 
           // Updating the services container
           updateContainer(servicesContainer);
@@ -498,8 +505,8 @@ const ReservationsList = () => {
 
             // Fetching room data for the reservation
             const res2 = await axios.get(`/rooms/by_roomID${reservation.id_room}`);
-            
-            if (!res2.data[0].title.includes(inputs.searchQuery)){
+
+            if (!res2.data[0].title.includes(inputs.searchQuery)) {
               continue;
             }
 
@@ -510,8 +517,13 @@ const ReservationsList = () => {
             // Fetching payment data for the reservation
             const res3 = await axios.get(`/payments/payment_byPaymentID${reservation.payment_id}`);
 
+            let status = 'Awaiting'
+            if (res3.data[0].id_method === 1) {
+              status = 'Approved'
+            }
+
             // Adding reservation to the services container
-            addReservation(res2.data[0].title, checkIn, checkOut, filepath, res3.data[0].price, reservation.reservationid);
+            addReservation(res2.data[0].title, checkIn, checkOut, filepath, status, reservation.reservationid);
 
             // Updating the services container
             updateContainer(servicesContainer);
@@ -531,7 +543,7 @@ const ReservationsList = () => {
     const target = new Date(targetDate);
     const start = new Date(startDate);
     const end = new Date(endDate);
-  
+
     // Check if the target date is between the start and end dates
     return target >= start && target <= end;
   }
@@ -586,7 +598,7 @@ const ReservationsList = () => {
 
             // Fetching room data for the reservation
             const res2 = await axios.get(`/rooms/by_roomID${reservation.id_room}`);
-            
+
             // Fetching image data for the room
             const image = await axios.get(`/files/get_image_by_id${res2.data[0].imageid}`);
             const filepath = "/upload/" + image.data[0].filename;
@@ -594,8 +606,13 @@ const ReservationsList = () => {
             // Fetching payment data for the reservation
             const res3 = await axios.get(`/payments/payment_byPaymentID${reservation.payment_id}`);
 
+            let status = 'Awaiting'
+            if (res3.data[0].id_method === 1) {
+              status = 'Approved'
+            }
+
             // Adding reservation to the services container
-            addReservation(res2.data[0].title, checkIn, checkOut, filepath, res3.data[0].price, reservation.reservationid);
+            addReservation(res2.data[0].title, checkIn, checkOut, filepath, status, reservation.reservationid);
 
             // Updating the services container
             updateContainer(servicesContainer);
@@ -609,9 +626,19 @@ const ReservationsList = () => {
       return;
     }
   }
+  
+  const handleGoBack = async e => {
+    if (isLoggedIn) {
+      e.preventDefault()
+      navigate("/home")
+    } else {
+      return;
+    }
+  }
 
   return ((isLoggedIn ?  // Show page (html) if user is logged in
     <div className='m-r'>
+      <img alt="back" onClick={handleGoBack} src={require("../assets/Image12.png")} className='image-12' />
       <div className="my-reservations">
         <div className="my-reservations-1">
           <div className="my-reservations">
@@ -622,19 +649,10 @@ const ReservationsList = () => {
         </div>
       </div>
 
-      <label className='custom-filter'>Filter By: </label>
-      <label className='custom-show'>Show: </label>
-      <select name="lazy-logger" className="custom-select" id="lazy-logger"
-        onChange={handleLoggingChange}>
-        <option key={3} value={3}>3</option>
-        <option key={10} value={10}>10</option>
-        <option key={25} value={25}>25</option>
-        <option key={50} value={50}>50</option>
-      </select>
-      <input autoComplete="new-password" 
-      value={inputs.searchQuery}
-      placeholder="Search Room by Name" 
-      onChange={handleChange} maxLength={33} name="searchQuery" className='input_az'></input>
+      <input autoComplete="new-password"
+        value={inputs.searchQuery}
+        placeholder="Search Room by Name"
+        onChange={handleChange} maxLength={33} name="searchQuery" className='input_az'></input>
 
       <div className="frame-40">
         <div className="check-in">
@@ -672,6 +690,8 @@ const ReservationsList = () => {
         />
       )}
 
+      <label className='custom-filter'>Filter By: </label>
+
       <div className="reservations-bar">
         <div className="reservations-info-bar">
           <span className="reservation">
@@ -697,6 +717,15 @@ const ReservationsList = () => {
 
         </div>
       </div>
+
+      <label className='custom-show'>Show: </label>
+      <select name="lazy-logger" className="custom-select" id="lazy-logger"
+        onChange={handleLoggingChange}>
+        <option key={5} value={5}>5</option>
+        <option key={10} value={10}>10</option>
+        <option key={15} value={15}>15</option>
+        <option key={25} value={25}>25</option>
+      </select>
 
       <div id="calendar-modal-modify" className="form-modal-2">
         <div className="form-modal-content-2">

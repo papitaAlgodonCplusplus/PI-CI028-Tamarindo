@@ -378,9 +378,19 @@ const Search = () => {
       return;
     }
   }
+  
+  const handleGoBack = async e => {
+    if (isLoggedIn) {
+      e.preventDefault()
+      navigate("/home")
+    } else {
+      return;
+    }
+  }
 
   return ((isLoggedIn ?  // Show page (html) if user is logged in
     <div className="search">
+      <img alt="back" onClick={handleGoBack} src={require("../assets/Image12.png")} className='image-12' />
       <meta name="viewport" content="intial-scale=1"></meta>
       <div className="rooms">
         Rooms
@@ -442,15 +452,6 @@ const Search = () => {
 
       <div className="results">
 
-        <label className='custom-show'>Show: </label>
-        <select name="lazy-logger" className="custom-select" id="lazy-logger"
-          onChange={handleLoggingChange}>
-          <option key={3} value={3}>3</option>
-          <option key={10} value={10}>10</option>
-          <option key={25} value={25}>25</option>
-          <option key={50} value={50}>50</option>
-        </select>
-
         <div className="frame-201">
           <p className="showing-4-of-108-places">
           </p>
@@ -466,6 +467,15 @@ const Search = () => {
         </div>
         <div className="container-2">
         </div>
+        <label className='custom-show'>Show: </label>
+        <select name="lazy-logger" className="custom-select" id="lazy-logger"
+          onChange={handleLoggingChange}>
+          <option key={5} value={5}>5</option>
+          <option key={10} value={10}>10</option>
+          <option key={15} value={15}>15</option>
+          <option key={25} value={25}>25</option>
+        </select>
+
       </div>
     </div>
     // Show error to user, that hasnt logged in

@@ -17,11 +17,11 @@ const Billing = () => {
   // Function to add a new bill to the UI
   const addBill = (room_title, img, datetime, method, amount) => {
     const newAmenityHTML = `
-    <div className="list-container">
+    <div className="billing-container">
     <div style="
       height: 100px;
       margin-top: 2%;
-      width: 71%;
+      width: 65.5%;
       background-color: #fff;
       border-radius: 8px;
       box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
@@ -34,25 +34,25 @@ const Billing = () => {
         font-weight: bold;
         position: relative; 
         width: 10vw;
-        left: 3.6vw;">${room_title}</div>
+        left: 2.4vw;">${room_title}</div>
       <div style="
         font-size: 16px;
         color: #333;
         position: relative;
         width: 10vw;
-        left: 9vw;">${datetime}</div>
+        left: 5.5vw;">${datetime}</div>
       <div style="
         font-size: 16px;
         color: #333;
         position: relative;
         width: 10vw;
-        left: 12vw;">${method}</div>
+        left: 9.5vw;">${method}</div>
       <div style="
         font-size: 16px;
         color: #333;
         position: relative;
         width: 10vw;
-        left: 13vw;">$${amount}</div>
+        left: 10vw;">$${amount}</div>
   </div>
   <div style="padding-bottom: 20px;"></div>
 `;
@@ -122,7 +122,7 @@ const Billing = () => {
                   default:
                     break
                 }
-                addBill(bill.paymentid + ASCIIChain(res2.data[0].title).slice(1, 14), "upload/" + res3.data[0].filename, bill.timestamp_column.slice(0, 19).replace('T', ' '), method, bill.price);
+                addBill(bill.paymentid + ASCIIChain(res2.data[0].title).slice(1, 10), "upload/" + res3.data[0].filename, bill.timestamp_column.slice(0, 19).replace('T', ' '), method, bill.price);
                 logged++;
               });
           });
@@ -200,9 +200,9 @@ const Billing = () => {
             // Formatting check-in and check-out dates
             const date = new Date(bill.timestamp_column).toISOString().slice(0, 19).replace('T', ' ');
             console.log(requestParams.check_in_date.slice(0, 10), requestParams.check_out_date.slice(0, 10), date.slice(0, 10))
-            if (!(isDateBetween(date, requestParams.check_in_date, requestParams.check_out_date)) 
+            if (!(isDateBetween(date, requestParams.check_in_date, requestParams.check_out_date))
               & !(date.slice(0, 10) === requestParams.check_in_date.slice(0, 10))
-            & !(date.slice(0, 10) === requestParams.check_out_date.slice(0, 10))) {
+              & !(date.slice(0, 10) === requestParams.check_out_date.slice(0, 10))) {
               continue;
             }
 
@@ -225,7 +225,7 @@ const Billing = () => {
                       default:
                         break
                     }
-                    addBill(bill.paymentid + ASCIIChain(res2.data[0].title).slice(1, 14), "upload/" + res3.data[0].filename, bill.timestamp_column.slice(0, 19).replace('T', ' '), method, bill.price);
+                    addBill(bill.paymentid + ASCIIChain(res2.data[0].title).slice(1, 10), "upload/" + res3.data[0].filename, bill.timestamp_column.slice(0, 19).replace('T', ' '), method, bill.price);
                   });
               });
             updateContainer(billing_table);
@@ -241,23 +241,23 @@ const Billing = () => {
     }
   }
 
+  const handleGoBack = async e => {
+    if (isLoggedIn) {
+      e.preventDefault()
+      navigate("/home")
+    } else {
+      return;
+    }
+  }
 
   return ((isLoggedIn ?  // Show page (html) if user is logged in as an user with permissions
     <div className='billing_page'>
       <meta name="viewport" content="intial-scale=1"></meta>
+      <img alt="back" onClick={handleGoBack} src={require("../assets/Image12.png")} className='image-12' />
       <div className="billing">
         Billing History
       </div>
       <hr className="solid"></hr>
-
-      <label className='custom-show'>Show: </label>
-      <select name="lazy-logger" className="custom-select" id="lazy-logger"
-        onChange={handleLoggingChange}>
-        <option key={3} value={3}>3</option>
-        <option key={10} value={10}>10</option>
-        <option key={25} value={25}>25</option>
-        <option key={50} value={50}>50</option>
-      </select>
 
       <label className='custom-filter'>Filter By: </label>
       <div className="frame-40">
@@ -318,6 +318,14 @@ const Billing = () => {
 
         </div>
       </div>
+      <label className='custom-show'>Show: </label>
+      <select name="lazy-logger" className="custom-select" id="lazy-logger"
+        onChange={handleLoggingChange}>
+        <option key={5} value={5}>5</option>
+        <option key={10} value={10}>10</option>
+        <option key={15} value={15}>15</option>
+        <option key={25} value={25}>25</option>
+      </select>
     </div >
     // Show error to user, that hasnt logged in
     : <div></div>)

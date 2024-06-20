@@ -458,6 +458,15 @@ const Rooms = () => {
     }
   }
 
+  const handleGoBack = async e => {
+    if (isLoggedIn) {
+      e.preventDefault()
+      navigate("/home")
+    } else {
+      return;
+    }
+  }
+
   const [file_changed, setFileChanged] = useState(false);
   // Function to handle amenity modify
   const handleUpdate = async e => {
@@ -525,6 +534,7 @@ const Rooms = () => {
   return ((isLoggedIn && (userRol === "admin" || userRol === "employee") ?  // Show page (html) if user is logged in as an user with permissions
     <div className='rooms'>
       <meta name="viewport" content="intial-scale=1"></meta>
+      <img alt="back" onClick={handleGoBack} src={require("../assets/Image12.png")} className='image-12' />
       {/* Form modal for adding rooms */}
       <div id="myFormModal" className="form-modal">
         <div className="form-modal-content">
@@ -593,14 +603,6 @@ const Rooms = () => {
         <div>
           <div className='rooms-title'>Rooms</div>
           <hr className="solid"></hr>
-          <label className="custom-show">Show: </label>
-          <select name="lazy-logger" className="custom-select" id="lazy-logger"
-            onChange={handleLoggingChange}>
-            <option key={3} value={3}>3</option>
-            <option key={10} value={10}>10</option>
-            <option key={25} value={25}>25</option>
-            <option key={50} value={50}>50</option>
-          </select>
           {/* Button to display add room modal */}
           <button style={{ "marginBottom": "-15vh" }} className="add-room-button" onClick={displayModal}><center>Add Room</center></button>
           <div className="rooms-bar">
@@ -619,6 +621,15 @@ const Rooms = () => {
           </div>
           <div className="list-container">
           </div>
+
+          <label className="custom-show">Show: </label>
+          <select name="lazy-logger" className="custom-select" id="lazy-logger"
+            onChange={handleLoggingChange}>
+            <option key={5} value={5}>5</option>
+            <option key={10} value={10}>10</option>
+            <option key={15} value={15}>15</option>
+            <option key={25} value={25}>25</option>
+          </select>
         </div>
       </div></center>
     </div >

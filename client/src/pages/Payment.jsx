@@ -13,6 +13,8 @@ import AmericanExpressImage from "../assets/AX.png";
 const Payment = () => {
   const [selectedCurrency, setServiceCurrency] = useState('');
   const [selectedService, setServiceOption] = useState('');
+  const [room, setRoom] = useState('');
+  const [prev, setPrev] = useState('');
   const [cards, setCards] = useState([]);
   const [selectedOption, setSelectedOption] = useState('credit-card');
   const [services, setServices] = useState([]);
@@ -40,8 +42,12 @@ const Payment = () => {
   // Define an asynchronous function to fetch data
   const fetchAndSetData = async () => {
     try {
+      // Get user saved cards
       const cards = await axios.get(`payments/creditCards${userId}`)
       setCards(cards.data.data)
+      const room = await axios.get(`rooms/by_roomID${lastRoomClickedID}`)
+      setRoom(room.data[0].title)
+      setPrev("upload/" + room.data[0].filename)
       // Fetch services data
       axios.get('/amenities').then(response => {
         // Set the services state with the fetched data
@@ -363,9 +369,19 @@ const Payment = () => {
     }
   }
 
+  const handleGoBack = async e => {
+    if (isLoggedIn) {
+      e.preventDefault()
+      navigate("/search")
+    } else {
+      return;
+    }
+  }
+
   return (
     <div className='pay_page'>
       <meta name="viewport" content="intial-scale=1"></meta>
+      <img alt="back" onClick={handleGoBack} src={require("../assets/Image12.png")} className='image-12' />
       <div className="payments-options">
         Select Payment Method
       </div>
@@ -445,9 +461,9 @@ const Payment = () => {
           {bookingDates[1].toString()[9]}
         </div>
         <div className="master-suite-tropicana">
-          Master Suite Tropicana
+          {room}
         </div>
-        <img alt="undefined graphic" src={require("../assets/Image13.png")} className="image-13" />
+        <img alt="undefined graphic" src={prev} className="image-13" />
         <div className="amenities">
           {currencySymbols[currentCurrency]}{' '}
           {convertCurrency(originalPrice, "Dollars", currentCurrency).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}{' '}
@@ -542,7 +558,7 @@ const Payment = () => {
 
     return (
       <div className="credit-card-section">
-        {!showForm ? (
+        {!showForm && (cards.length > 0) ? (
           <div className="select-card-option">
             <div className="existing-cards">
               <h2 className='or-separator-2'>Your saved cards</h2>

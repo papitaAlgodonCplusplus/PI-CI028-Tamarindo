@@ -257,6 +257,7 @@
   border-radius: 5px;
   padding-left: 60px;
   box-sizing: border-box;
+  margin-bottom: 1%;
 }
 
 .my-reservations .style-layer {
@@ -390,8 +391,8 @@
 
 .m-r .custom-filter {
   position: absolute;
-  margin-left: 17vw;
-  margin-top: -2vh;
+  margin-top: -5.5vh;
+  margin-left: 11vw;
 }
 
 .m-r .text-field-2 {
@@ -453,7 +454,8 @@
   position: absolute;
   margin-left: 17vw;
   width: 20vw;
-  margin-top: 2.5vh;
+  height: 7vh;
+  margin-top: 2.1vh;
 }
 
 .MDdata-amenitiesspace {
@@ -462,15 +464,13 @@
 }
 
 .m-r .custom-show {
-  position: absolute;
+  position: relative;
   margin-left: 8vw;
-  margin-top: 3vh;
 }
 
 .m-r .custom-select {
-  position: absolute;
-  top: 36vh;
-  left: 12vw;
+  position: relative;
+  left: 1vw;
 }
 
 

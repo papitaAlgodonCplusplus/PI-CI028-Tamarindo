@@ -324,15 +324,15 @@
 }
 
 .search .custom-show {
-  position: absolute;
   margin-left: 13vw;
   margin-top: 3vh;
 }
 
 .search .custom-select {
-  position: absolute;
-  top: 47.5vh;
-  left: 18vw;
+  position: relative;
+  margin-left: 17vw;
+  margin-top: -3vh;
+  width: 3vw;
 }
 
 

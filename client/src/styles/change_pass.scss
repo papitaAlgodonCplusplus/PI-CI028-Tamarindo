@@ -140,11 +140,11 @@ input:focus {
   border-radius: 3px;
   background-color: transparent;
   border: none;
-  margin-top: -1vh;
+  margin-top: 0vh;
 
   &.visible {
-    margin-top: -0.8vh;
-    margin-left: -0.5vw;
+    margin-top: 0.5vh;
+    margin-left: 0vw;
   }
 }
 
@@ -159,7 +159,7 @@ input:focus {
 
   &.visible {
     margin-top: 0.2vh;
-    margin-left: -0.4vw;
+    margin-left: -0.5vw;
   }
 }
 

@@ -132,6 +132,7 @@ const Register = () => {
       try {
         console.log("Register: ", inputs)
         await axios.post("/auth/register", inputs);
+        showErrorDialog("Status", "Account created succesfully!", true, navigate)
         navigate("/");
       } catch (error) {
         if (error.response && error.response.status === 409) {
@@ -159,6 +160,7 @@ const Register = () => {
 
     // Getting the image preview element
     const imagePreview = document.getElementById('image-preview');
+    const uploadIcon = document.getElementById('upload-icon');
 
     if (file) {
       // If a file is selected
@@ -169,13 +171,15 @@ const Register = () => {
         // Displaying the image preview
         imagePreview.src = e.target.result;
         imagePreview.style.visibility = 'visible';
+        uploadIcon.style.display = 'none';
       };
 
       // Reading the selected file as data URL
       reader.readAsDataURL(file);
 
       // Setting the file state
-      setFile(e.target.files[0]);
+      // setFile(e.target.files[0]);
+      setFile(file);
       setFileChanged(true)
 
       // Hidding red label
@@ -183,7 +187,9 @@ const Register = () => {
     } else {
       // If no file is selected, reset the image preview
       imagePreview.src = '#';
-      imagePreview.style.visibility = 'none';
+      // imagePreview.style.visibility = 'none';
+      imagePreview.style.visibility = 'hidden';
+      uploadIcon.style.display = 'block'
     }
   };
 
@@ -193,17 +199,18 @@ const Register = () => {
         <div className="sign-up">
           - Sign Up -
         </div>
-
         <div className="create-an-account">
-          Create An Account!
+          Choose a profile picture!
         </div>
 
         <form className='form'>
-          {/* File input for uploading image */}
           <div className="file-input-container">
-            <input type="file" id="file-input" placeholder="na" className="file-input" onChange={handleFileChange} />
-            <label htmlFor="file-input" className="file-input-label">Choose an image</label>
-            <img id="image-preview" className="image-preview" src="#" alt="Preview" />
+            <input type="file" id="file-input" className="file-input" onChange={handleFileChange} />
+            <label htmlFor="file-input" className="file-input-label">
+              {/* <img id="image-preview" className="image-preview" src="#" alt="Preview" /> */}
+              <img id="image-preview" className="image-preview image-preview-adjusted" src="/default-profile.png" alt="Preview" />
+              <div id="upload-icon" className="upload-icon">+</div>
+            </label>
           </div>
           <label id="warning-user_image" className='warning-user_image'>Please provide a user image</label>
 
@@ -260,14 +267,12 @@ const Register = () => {
         </div>
 
         <p className="already-account">
-          <span href="/"> Already have an account? Log in
+          <span> Already have an account? <a href="/"> Log in </a>
           </span>
         </p>
       </div>
-
       <div className="ima_register">
       </div>
-
     </div>
   )
 }

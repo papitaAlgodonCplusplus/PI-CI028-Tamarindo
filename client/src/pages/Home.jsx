@@ -107,7 +107,7 @@ const Home = () => {
           <img alt="logo" className='logo' src={require("../assets/Logo.PNG")}></img>
           <ul>
             <li><a href="/services">Services</a></li>
-            <li><a href="/reviews">Reviews</a></li>
+            <li><a href="/search">Hotel Rooms</a></li>
             <li><a href="/about_us">About Us</a></li>
           </ul>
         </div>)}

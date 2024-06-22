@@ -288,7 +288,14 @@ const Rooms = () => {
       // Clear previous image previews
       imagePreviewsContainer.innerHTML = '';
 
+      if (files.length > 5) {
+        showErrorDialog("Error", "Max 5 images")
+        imagePreviewsContainer.style.height = 100 + "vh";
+        return;
+      }
       if (files.length > 0) {
+        let num = 10;
+        let h = 100;
         Array.from(files).forEach((file, index) => {
           // Create a FileReader for each file
           const reader = new FileReader();
@@ -301,8 +308,12 @@ const Rooms = () => {
             imagePreview.className = 'image-preview';
             imagePreview.src = e.target.result;
             imagePreview.alt = 'Preview';
+            imagePreview.style.marginBlock = num + "vh";
+            imagePreviewsContainer.style.height = h + "vh";
             imagePreview.style.visibility = 'visible';
             imagePreviewsContainer.style.visibility = 'visible';
+            num += 35;
+            h += 40;
 
             // Append the img element to the container
             imagePreviewsContainer.appendChild(imagePreview);
@@ -323,7 +334,6 @@ const Rooms = () => {
       return;
     }
   };
-
 
   // Function to handle form submission
   const handleSubmit = async (e) => {
@@ -448,6 +458,15 @@ const Rooms = () => {
     }
   }
 
+  const handleGoBack = async e => {
+    if (isLoggedIn) {
+      e.preventDefault()
+      navigate("/home")
+    } else {
+      return;
+    }
+  }
+
   const [file_changed, setFileChanged] = useState(false);
   // Function to handle amenity modify
   const handleUpdate = async e => {
@@ -513,8 +532,9 @@ const Rooms = () => {
   }
 
   return ((isLoggedIn && (userRol === "admin" || userRol === "employee") ?  // Show page (html) if user is logged in as an user with permissions
-    <div className='body'>
+    <div className='rooms'>
       <meta name="viewport" content="intial-scale=1"></meta>
+      <img alt="back" onClick={handleGoBack} src={require("../assets/Image12.png")} className='image-12' />
       {/* Form modal for adding rooms */}
       <div id="myFormModal" className="form-modal">
         <div className="form-modal-content">
@@ -537,7 +557,7 @@ const Rooms = () => {
             <label id="warning-desc" className='red-label-r'>Please provide a description</label>
             {/* Dropdown for selecting room type */}
             <label htmlFor="room_types_selector_1">Room Type</label><br />
-            <select name="room_types_selector" className="custom-select-4" id="room_types_selector_1"
+            <select name="room_types_selector" className="custom-select-5" id="room_types_selector_1"
               onChange={handleRoomTypeChange} value={roomTypeOption} required>
               {/* Mapping room types to options */}
               {room_types.map(room_type => (
@@ -555,12 +575,6 @@ const Rooms = () => {
         <div className="form-modal-content">
           <span className="close" onClick={closeModal2}>&times;</span>
           <form id="myForm">
-            {/* File input for uploading image */}
-            <div className="file-input-container">
-              <input type="file" id="file-input" className="file-input" onChange={handleFileChange} />
-              <label htmlFor="file-input" className="file-input-label">Choose an image</label>
-              <img id="image-preview2" className="image-preview" src="#" alt="Preview" />
-            </div>
             {/* Input field for room title */}
             <label htmlFor="name">New Title</label><br />
             <input placeholder={data.title} type="text" id="title" name="title" onChange={handleModifyChange} /><br />
@@ -569,7 +583,7 @@ const Rooms = () => {
             <textarea placeholder={data.description} id="description" name="description" onChange={handleModifyChange} ></textarea>
             {/* Dropdown for selecting room type */}
             <label htmlFor="room_types_selector">New Room Type</label><br />
-            <select name="room_types_selector" className="custom-select-4" id="room_types_selector_1"
+            <select name="room_types_selector" className="custom-select-4"
               onChange={handleRoomTypeChange} value={roomTypeOption} required>
               {/* Mapping room types to options */}
               {room_types.map(room_type => (
@@ -589,16 +603,8 @@ const Rooms = () => {
         <div>
           <div className='rooms-title'>Rooms</div>
           <hr className="solid"></hr>
-          <label style={{ "marginLeft": "-65.5vw" }}>Show: </label>
-          <select style={{ "marginTop": "-3vh", marginLeft: "-49vw" }} name="lazy-logger" className="custom-select" id="lazy-logger"
-            onChange={handleLoggingChange}>
-            <option key={3} value={3}>3</option>
-            <option key={10} value={10}>10</option>
-            <option key={25} value={25}>25</option>
-            <option key={50} value={50}>50</option>
-          </select>
           {/* Button to display add room modal */}
-          <button style={{ "marginBottom": "-15vh"}} className="add-room-button" onClick={displayModal}><center>Add Room</center></button>
+          <button style={{ "marginBottom": "-15vh" }} className="add-room-button" onClick={displayModal}><center>Add Room</center></button>
           <div className="rooms-bar">
             <span className="room">
               Rooms
@@ -615,6 +621,15 @@ const Rooms = () => {
           </div>
           <div className="list-container">
           </div>
+
+          <label className="custom-show">Show: </label>
+          <select name="lazy-logger" className="custom-select" id="lazy-logger"
+            onChange={handleLoggingChange}>
+            <option key={5} value={5}>5</option>
+            <option key={10} value={10}>10</option>
+            <option key={15} value={15}>15</option>
+            <option key={25} value={25}>25</option>
+          </select>
         </div>
       </div></center>
     </div >

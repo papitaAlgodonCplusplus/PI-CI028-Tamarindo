@@ -102,7 +102,7 @@ const Search = () => {
       padding: 31px 17.2px 41px 19px;
       box-sizing: border-box;">
         <img alt="undefined graphic" src="${imageSrc}" style="
-        border-radius: 6px 6px 0 0;
+        border-radius: 6px;
         margin-right: 18px;
         width: 320px;
         height: 240px;" />
@@ -111,8 +111,9 @@ const Search = () => {
         display: inline-block;
         overflow-wrap: break-word;
         font-family: 'Poppins';
-        font-weight: 500;
+        font-weight: bold;
         font-size: 22px;
+        text-align: center;
         letter-spacing: 0.2px;
         color: #1A1A1A;">
         ${title}
@@ -128,7 +129,9 @@ const Search = () => {
         overflow-wrap: break-word;
         font-family: 'Poppins';
         font-weight: 500;
-        font-size: 15px;
+        font-size: 14px;
+        padding-top: 5px;
+        text-align: justify;
         letter-spacing: 0.1px;
         color: #000000;">
         ${description}<br /><br />
@@ -140,9 +143,9 @@ const Search = () => {
         position: absolute;
         margin-top: 185px;
         margin-left: 360px;
-        width: 150px;
-        height: 40px;
-        padding-top: 13px;
+        width: 100px;
+        height: 30px;
+        padding-top: 16px;
         padding-inline: 10px;
         border-radius: 4px;
         background: #1E91B6;
@@ -151,8 +154,9 @@ const Search = () => {
           overflow-wrap: break-word;
           font-family: 'Poppins';
           font-weight: 500;
-          font-size: 20px;
-          margin-left: 21px;
+          font-size: 16px;
+          text-align: center;
+          // margin-left: 21px;
           color: #FFFFFF;">
             View Details
           </div>
@@ -279,7 +283,11 @@ const Search = () => {
           emptyContainer(cardsContainer);
 
           const roomsData = [];
+          let logged = 0;
           for (const room of roomsResponse.data) {
+            if (logged >= logs) {
+              break;
+            }
             const roomTypeResponse = await axios.get(`/categories/room_type_ByID${room.type_of_room}`);
             const price = roomTypeResponse.data[0].price;
 
@@ -313,7 +321,11 @@ const Search = () => {
         emptyContainer(cardsContainer);
         setNRooms(roomsResponse.data.length);
         setTotalRooms(roomsResponse.data.length);
+        let logged = 0;
         for (const room of roomsResponse.data) {
+          if (logged >= logs) {
+            break;
+          }
           // Fetch room details by room ID
           const roomDetailsResponse = await axios.get(`/rooms/by_roomID${room.roomid}`);
           // Fetch room image by image ID
@@ -355,8 +367,30 @@ const Search = () => {
     fetchDataFromServer()
   }
 
+
+  let logs = 3;
+  const handleLoggingChange = e => {
+    if (isLoggedIn) {
+      logs = e.target.value;
+      fetchDataFromServer()
+      return;
+    } else {
+      return;
+    }
+  }
+  
+  const handleGoBack = async e => {
+    if (isLoggedIn) {
+      e.preventDefault()
+      navigate("/home")
+    } else {
+      return;
+    }
+  }
+
   return ((isLoggedIn ?  // Show page (html) if user is logged in
     <div className="search">
+      <img alt="back" onClick={handleGoBack} src={require("../assets/Image12.png")} className='image-12' />
       <meta name="viewport" content="intial-scale=1"></meta>
       <div className="rooms">
         Rooms
@@ -371,7 +405,7 @@ const Search = () => {
               Rooms
             </span>
           </div>
-          <input autoComplete="new-password" type="text" name="searchQuery" maxLength={33} onChange={handleChange} className='input_searchQuery'></input>
+          <input autoComplete="new-password" placeholder="Search Room by Name" type="text" name="searchQuery" maxLength={33} onChange={handleChange} className='input_searchQuery'></input>
         </div>
         <div className="check-in">
           <div className="text-field-1">
@@ -417,9 +451,9 @@ const Search = () => {
       </div>
 
       <div className="results">
+
         <div className="frame-201">
           <p className="showing-4-of-108-places">
-            Showing {nRooms} of <label className="blue">{totalRooms} Rooms</label>
           </p>
           <div className="frame-49">
             <span className="sort-by-recommended">
@@ -433,6 +467,15 @@ const Search = () => {
         </div>
         <div className="container-2">
         </div>
+        <label className='custom-show'>Show: </label>
+        <select name="lazy-logger" className="custom-select" id="lazy-logger"
+          onChange={handleLoggingChange}>
+          <option key={5} value={5}>5</option>
+          <option key={10} value={10}>10</option>
+          <option key={15} value={15}>15</option>
+          <option key={25} value={25}>25</option>
+        </select>
+
       </div>
     </div>
     // Show error to user, that hasnt logged in

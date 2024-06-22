@@ -13,6 +13,7 @@ import Vector4 from "../vectors/Vector4_x2.svg";
 import Vector5 from "../vectors/Vector5_x2.svg";
 import Vector6 from "../vectors/Vector6_x2.svg";
 import Vector10 from "../vectors/Vector10_x2.svg";
+import Vector11 from "../vectors/Vector11_x2.svg";
 import Location from "../vectors/Location_x2.svg";
 import GroupX2 from "../vectors/Group_x2.svg";
 import Group1_X2 from "../vectors/Group1_x2.svg";
@@ -32,6 +33,7 @@ const Star4 = () => <div className="star-4"><img alt="vector" className="vector-
 const Vector7 = () => <div className="style-layer"><img alt="vector" className="vector-7" src={Vector} /></div>;
 const Vector7Pink = () => <div className="style-layer-heart"><img alt="vector" className="vector-7" src={require("../vectors/Vector_x2 - Pink.png")} /></div>;
 const Vector8 = () => <div className="style-layer-1"><img alt="vector" className="vector-8" src={Vector5} /></div>;
+const Starb = () => <div className="star-b"><img alt="vector" className="vector-11" src={Vector11} /></div>;
 
 const Car = () => (
   <div className="icon-with-text">
@@ -107,7 +109,7 @@ const Details = () => {
         setValues(newDatesRange);
         if (newDatesRange[1]) {
           changeBookingDates(newDatesRange)
-          // navigate("/pay")
+          navigate("/pay")
         }
       } catch (error) {
         showErrorDialog("An error occurred:", error, false, navigate);
@@ -151,42 +153,7 @@ const Details = () => {
 
   // Function to handle booking
   const handleBook = async e => {
-    if (isLoggedIn) {
-      let paymentData = { price: 1050, paymentMethodId: 1, cardType: 'Mastercard' };
-      const paymentRes = await axios.post('/payments/add_payment', paymentData);
-      await axios.post('/payments/add_card_payment', paymentData);
-      let paymentId = paymentRes.data.payment_id;
-      const reservationRequestData = {
-        check_in_date: '2024-12-11 7:00:00',           // Date of check-in
-        check_out_date: '2024-12-29 18:00:00',         // Date of check-out
-        room_id: lastRoomClickedID,           // ID of the room selected
-        payment_id: paymentId,                 // ID of the payment method
-        user_id: userId                       // ID of the user making the reservation
-      };
-
-      await axios.post("/reservations/add_reservation", reservationRequestData);
-      const serviceId = "service_4g9saua";
-      const templateId = "template_lmum0vx"; 
-      const room = await axios.get(`/rooms/by_roomID${lastRoomClickedID}`);
-      const user = await axios.get(`/auth/getUserbyID${userId}`);
-      // send email
-      await emailjs.send(serviceId, templateId, {
-        email: "alexquesada22@gmail.com",
-        to_name: user.data[0].name,
-        from_name: "Hotel Tamarindo",
-        room_name: room.data[0].title,
-        total_price: paymentData.price,
-        check_in_date: reservationRequestData.check_in_date,
-        check_out_date: reservationRequestData.check_out_date
-      })
-
-      showErrorDialog("Reservation Approved", "You'll receive an email with your reservation details.", navigate);
-
-      // toggleModal()
-      navigate("/reservations_list");
-    } else {
-      return;
-    }
+    toggleModal()
   }
 
   // Function to fetch data
@@ -284,6 +251,7 @@ const Details = () => {
             </div>
             <div className="frame-57">
               <div className="button">
+                <Starb />
                 <div className="frame-1">
                   <span className="button-4">
                     4.7

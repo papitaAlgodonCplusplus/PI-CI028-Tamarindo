@@ -1,10 +1,10 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useRef, useContext, useEffect } from 'react'
 import axios from "axios"
 import { AuthContext } from '../AuthContext.js';
 import { DateObject } from "react-multi-date-picker"
 import { Calendar } from "react-multi-date-picker"
 import { showErrorDialog, showWarningDialog, calculateNumberOfDays, emptyContainer, updateContainer, deleteDataWithTimeout, putDataWithTimeout } from '../Misc.js';
-import "../styles/reservation_list.scss"
+import "../styles/reservation_list.scss";
 import { useNavigate } from 'react-router-dom';
 
 const ReservationsList = () => {
@@ -23,6 +23,7 @@ const ReservationsList = () => {
       height: 100px;
       margin-left: 100px;
       margin-top: 2%;
+      margin-bottom: 2vh;
       width: 81vw;
       background-color: #fff;
       border-radius: 8px;
@@ -41,22 +42,11 @@ const ReservationsList = () => {
       <div style="
         font-size: 18px;
         font-weight: bold;
-        position: relative; 
-        max-width: 10vw;
+        position: relative;
+        word-break: break-all;
+        width: 10vw;
         left: 1.2vw;
-        margin-top: -50px;">${title}</div>
-      <div style="
-        font-size: 16px;
-        position: relative;
-        margin-left: -4vw;
-        color: #545454;
-        margin-top: 15px;">Guests: 3 (2 adults, 1 child)</div>
-      <div style="
-        font-size: 16px;
-        position: relative;
-        margin-left: -14.5vw;
-        color: #545454;
-        margin-top: 100px;">• Extra Services</div>
+        margin-top: -10px;">${title}</div>
       <div style="
         font-size: 16px;
         color: #333;
@@ -71,7 +61,8 @@ const ReservationsList = () => {
       font-size: 16px;
       color: #333;
       position: relative;
-      left: 24vw;">Active</div>
+      width: 4.5vw;
+      left: 24vw;">${status}</div>
       <!-- Buttons Container -->
       <div style="
             margin-top: 20px;
@@ -173,6 +164,8 @@ const ReservationsList = () => {
         // Delete reservation data with timeout
         await deleteDataWithTimeout(`/reservations/delete${reservationId}`, 500);
 
+        showErrorDialog("Success", "Reservation was cancelled succesfully")
+
         // Fetch updated data
         fetchData();
 
@@ -264,8 +257,12 @@ const ReservationsList = () => {
         // Fetching reservations data for the current user
         const res = await axios.get(`/reservations/by_userID${userId}`);
 
+        let logged = 0;
         // Iterating through each reservation
         for (const reservation of res.data) {
+          if (logged >= logs) {
+            break;
+          }
           // Formatting check-in and check-out dates
           const checkIn = new Date(reservation.check_in).toISOString().slice(0, 19).replace('T', ' ');
           const checkOut = new Date(reservation.check_out).toISOString().slice(0, 19).replace('T', ' ');
@@ -280,8 +277,13 @@ const ReservationsList = () => {
           // Fetching payment data for the reservation
           const res3 = await axios.get(`/payments/payment_byPaymentID${reservation.payment_id}`);
 
+          let status = 'Awaiting'
+          if (res3.data[0].id_method === 1) {
+            status = 'Approved'
+          }
+
           // Adding reservation to the services container
-          addReservation(res2.data[0].title, checkIn, checkOut, filepath, res3.data[0].price, reservation.reservationid);
+          addReservation(res2.data[0].title, checkIn, checkOut, filepath, status, reservation.reservationid);
 
           // Updating the services container
           updateContainer(servicesContainer);
@@ -337,6 +339,17 @@ const ReservationsList = () => {
       return;
     }
   };
+
+  let logs = 3;
+  const handleLoggingChange = e => {
+    if (isLoggedIn) {
+      logs = e.target.value;
+      fetchData()
+      return;
+    } else {
+      return;
+    }
+  }
 
   // State variable for room ID
   const handleModifyConfirm = async (e) => {
@@ -426,8 +439,206 @@ const ReservationsList = () => {
     }
   }
 
+  const [modalVisible, setModalVisible] = useState(false);
+  const [values, setValues] = useState([
+    new DateObject(),
+    new DateObject()
+  ])
+  const toggleModal = (e) => {
+    if (isLoggedIn) {
+      e.preventDefault();
+      setModalVisible(!modalVisible);
+    } else {
+      return;
+    }
+  };
+
+  const [inputs, setInputs] = useState({
+    name: "",
+    desc: "",
+    searchQuery: "",
+    delete: "",
+    filename: "",
+  });
+
+  const handleChange = e => {
+    if (isLoggedIn) {
+      // Update input state when input values change
+      setInputs(prev => ({ ...prev, [e.target.name]: e.target.value }));
+      handleSearch()
+    } else {
+      return;
+    }
+  }
+
+  const [nRooms, setNRooms] = useState(0);
+  var inDate = useRef('--/--/----');
+  var outDate = useRef('--/--/----');
+
+
+  const handleSearch = async (e) => {
+    if (isLoggedIn) {
+      if (e) {
+        e.preventDefault();
+      }
+      const servicesContainer = document.querySelector('.reservations-container');
+      const searchTerm = inputs.searchQuery;
+      if (searchTerm.trim() === '') {
+        return;
+      } else {
+        try {
+          // Clearing the services container
+          emptyContainer(servicesContainer);
+
+          // Fetching reservations data for the current user
+          const res = await axios.get(`/reservations/by_userID${userId}`);
+
+          let logged = 0;
+          // Iterating through each reservation
+          for (const reservation of res.data) {
+            if (logged >= logs) {
+              break;
+            }
+            // Formatting check-in and check-out dates
+            const checkIn = new Date(reservation.check_in).toISOString().slice(0, 19).replace('T', ' ');
+            const checkOut = new Date(reservation.check_out).toISOString().slice(0, 19).replace('T', ' ');
+
+            // Fetching room data for the reservation
+            const res2 = await axios.get(`/rooms/by_roomID${reservation.id_room}`);
+
+            if (!res2.data[0].title.includes(inputs.searchQuery)) {
+              continue;
+            }
+
+            // Fetching image data for the room
+            const image = await axios.get(`/files/get_image_by_id${res2.data[0].imageid}`);
+            const filepath = "/upload/" + image.data[0].filename;
+
+            // Fetching payment data for the reservation
+            const res3 = await axios.get(`/payments/payment_byPaymentID${reservation.payment_id}`);
+
+            let status = 'Awaiting'
+            if (res3.data[0].id_method === 1) {
+              status = 'Approved'
+            }
+
+            // Adding reservation to the services container
+            addReservation(res2.data[0].title, checkIn, checkOut, filepath, status, reservation.reservationid);
+
+            // Updating the services container
+            updateContainer(servicesContainer);
+          }
+          return;
+        } catch (error) {
+          showErrorDialog("An error occurred:", error, false, navigate);
+        }
+      }
+    } else {
+      return;
+    }
+  }
+
+  function isDateBetween(targetDate, startDate, endDate) {
+    // Convert the date strings to Date objects
+    const target = new Date(targetDate);
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    // Check if the target date is between the start and end dates
+    return target >= start && target <= end;
+  }
+
+  const handleFilterCalendarChange = async (newDatesRange, event) => {
+    if (isLoggedIn) {
+      const servicesContainer = document.querySelector('.reservations-container');
+      // Update selected dates
+      setValues(newDatesRange);
+      let requestParams;
+      if (newDatesRange[0]) inDate.current = newDatesRange[0].toString()
+      if (newDatesRange[1]) outDate.current = newDatesRange[1].toString()
+      if (newDatesRange[1]) {
+        // Set default time for check-in and check-out dates
+        const checkInDateTime = newDatesRange[0].set({
+          hour: 7,
+          minute: 0,
+          second: 0,
+        }).format('YYYY-MM-DD HH:mm:ss');
+
+        const checkOutDateTime = newDatesRange[1].set({
+          hour: 18,
+          minute: 0,
+          second: 0,
+        }).format('YYYY-MM-DD HH:mm:ss');
+
+        // Assign to requestParams
+        requestParams = {
+          check_in_date: checkInDateTime,
+          check_out_date: checkOutDateTime,
+        };
+        try {
+          // Clearing the services container
+          emptyContainer(servicesContainer);
+
+          // Fetching reservations data for the current user
+          const res = await axios.get(`/reservations/by_userID${userId}`);
+
+          let logged = 0;
+          // Iterating through each reservation
+          for (const reservation of res.data) {
+            if (logged >= logs) {
+              break;
+            }
+            // Formatting check-in and check-out dates
+            const checkIn = new Date(reservation.check_in).toISOString().slice(0, 19).replace('T', ' ');
+            const checkOut = new Date(reservation.check_out).toISOString().slice(0, 19).replace('T', ' ');
+
+            if (!(isDateBetween(requestParams.check_in_date, checkIn, checkOut) || isDateBetween(requestParams.check_out_date, checkIn, checkOut))) {
+              continue;
+            }
+
+            // Fetching room data for the reservation
+            const res2 = await axios.get(`/rooms/by_roomID${reservation.id_room}`);
+
+            // Fetching image data for the room
+            const image = await axios.get(`/files/get_image_by_id${res2.data[0].imageid}`);
+            const filepath = "/upload/" + image.data[0].filename;
+
+            // Fetching payment data for the reservation
+            const res3 = await axios.get(`/payments/payment_byPaymentID${reservation.payment_id}`);
+
+            let status = 'Awaiting'
+            if (res3.data[0].id_method === 1) {
+              status = 'Approved'
+            }
+
+            // Adding reservation to the services container
+            addReservation(res2.data[0].title, checkIn, checkOut, filepath, status, reservation.reservationid);
+
+            // Updating the services container
+            updateContainer(servicesContainer);
+          }
+          return;
+        } catch (error) {
+          showErrorDialog("An error occurred:", error, false, navigate);
+        }
+      }
+    } else {
+      return;
+    }
+  }
+  
+  const handleGoBack = async e => {
+    if (isLoggedIn) {
+      e.preventDefault()
+      navigate("/home")
+    } else {
+      return;
+    }
+  }
+
   return ((isLoggedIn ?  // Show page (html) if user is logged in
-    <div>
+    <div className='m-r'>
+      <img alt="back" onClick={handleGoBack} src={require("../assets/Image12.png")} className='image-12' />
       <div className="my-reservations">
         <div className="my-reservations-1">
           <div className="my-reservations">
@@ -437,6 +648,49 @@ const ReservationsList = () => {
           </div>
         </div>
       </div>
+
+      <input autoComplete="new-password"
+        value={inputs.searchQuery}
+        placeholder="Search Room by Name"
+        onChange={handleChange} maxLength={33} name="searchQuery" className='input_az'></input>
+
+      <div className="frame-40">
+        <div className="check-in">
+          <div className="text-field-1">
+            <img alt="undefined graphic" className="vector-1" src={require("../assets/Calendar.png")} />
+          </div>
+          <div className="label-text-2">
+            <span className="label-text-3">
+              Check-in
+            </span>
+            <p style={{ position: "absolute", marginTop: "4.3vh" }}>{inDate.current}</p>
+          </div>
+        </div>
+        <div onClick={toggleModal} className="check_in_icon"></div>
+        <div className="check-out">
+          <div className="text-field-2">
+            <img alt="undefined graphic" className="vector-2" onClick={toggleModal} src={require("../assets/Calendar.png")} />
+          </div>
+          <div className="label-text-4">
+            <span className="label-text-5">
+              Check-out
+            </span>
+            <p style={{ position: "absolute", marginTop: "4.3vh" }}>{outDate.current}</p>
+          </div>
+        </div>
+      </div>
+      {/* Modal for filter options, visible if modalVisible is true */}
+      {modalVisible && (
+        <Calendar className="calendar"
+          value={values}
+          onChange={(newDatesRange, event) => handleFilterCalendarChange(newDatesRange, event)}
+          range
+          numberOfMonths={2}
+          showOtherDays
+        />
+      )}
+
+      <label className='custom-filter'>Filter By: </label>
 
       <div className="reservations-bar">
         <div className="reservations-info-bar">
@@ -464,6 +718,15 @@ const ReservationsList = () => {
         </div>
       </div>
 
+      <label className='custom-show'>Show: </label>
+      <select name="lazy-logger" className="custom-select" id="lazy-logger"
+        onChange={handleLoggingChange}>
+        <option key={5} value={5}>5</option>
+        <option key={10} value={10}>10</option>
+        <option key={15} value={15}>15</option>
+        <option key={25} value={25}>25</option>
+      </select>
+
       <div id="calendar-modal-modify" className="form-modal-2">
         <div className="form-modal-content-2">
           <span className="close-modal-x" onClick={closeModal}>&times;</span>
@@ -490,8 +753,10 @@ const ReservationsList = () => {
                 <div className="MDdata-descriptionspace">
                   Description: {desc}
                 </div>
-                <br></br>
+              </div>
 
+
+              <div className="MDtext2">
                 <div className="MDdata-typespace">
                   Type of room: {type}
                 </div>
@@ -500,17 +765,13 @@ const ReservationsList = () => {
                 <div className="MDdata-totalspace">
                   Total: ${totalPrice}
                 </div>
-
-                <br></br>
-                Amenities:
-
               </div>
 
               <div className="amenities-flex">
                 {amenitiesList.map((dataAmenidades, index) => (
                   <div className="MDdata-amenitiesspace" key={index}>
                     <div>
-                        {dataAmenidades[1]}
+                      {dataAmenidades[1]}
                       <p className='MDAP'>
                         <img className="MDPI" src={dataAmenidades[0]} alt={dataAmenidades[1]} />
                       </p>

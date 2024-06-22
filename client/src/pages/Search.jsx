@@ -5,7 +5,7 @@ import { Context } from '../Context.js';
 import { DateObject } from "react-multi-date-picker"
 import { useNavigate } from "react-router-dom";
 import { emptyContainer, updateContainer, showErrorDialog } from "../Misc.js";
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useRef, useState, useEffect, useContext } from 'react';
 import '../styles/search_page.scss'
 
 const Search = () => {
@@ -23,6 +23,8 @@ const Search = () => {
   const [nRooms, setNRooms] = useState(0);
   const [totalRooms, setTotalRooms] = useState(0);
   const { changeLastRoomClickedID } = useContext(Context);
+  var inDate = useRef('--/--/----');
+  var outDate = useRef('--/--/----');
   const { homeDates, homeSearch } = useContext(Context)
   const { changeHomeDates, changeHomeSearch } = useContext(Context)
 
@@ -31,8 +33,9 @@ const Search = () => {
       cardsContainer = document.querySelector('.container-2');
       // Update selected dates
       setValues(newDatesRange);
-
       let requestParams;
+      if (newDatesRange[0]) inDate.current = newDatesRange[0].toString()
+      if (newDatesRange[1]) outDate.current = newDatesRange[1].toString()
       if (newDatesRange[1]) {
         // Set default time for check-in and check-out dates
         const checkInDateTime = newDatesRange[0].set({
@@ -99,7 +102,7 @@ const Search = () => {
       padding: 31px 17.2px 41px 19px;
       box-sizing: border-box;">
         <img alt="undefined graphic" src="${imageSrc}" style="
-        border-radius: 6px 6px 0 0;
+        border-radius: 6px;
         margin-right: 18px;
         width: 320px;
         height: 240px;" />
@@ -108,8 +111,9 @@ const Search = () => {
         display: inline-block;
         overflow-wrap: break-word;
         font-family: 'Poppins';
-        font-weight: 500;
+        font-weight: bold;
         font-size: 22px;
+        text-align: center;
         letter-spacing: 0.2px;
         color: #1A1A1A;">
         ${title}
@@ -125,7 +129,9 @@ const Search = () => {
         overflow-wrap: break-word;
         font-family: 'Poppins';
         font-weight: 500;
-        font-size: 15px;
+        font-size: 14px;
+        padding-top: 5px;
+        text-align: justify;
         letter-spacing: 0.1px;
         color: #000000;">
         ${description}<br /><br />
@@ -137,9 +143,9 @@ const Search = () => {
         position: absolute;
         margin-top: 185px;
         margin-left: 360px;
-        width: 150px;
-        height: 40px;
-        padding-top: 13px;
+        width: 100px;
+        height: 30px;
+        padding-top: 16px;
         padding-inline: 10px;
         border-radius: 4px;
         background: #1E91B6;
@@ -148,8 +154,9 @@ const Search = () => {
           overflow-wrap: break-word;
           font-family: 'Poppins';
           font-weight: 500;
-          font-size: 20px;
-          margin-left: 21px;
+          font-size: 16px;
+          text-align: center;
+          // margin-left: 21px;
           color: #FFFFFF;">
             View Details
           </div>
@@ -199,25 +206,24 @@ const Search = () => {
           const searchResults = await axios.get(`/filters/search_by_title${searchTerm}`);
           // Retrieve image files using Axios
           const imageFiles = await axios.get(`/files/retrieve_images`);
-          let imageIndex = 0;
           // Filter image files array to include only images of rooms matching search results
           imageFiles.data = imageFiles.data.filter(image => {
             return searchResults.data.some(resImage => resImage.image_id === image.imageid);
           });
           emptyContainer(cardsContainer);
           setNRooms(searchResults.data.length);
-          searchResults.data.forEach(room => {
-            // If no more images are available, update container and exit loop
-            if (imageIndex >= imageFiles.data.length) {
-              updateContainer(cardsContainer);
-              return;
-            }
-            const imagePath = "/upload/" + imageFiles.data[imageIndex].filename;
-            addCardToUI(room.title, room.description, imagePath, room.roomid);
-            imageIndex++;
-          });
+
+          for (const room of searchResults.data) {
+            // Fetch room details by room ID
+            const roomDetailsResponse = await axios.get(`/rooms/by_roomID${room.roomid}`);
+            // Fetch room image by image ID
+            const roomImage = await axios.get(`/files/get_image_by_id${roomDetailsResponse.data[0].imageid}`);
+            // Construct room image path
+            const roomImagePath = "/upload/" + roomImage.data[0].filename;
+            // Add room card to the UI
+            addCardToUI(room.title, room.description, roomImagePath, room.roomid);
+          }
           updateContainer(cardsContainer);
-          changeHomeSearch(null);
           return;
         } catch (error) {
           showErrorDialog("An error occurred:", error, false, navigate);
@@ -258,7 +264,6 @@ const Search = () => {
           inputs.searchQuery = homeSearch;
           inputElement.value = homeSearch;
           handleSearch();
-          emptyContainer(cardsContainer);
           const roomsResponse = await axios.get("/rooms");
           setTotalRooms(roomsResponse.data.length);
           return;
@@ -266,7 +271,8 @@ const Search = () => {
 
         if (homeDates.length > 0) {
           handleFilterCalendarChange(homeDates)
-          emptyContainer(cardsContainer);
+          if (homeDates[0]) inDate.current = homeDates[0].toString()
+          if (homeDates[1]) outDate.current = homeDates[1].toString()
           const roomsResponse = await axios.get("/rooms");
           setTotalRooms(roomsResponse.data.length);
           return;
@@ -277,7 +283,11 @@ const Search = () => {
           emptyContainer(cardsContainer);
 
           const roomsData = [];
+          let logged = 0;
           for (const room of roomsResponse.data) {
+            if (logged >= logs) {
+              break;
+            }
             const roomTypeResponse = await axios.get(`/categories/room_type_ByID${room.type_of_room}`);
             const price = roomTypeResponse.data[0].price;
 
@@ -311,7 +321,11 @@ const Search = () => {
         emptyContainer(cardsContainer);
         setNRooms(roomsResponse.data.length);
         setTotalRooms(roomsResponse.data.length);
+        let logged = 0;
         for (const room of roomsResponse.data) {
+          if (logged >= logs) {
+            break;
+          }
           // Fetch room details by room ID
           const roomDetailsResponse = await axios.get(`/rooms/by_roomID${room.roomid}`);
           // Fetch room image by image ID
@@ -353,8 +367,30 @@ const Search = () => {
     fetchDataFromServer()
   }
 
+
+  let logs = 3;
+  const handleLoggingChange = e => {
+    if (isLoggedIn) {
+      logs = e.target.value;
+      fetchDataFromServer()
+      return;
+    } else {
+      return;
+    }
+  }
+  
+  const handleGoBack = async e => {
+    if (isLoggedIn) {
+      e.preventDefault()
+      navigate("/home")
+    } else {
+      return;
+    }
+  }
+
   return ((isLoggedIn ?  // Show page (html) if user is logged in
     <div className="search">
+      <img alt="back" onClick={handleGoBack} src={require("../assets/Image12.png")} className='image-12' />
       <meta name="viewport" content="intial-scale=1"></meta>
       <div className="rooms">
         Rooms
@@ -369,7 +405,7 @@ const Search = () => {
               Rooms
             </span>
           </div>
-          <input type="text" name="searchQuery" maxLength={33} onChange={handleChange} className='input_searchQuery'></input>
+          <input autoComplete="new-password" placeholder="Search Room by Name" type="text" name="searchQuery" maxLength={33} onChange={handleChange} className='input_searchQuery'></input>
         </div>
         <div className="check-in">
           <div className="text-field-1">
@@ -379,6 +415,7 @@ const Search = () => {
             <span className="label-text-3">
               Check-in
             </span>
+            <p style={{ position: "absolute", marginTop: "4.3vh" }}>{inDate.current}</p>
           </div>
         </div>
         <div onClick={toggleModal} className="check_in_icon"></div>
@@ -390,6 +427,7 @@ const Search = () => {
             <span className="label-text-5">
               Check-out
             </span>
+            <p style={{ position: "absolute", marginTop: "4.3vh" }}>{outDate.current}</p>
           </div>
         </div>
         {/* Modal for filter options, visible if modalVisible is true */}
@@ -413,9 +451,9 @@ const Search = () => {
       </div>
 
       <div className="results">
+
         <div className="frame-201">
           <p className="showing-4-of-108-places">
-            Showing {nRooms} of <label className="blue">{totalRooms} Rooms</label>
           </p>
           <div className="frame-49">
             <span className="sort-by-recommended">
@@ -429,6 +467,15 @@ const Search = () => {
         </div>
         <div className="container-2">
         </div>
+        <label className='custom-show'>Show: </label>
+        <select name="lazy-logger" className="custom-select" id="lazy-logger"
+          onChange={handleLoggingChange}>
+          <option key={5} value={5}>5</option>
+          <option key={10} value={10}>10</option>
+          <option key={15} value={15}>15</option>
+          <option key={25} value={25}>25</option>
+        </select>
+
       </div>
     </div>
     // Show error to user, that hasnt logged in

@@ -2,7 +2,7 @@ import "../styles/home_page.scss"
 import { DateObject } from "react-multi-date-picker"
 import { Calendar } from "react-multi-date-picker"
 import { Context } from '../Context.js';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { useNavigate } from "react-router-dom";
 import { showErrorDialog } from "../Misc.js";
 import { AuthContext } from "../AuthContext.js"
@@ -12,6 +12,8 @@ const Home = () => {
   const navigate = useNavigate()
   const { changeHomeDates, changeHomeSearch } = useContext(Context)
   const [modalVisible, setModalVisible] = useState(false);
+  var inDate = useRef('--/--/----');
+  var outDate = useRef('--/--/----');
   const [values, setValues] = useState([
     new DateObject(),
     new DateObject()
@@ -21,8 +23,11 @@ const Home = () => {
     try {
       setValues(newDatesRange);
       changeHomeDates(newDatesRange)
+      if (newDatesRange[0]) {
+        inDate.current = newDatesRange[0].toString()
+      }
       if (newDatesRange[1]) {
-        navigate("/search")
+        outDate.current = newDatesRange[1].toString()
       }
     } catch (error) {
       showErrorDialog("An error occurred:", error, false, navigate);
@@ -65,10 +70,16 @@ const Home = () => {
 
   const { isLoggedIn } = useContext(AuthContext)
   useEffect(() => {
+    let fetch = true;
     if (!isLoggedIn) {
       navigate("/")
     }
-    fetchData()
+    if (userId === null) {
+      navigate("/")
+      fetch = false;
+    }
+    console.log(userId === null)
+    if (fetch) fetchData()
   });
 
   const toggleModal = (e) => {
@@ -89,7 +100,6 @@ const Home = () => {
             <li><a href="/amenities">Amenities</a></li>
             <li><a href="/rooms">Rooms</a></li>
           </ul>
-          <img src={img_source} alt='pfp' className="pfp2"></img>
         </div>
         :
         <div className="homepage-navbar">
@@ -97,10 +107,9 @@ const Home = () => {
           <img alt="logo" className='logo' src={require("../assets/Logo.PNG")}></img>
           <ul>
             <li><a href="/services">Services</a></li>
-            <li><a href="/reviews">Reviews</a></li>
+            <li><a href="/search">Hotel Rooms</a></li>
             <li><a href="/about_us">About Us</a></li>
           </ul>
-          <img  src={img_source} alt='pfp' className="pfp"></img>
         </div>)}
       <div className="image-8">
       </div>
@@ -120,7 +129,7 @@ const Home = () => {
               Rooms
             </span>
           </div>
-          <input type="text" name="searchQuery" maxLength={33} onChange={handleChange} className='input_1'></input>
+          <input type="text" autoComplete="new-password" placeholder="Search Room by Name" name="searchQuery" maxLength={33} onChange={handleChange} className='input_1'></input>
         </div>
         <div className="check-in">
           <div className="text-field-2">
@@ -130,6 +139,7 @@ const Home = () => {
             <span className="label-text-3">
               Check-in
             </span>
+            <p style={{ position: "absolute", marginTop: "4.3vh" }}>{inDate.current}</p>
           </div>
         </div>
         <div onClick={toggleModal} className="check_in_icon"></div>
@@ -141,6 +151,7 @@ const Home = () => {
             <span className="label-text-5">
               Check-out
             </span>
+            <p style={{ position: "absolute", marginTop: "4.3vh", marginLeft: "0.1vw" }}>{outDate.current}</p>
           </div>
         </div>
         {/* Modal for filter options, visible if modalVisible is true */}

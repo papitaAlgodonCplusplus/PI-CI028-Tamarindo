@@ -111,7 +111,7 @@ const ForgotPass = () => {
 
   return (
     <div className="forgetPass">
-      <div className='image'>
+      <div className='imageForgotP'>
         {/* Image */}
         <img src={require("../assets/forgot_pass.jpg")} alt="" className='imageForgotPass'/> 
       </div>

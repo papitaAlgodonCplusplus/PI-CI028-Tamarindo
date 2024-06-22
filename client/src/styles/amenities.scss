@@ -1,5 +1,5 @@
 .amenities {
-  margin: 0 76px 6.5px 76px;
+  margin: 10px 76px 6.5px 76px;
   display: inline-block;
   align-self: flex-start;
   overflow-wrap: break-word;
@@ -66,6 +66,16 @@ hr {
   color: #181818;
 }
 
+.amenities_page .custom-show {
+  position: relative;
+  margin-left: 20vw;
+}
+
+.amenities_page .custom-select {
+  position: relative;
+  left: 1vw;
+}
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -84,19 +94,19 @@ hr {
 }
 
 .add-amenity-button {
-  margin-top: 10vh;
   border-radius: 6px;
   border: 1px solid #1E91B6;
   background: #1E91B6;
   font-family: 'Poppins';
   cursor: pointer;
   width: 150px;
-  margin-left: 44%;
   padding-block: 0.5%;
   font-weight: 500;
   font-size: 18px;
   color: #ffffff;
-  margin-bottom: -14vh;
+  margin-bottom: -40vh;
+  margin-top: 2vh;
+  margin-left: 44vw;
 }
 
 .myForm .add-amenity-button {

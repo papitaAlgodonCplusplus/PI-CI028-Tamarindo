@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import axios from 'axios';
 import { AuthContext } from '../AuthContext.js';
-import { emptyContainer, showErrorDialog, postDataWithTimeout, putDataWithTimeout, updateContainer, deleteDataWithTimeout, showWarningDialog } from '../Misc';
+import { emptyContainer, showErrorDialog, postDataWithTimeout, putDataWithTimeout, deleteDataWithTimeout, showWarningDialog } from '../Misc';
 import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useState, useContext } from 'react';
 import '../styles/amenities.scss';
@@ -145,7 +145,11 @@ const Amenities = () => {
 
     try {
       const res = await axios.get(`/amenities/paginated_services?page=${page}&limit=${limit}`);
-      setServices(res.data.data);
+      const amenities_container = document.querySelector('.amenities-container');
+      amenities_container.innerHTML = ''; // Clear the container before rendering new amenities
+      res.data.data.forEach(service => {
+        addAmenity(service.service_name, service.service_price, service.serviceid, service.image_path);
+      });
       setPagination({
         page: res.data.pagination.page,
         limit: limit,
@@ -500,14 +504,8 @@ const Amenities = () => {
         </div>
       </div>
 
-      <div>
-        <div className="amenities-container">
-          {services.map(service => (
-            <div key={service.serviceid}>
-              {addAmenity(service.service_name, service.service_price, service.serviceid, service.image_path)}
-            </div>
-          ))}
-        </div>
+      <div className="amenities-container">
+        {/* The amenities will be rendered here by the addAmenity function */}
       </div>
 
       <div className="pagination-controls" style={{ textAlign: 'center', marginTop: '20px' }}>

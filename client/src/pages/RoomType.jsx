@@ -1,7 +1,5 @@
-// RoomType.jsx
 import React, { useState, useContext, useEffect, useCallback } from 'react';
 import axios from "axios";
-import Plus from "../img/Add.png";
 import { showErrorDialog, updateContainer, emptyContainer, postDataWithTimeout, putDataWithTimeout } from '../Misc';
 import { AuthContext } from '../AuthContext.js';
 import { useNavigate } from 'react-router-dom';
@@ -27,7 +25,7 @@ const RoomType = () => {
       return;
     }
 
-    const roomTypesContainer = document.querySelector('.rooms_type-container');
+    const roomTypesContainer = document.querySelector('.room-types-container');
     try {
       const roomTypesResponse = await axios.get('/api/room_types');
       setRoomTypes(roomTypesResponse.data);
@@ -49,12 +47,12 @@ const RoomType = () => {
   }, [fetchData]);
 
   const addRoomType = (title, price, id) => {
-    const roomsTypeContainer = document.querySelector('.rooms_type-container');
+    const roomTypesContainer = document.querySelector('.room-types-container');
     const newRoomTypeHTML = `
       <div class="list-item">
         <div style="display: flex; justify-content: space-between; align-items: center; width: 70%; padding: 10px;">
-          <div style="font-size: 18px; font-weight: bold; position:absolute; left: 370px;">${title}</div>
-          <div style="font-size: 16px; color: #333; position:absolute; left: 755px;">${price}</div>
+          <div style="font-size: 18px; font-weight: bold; position:absolute; left: 200px;">${title}</div>
+          <div style="font-size: 16px; color: #333; position:absolute; left: 450px;">${price}</div>
         </div>
         <div style="display: flex; align-items: center;">
           <div style="margin-top: 20px; margin-left: 20%; border-radius: 6px; border: 1px solid #1E91B6; background: #FFFFFF; display: flex; flex-direction: row; justify-content: center; cursor: pointer; padding: 8px 0.4px 8px 0; width: 169px; box-sizing: border-box;" id="delete-room_type-button-${id}">
@@ -67,7 +65,7 @@ const RoomType = () => {
       </div>
     `;
 
-    roomsTypeContainer.insertAdjacentHTML('beforeend', newRoomTypeHTML);
+    roomTypesContainer.insertAdjacentHTML('beforeend', newRoomTypeHTML);
     const deleteButton = document.getElementById("delete-room_type-button-" + id);
     const modifyButton = document.getElementById("modify-button-" + id);
 
@@ -196,18 +194,19 @@ const RoomType = () => {
   }
 
   return ((isLoggedIn && (userRol === "admin" || userRol === "employee")) ? (
-    <div className='rooms'>
+    <div className='room-types'>
       <meta name="viewport" content="intial-scale=1"></meta>
       <div className='admin-container'>
         <div>
-          <div className='rooms-title'>Room Types</div>
+          <button className="add-room-button" onClick={displayRoomTypeModal}><center>Add Room Type</center></button>
+          <div className='room-types-title'>Room Types</div> {/* Título actualizado */}
           <hr className="solid"></hr>
           <div className="rooms-bar">
             <span className="roomT">Room Type</span>
             <span className="priceT">Price</span>
+            <span className="actions">Actions</span> {/* Añadido para las acciones */}
           </div>
-          <div className="rooms_type-container"></div>
-          <button className="add-room-type-button" onClick={displayRoomTypeModal}><center>Add Room Type</center></button>
+          <div className="room-types-container"></div>
         </div>
       </div>
 
@@ -219,9 +218,7 @@ const RoomType = () => {
             <input type="text" id="room_type_name" name="room_type_name" onChange={handleChange} /><br />
             <label htmlFor="room_type_price">Room Type Price</label><br />
             <input type="number" id="room_type_price" name="room_type_price" onChange={handleChange} /><br />
-            <button className="Plus">
-              <img src={Plus} alt="Plus" id="plusImg" onClick={handleRoomTypeSubmit} />
-            </button>
+            <button type='submit' className="MODAL-BUTTON" onClick={handleRoomTypeSubmit}><center>Add</center></button>
           </form>
         </div>
       </div>

@@ -461,47 +461,6 @@ textarea {
   margin-top: 2.5vh;
 }
 
-.room-types-title {
-  margin: 0 76px 6.5px -850px;
-  display: inline-block;
-  align-self: flex-start;
-  overflow-wrap: break-word;
-  font-family: 'Poppins';
-  font-weight: 700;
-  font-size: 45px;
-  color: #000000;
-}
-
-.MODAL-BUTTON {
-  margin: 0%;
-  margin-top: 10%;
-  border-radius: 6px;
-  border: 1px solid #1E91B6;
-  background: #1E91B6;
-  font-family: 'Poppins';
-  cursor: pointer;
-  padding-block: 2%;
-  width: 150px;
-  font-weight: 500;
-  font-size: 23px;
-  color: #ffffff;
-}
-
-.add-room-button {
-  border-radius: 6px;
-  border: 1px solid #1E91B6;
-  background: #1E91B6;
-  font-family: 'Poppins';
-  cursor: pointer;
-  width: 175px;
-  padding-block: 0.5%;
-  font-weight: 500;
-  font-size: 18px;
-  color: #ffffff;
-  position: absolute;
-  margin-left: -7vw;
-  margin-top: 2.5vh;
-}
 
 .room-types-title {
   margin: 0 76px 6.5px 0;
@@ -541,10 +500,8 @@ textarea {
   font-weight: 500;
   font-size: 18px;
   color: #ffffff;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-top: 2.5vh;
+  display: block;
+  margin: 20px auto; /* Centrar el botón */
 }
 
 hr {

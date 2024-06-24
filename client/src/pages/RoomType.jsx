@@ -198,9 +198,9 @@ const RoomType = () => {
       <meta name="viewport" content="intial-scale=1"></meta>
       <div className='admin-container'>
         <div>
-          <button className="add-room-button" onClick={displayRoomTypeModal}><center>Add Room Type</center></button>
-          <div className='room-types-title'>Room Types</div> {/* Título actualizado */}
+          <div className='room-types-title'>Room Types</div>
           <hr className="solid"></hr>
+          <button className="add-room-button" onClick={displayRoomTypeModal}><center>Add Room Type</center></button>
           <div className="rooms-bar">
             <span className="roomT">Room Type</span>
             <span className="priceT">Price</span>

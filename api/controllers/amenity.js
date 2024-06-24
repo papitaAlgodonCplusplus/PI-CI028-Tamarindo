@@ -11,34 +11,29 @@ export const addService = (req, res) => {
       return res.status(409).json("Amenity already exists!");
     }
 
-    const q = "INSERT INTO services(`service_name`, `service_price`, `image_path`) VALUES (?)"
-    const values = [
-      req.body.title,
-      req.body.fee,
-      req.body.file_path
-    ]
+    const q =
+      "INSERT INTO services(`service_name`, `service_price`, `image_path`) VALUES (?)";
+    const values = [req.body.title, req.body.fee, req.body.file_path];
     db.query(q, [values], (err, data) => {
       if (err) {
         return res.json(err);
       }
       return res.status(200);
-    })
-  })
-}
+    });
+  });
+};
 
 export const addToServiceLog = (req, res) => {
-  const q = "INSERT INTO services_log(`service_id`, `reservation_id`) VALUES (?)"
-  const values = [
-    req.body.service_id,
-    req.body.reservation_id,
-  ]
+  const q =
+    "INSERT INTO services_log(`service_id`, `reservation_id`) VALUES (?)";
+  const values = [req.body.service_id, req.body.reservation_id];
   db.query(q, [values], (err, data) => {
     if (err) {
       return res.json(err);
     }
     return res.status(200);
-  })
-}
+  });
+};
 
 export const updateAmenity = (req, res) => {
   const updateQuery = `
@@ -47,24 +42,30 @@ export const updateAmenity = (req, res) => {
     WHERE serviceid = ?
   `;
 
-  db.query(updateQuery, [req.body.title, req.body.fee, req.body.file_path, req.body.service_id], (error, results) => {
-    if (error) {
-      return res.status(500).send("Error updating amenity");
-    }
+  db.query(
+    updateQuery,
+    [req.body.title, req.body.fee, req.body.file_path, req.body.service_id],
+    (error, results) => {
+      if (error) {
+        return res.status(500).send("Error updating amenity");
+      }
 
-    if (results.affectedRows === 0) {
-      return res.status(404).send("Amenity not found");
-    }
+      if (results.affectedRows === 0) {
+        return res.status(404).send("Amenity not found");
+      }
 
-    return res.status(200);
-  });
-}
+      return res.status(200);
+    }
+  );
+};
 
 export const updateServices = (req, res) => {
-  const q = 'SELECT * FROM services';
+  const q = "SELECT * FROM services";
   db.query(q, (err, result) => {
     if (err) {
-      return res.status(500).json({ message: 'Failed to fetch services from the database.' });
+      return res
+        .status(500)
+        .json({ message: "Failed to fetch services from the database." });
     }
 
     return res.status(200).json(result);
@@ -72,10 +73,12 @@ export const updateServices = (req, res) => {
 };
 
 export const getService = (req, res) => {
-  const q = 'SELECT * FROM services WHERE service_name = ?';
+  const q = "SELECT * FROM services WHERE service_name = ?";
   db.query(q, [req.params.serviceName], (err, result) => {
     if (err) {
-      return res.status(500).json({ message: 'Failed to fetch service from the database.' });
+      return res
+        .status(500)
+        .json({ message: "Failed to fetch service from the database." });
     }
 
     return res.status(200).json(result);
@@ -83,10 +86,12 @@ export const getService = (req, res) => {
 };
 
 export const getServiceByID = (req, res) => {
-  const q = 'SELECT * FROM services WHERE serviceid = ?';
+  const q = "SELECT * FROM services WHERE serviceid = ?";
   db.query(q, [req.params.serviceID], (err, result) => {
     if (err) {
-      return res.status(500).json({ message: 'Failed to fetch service from the database.' });
+      return res
+        .status(500)
+        .json({ message: "Failed to fetch service from the database." });
     }
 
     return res.status(200).json(result);
@@ -100,7 +105,9 @@ export const deleteService = (req, res) => {
   db.query(q, [serviceID], (err, data) => {
     if (err) {
       if (err.errno === 1451) {
-        return res.status(415).json({ error: "Error: This amenity is already in a reservation" });
+        return res
+          .status(415)
+          .json({ error: "Error: This amenity is already in a reservation" });
       }
       return res.status(500).json({ error: "Error: Couldn't delete service." });
     }
@@ -123,7 +130,7 @@ export const getSumByReservationID = (req, res) => {
       return;
     }
 
-    const serviceIDs = results.map(result => result.service_id);
+    const serviceIDs = results.map((result) => result.service_id);
     if (serviceIDs.length === 0) {
       res.json({ totalServicePrice: 0 });
       return;
@@ -141,7 +148,10 @@ export const getSumByReservationID = (req, res) => {
         return;
       }
 
-      const totalServicePrice = results.reduce((total, result) => total + result.service_price, 0);
+      const totalServicePrice = results.reduce(
+        (total, result) => total + result.service_price,
+        0
+      );
       res.json({ totalServicePrice });
     });
   });
@@ -161,5 +171,40 @@ export const getListByReservationID = (req, res) => {
       return;
     }
     return res.json({ results });
+  });
+};
+
+export const getPaginatedServices = (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const offset = (page - 1) * limit;
+
+  const q = "SELECT * FROM services LIMIT ?, ?";
+  db.query(q, [offset, limit], (err, result) => {
+    if (err) {
+      return res
+        .status(500)
+        .json({ message: "Failed to fetch services from the database." });
+    }
+
+    const countQuery = "SELECT COUNT(*) AS total FROM services";
+    db.query(countQuery, (err, countResult) => {
+      if (err) {
+        return res.status(500).json({
+          message: "Failed to fetch services count from the database.",
+        });
+      }
+      const total = countResult[0].total;
+      const totalPages = Math.ceil(total / limit);
+
+      return res.status(200).json({
+        data: result,
+        pagination: {
+          total,
+          page,
+          totalPages,
+        },
+      });
+    });
   });
 };

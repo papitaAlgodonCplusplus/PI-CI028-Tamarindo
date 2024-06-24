@@ -109,7 +109,7 @@ const Amenities = () => {
   const handleLoggingChange = e => {
     if (isLoggedIn) {
       logs = e.target.value;
-      fetchData()
+      fetchData();
       return;
     } else {
       return;
@@ -124,7 +124,7 @@ const Amenities = () => {
         const warningResult = await showWarningDialog("Delete Confirmation", "Are you sure you would like to delete the amenity <strong>" + title + "</strong>?")
         if (!warningResult) return;
         await deleteDataWithTimeout(`/amenities/delete${id}`, 500);
-        fetchData()
+        fetchData(pagination.page, pagination.limit);
         window.location.reload();
       } catch (error) {
         showErrorDialog("Error", error);
@@ -136,45 +136,50 @@ const Amenities = () => {
 
   // Function to fetch services data from server
   const { userRol } = useContext(AuthContext);
-  const navigate = useNavigate()
-  const fetchData = async () => {
+  const navigate = useNavigate();
+  const fetchData = async (page = 1, limit = 10) => {
     if ((userRol !== "admin" && userRol !== "employee") || !isLoggedIn) {
-      navigate("/reservations_list") // TODO: ERROR PAGE, CANT ACCESS AS USER
+      navigate("/reservations_list");
       return;
     }
-    const amenities_table = document.querySelector('.amenities-container');
+
     try {
-      const res = await axios.get("/amenities");
-      emptyContainer(amenities_table);
-      // Add each service to the UI
-      let logged = 0;
-      res.data.forEach(service => {
-        if (logged >= logs) {
-          updateContainer(amenities_table);
-          return;
-        }
-        addAmenity(service.service_name, service.service_price, service.serviceid, service.image_path);
-        logged++;
+      const res = await axios.get(`/amenities/paginated_services?page=${page}&limit=${limit}`);
+      setServices(res.data.data);
+      setPagination({
+        page: res.data.pagination.page,
+        limit: limit,
+        totalPages: res.data.pagination.totalPages,
       });
-      updateContainer(amenities_table);
-      return;
     } catch (error) {
       showErrorDialog("Error", error);
     }
+  };
+
+  const [services, setServices] = useState([]);
+  const [pagination, setPagination] = useState({ page: 1, limit: 10, totalPages: 1 });
+
+  const handlePageChange = (newPage) => {
+    fetchData(newPage, pagination.limit);
+  };
+
+  const handleLimitChange = (event) => {
+    const newLimit = parseInt(event.target.value);
+    fetchData(1, newLimit);
   };
 
   const [inputs, setInputs] = useState({
     title: "",
     fee: "",
     file_path: "",
-  })
+  });
 
   const [data, setData] = useState({
     title: "",
     fee: "",
     file_path: "",
     id: "",
-  })
+  });
 
   const [file_changed, setFileChanged] = useState(false);
 
@@ -183,27 +188,18 @@ const Amenities = () => {
     if (isLoggedIn) {
       try {
         e.preventDefault();
-        const res = await axios.get(`amenities/get_service${title}`)
+        const res = await axios.get(`amenities/get_service${title}`);
         setData(prevData => ({
           ...prevData,
-          title: res.data[0].service_name
-        }));
-        setData(prevData => ({
-          ...prevData,
-          fee: res.data[0].service_price
-        }));
-        setData(prevData => ({
-          ...prevData,
-          file_path: res.data[0].image_path
-        }));
-        setData(prevData => ({
-          ...prevData,
-          id: res.data[0].serviceid
+          title: res.data[0].service_name,
+          fee: res.data[0].service_price,
+          file_path: res.data[0].image_path,
+          id: res.data[0].serviceid,
         }));
         const imagePreview2 = document.getElementById('image-preview2');
         imagePreview2.src = res.data[0].image_path;
         imagePreview2.style.visibility = 'visible';
-        displayModal2()
+        displayModal2();
       } catch (error) {
         showErrorDialog("Error", error);
       }
@@ -222,13 +218,13 @@ const Amenities = () => {
         // Check if the entered value is negative
         if (parseFloat(newValue) < 0) {
           e.target.value = 0;
-          showErrorDialog("Error", "Fee can't be negative")
+          showErrorDialog("Error", "Fee can't be negative");
           return;
         } else {
-          setInputs(prev => ({ ...prev, [e.target.name]: e.target.value }))
+          setInputs(prev => ({ ...prev, [e.target.name]: e.target.value }));
         }
       } else {
-        setInputs(prev => ({ ...prev, [e.target.name]: e.target.value }))
+        setInputs(prev => ({ ...prev, [e.target.name]: e.target.value }));
       }
     } else {
       return;
@@ -243,13 +239,13 @@ const Amenities = () => {
         // Check if the entered value is negative
         if (parseFloat(newValue) < 0) {
           e.target.value = 0;
-          showErrorDialog("Error", "Fee can't be negative")
+          showErrorDialog("Error", "Fee can't be negative");
           return;
         } else {
-          setData(prev => ({ ...prev, [e.target.name]: e.target.value }))
+          setData(prev => ({ ...prev, [e.target.name]: e.target.value }));
         }
       } else {
-        setData(prev => ({ ...prev, [e.target.name]: e.target.value }))
+        setData(prev => ({ ...prev, [e.target.name]: e.target.value }));
       }
     } else {
       return;
@@ -259,7 +255,7 @@ const Amenities = () => {
   // Function to handle form submission
   const handleSubmit = async e => {
     if (isLoggedIn) {
-      e.preventDefault()
+      e.preventDefault();
       let isError = false;
       const title = inputs.title.trim();
       const fee = inputs.fee.trim();
@@ -311,12 +307,12 @@ const Amenities = () => {
             ...prevData,
             file_path: "./upload/" + filename.data
           }));
-          inputs.file_path = "./upload/" + filename.data
+          inputs.file_path = "./upload/" + filename.data;
         }
 
         // Adding room data to database
         await postDataWithTimeout("/amenities/add_amenity", inputs, 500);
-        fetchData();
+        fetchData(pagination.page, pagination.limit);
         closeModal();
         setFileChanged(false);
         window.location.reload();
@@ -355,7 +351,7 @@ const Amenities = () => {
           });
 
           // Setting file_path
-          file_path = "./upload/" + filename.data
+          file_path = "./upload/" + filename.data;
         }
 
         // Update amenity on the database
@@ -364,9 +360,9 @@ const Amenities = () => {
           fee: data.fee,
           file_path: file_path,
           service_id: data.id
-        }
+        };
         await putDataWithTimeout(`/amenities/update_amenity`, req, 500);
-        fetchData()
+        fetchData(pagination.page, pagination.limit);
         closeModal2();
         setFileChanged(false);
         return;
@@ -472,8 +468,8 @@ const Amenities = () => {
 
   const handleGoBack = async e => {
     if (isLoggedIn) {
-      e.preventDefault()
-      navigate("/home")
+      e.preventDefault();
+      navigate("/home");
     } else {
       return;
     }
@@ -506,12 +502,24 @@ const Amenities = () => {
 
       <div>
         <div className="amenities-container">
-
+          {services.map(service => (
+            <div key={service.serviceid}>
+              {addAmenity(service.service_name, service.service_price, service.serviceid, service.image_path)}
+            </div>
+          ))}
         </div>
       </div>
+
+      <div className="pagination-controls" style={{ textAlign: 'center', marginTop: '20px' }}>
+        <button disabled={pagination.page === 1} onClick={() => handlePageChange(1)}>First</button>
+        <button disabled={pagination.page === 1} onClick={() => handlePageChange(pagination.page - 1)}>Previous</button>
+        <span>Page {pagination.page} of {pagination.totalPages}</span>
+        <button disabled={pagination.page === pagination.totalPages} onClick={() => handlePageChange(pagination.page + 1)}>Next</button>
+        <button disabled={pagination.page === pagination.totalPages} onClick={() => handlePageChange(pagination.totalPages)}>Last</button>
+      </div>
+
       <label className='custom-show'>Show: </label>
-      <select name="lazy-logger" className="custom-select" id="lazy-logger"
-        onChange={handleLoggingChange}>
+      <select name="lazy-logger" className="custom-select" id="lazy-logger" value={pagination.limit} onChange={handleLimitChange}>
         <option key={5} value={5}>5</option>
         <option key={10} value={10}>10</option>
         <option key={15} value={15}>15</option>

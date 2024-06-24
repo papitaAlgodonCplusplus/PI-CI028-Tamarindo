@@ -10,6 +10,7 @@ import ReservationsList from "./pages/ReservationsList.jsx";
 import ChangePassword from "./pages/ChangePass.jsx";
 import Search from "./pages/Search.jsx";
 import Rooms from "./pages/Rooms";
+import RoomType from "./pages/RoomType";
 import Details from "./pages/Details";
 import MyAccount from "./pages/MyAccount.jsx";
 import Billing from "./pages/Billing.jsx";
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
       {
         path: "/rooms",
         element: <Rooms />,
+      },
+      {
+        path: "/room_type",
+        element: <RoomType />,
       },
       {
         path: "/reservations_list",

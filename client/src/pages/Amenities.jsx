@@ -1,10 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import axios from 'axios';
 import { AuthContext } from '../AuthContext.js';
-import { emptyContainer, showErrorDialog, postDataWithTimeout, putDataWithTimeout, deleteDataWithTimeout, showWarningDialog } from '../Misc';
+import { emptyContainer, showErrorDialog, postDataWithTimeout, putDataWithTimeout, deleteDataWithTimeout, showWarningDialog, updateContainer } from '../Misc';
 import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useState, useContext } from 'react';
 import '../styles/amenities.scss';
+import '../styles/pagination_controls.scss'
 
 const Amenities = () => {
   // Bool that checks if user has logged in with valid user (client-worker-administrator)
@@ -15,7 +16,7 @@ const Amenities = () => {
     const newAmenityHTML = `
     <div className="list-container">
     <div style="
-      height: 100px;
+      height: 80px;
       margin-top: 2%;
       width: 71%;
       background-color: #fff;
@@ -105,17 +106,6 @@ const Amenities = () => {
     modifyButton.addEventListener('click', (e) => handleModify(e, title));
   }
 
-  let logs = 3;
-  const handleLoggingChange = e => {
-    if (isLoggedIn) {
-      logs = e.target.value;
-      fetchData();
-      return;
-    } else {
-      return;
-    }
-  }
-
   // Function to handle deletion of a service
   const handleDelete = async (e, id, title) => {
     if (isLoggedIn) {
@@ -139,16 +129,18 @@ const Amenities = () => {
   const navigate = useNavigate();
   const fetchData = async (page = 1, limit = 10) => {
     if ((userRol !== "admin" && userRol !== "employee") || !isLoggedIn) {
-      navigate("/reservations_list");
+      navigate("/home");
       return;
     }
 
     try {
       const res = await axios.get(`/amenities/paginated_services?page=${page}&limit=${limit}`);
       const amenities_container = document.querySelector('.amenities-container');
+      emptyContainer(amenities_container)
       amenities_container.innerHTML = ''; // Clear the container before rendering new amenities
       res.data.data.forEach(service => {
         addAmenity(service.service_name, service.service_price, service.serviceid, service.image_path);
+        updateContainer(amenities_container)
       });
       setPagination({
         page: res.data.pagination.page,
@@ -160,7 +152,6 @@ const Amenities = () => {
     }
   };
 
-  const [services, setServices] = useState([]);
   const [pagination, setPagination] = useState({ page: 1, limit: 10, totalPages: 1 });
 
   const handlePageChange = (newPage) => {
@@ -170,6 +161,7 @@ const Amenities = () => {
   const handleLimitChange = (event) => {
     const newLimit = parseInt(event.target.value);
     fetchData(1, newLimit);
+    console.log(newLimit)
   };
 
   const [inputs, setInputs] = useState({
@@ -509,11 +501,11 @@ const Amenities = () => {
       </div>
 
       <div className="pagination-controls" style={{ textAlign: 'center', marginTop: '20px' }}>
-        <button disabled={pagination.page === 1} onClick={() => handlePageChange(1)}>First</button>
-        <button disabled={pagination.page === 1} onClick={() => handlePageChange(pagination.page - 1)}>Previous</button>
+        <button className='pagination-button' disabled={pagination.page === 1} onClick={() => handlePageChange(1)}>First</button>
+        <button className='pagination-button' disabled={pagination.page === 1} onClick={() => handlePageChange(pagination.page - 1)}>Previous</button>
         <span>Page {pagination.page} of {pagination.totalPages}</span>
-        <button disabled={pagination.page === pagination.totalPages} onClick={() => handlePageChange(pagination.page + 1)}>Next</button>
-        <button disabled={pagination.page === pagination.totalPages} onClick={() => handlePageChange(pagination.totalPages)}>Last</button>
+        <button className='pagination-button' disabled={pagination.page === pagination.totalPages} onClick={() => handlePageChange(pagination.page + 1)}>Next</button>
+        <button className='pagination-button' disabled={pagination.page === pagination.totalPages} onClick={() => handlePageChange(pagination.totalPages)}>Last</button>
       </div>
 
       <label className='custom-show'>Show: </label>
@@ -536,7 +528,7 @@ const Amenities = () => {
             </div>
             <label id="warning-photo" className='red-label-a'>Please provide an image</label>
             {/* Input field for amenity title */}
-            <label htmlFor="title">Title</label><br />
+            <label htmlFor="title" className="title">Title</label><br />
             <input required type="text" maxLength="28" id="title" name="title" onChange={handleChange} /><br />
             <label id="warning-title" className='red-label-a'>Please provide a title</label>
             {/* Input field for amenity fee */}
@@ -560,7 +552,7 @@ const Amenities = () => {
               <img id="image-preview2" className="image-preview2" src={data.file_path} alt="Preview" />
             </div>
             {/* Input field for amenity title */}
-            <label htmlFor="title">Title</label><br />
+            <label htmlFor="title" className="title2">Title</label><br />
             <input placeholder={data.title} maxLength="28" type="text" id="title_modify" name="title" onChange={handleModifyChange} /><br />
             {/* Input field for amenity fee */}
             <label htmlFor="fee">Fee</label><br />

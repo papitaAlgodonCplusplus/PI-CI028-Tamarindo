@@ -445,22 +445,6 @@ textarea {
   margin-left: 15svw;
 }
 
-.add-room-button {
-  border-radius: 6px;
-  border: 1px solid #1E91B6;
-  background: #1E91B6;
-  font-family: 'Poppins';
-  cursor: pointer;
-  width: 175px;
-  padding-block: 0.5%;
-  font-weight: 500;
-  font-size: 18px;
-  color: #ffffff;
-  position: absolute;
-  margin-left: -7vw;
-  margin-top: 2.5vh;
-}
-
 
 .room-types-title {
   margin: 0 76px 6.5px 0;
@@ -489,7 +473,7 @@ textarea {
   color: #ffffff;
 }
 
-.add-room-button {
+.rooms .add-room-button {
   border-radius: 6px;
   border: 1px solid #1E91B6;
   background: #1E91B6;
@@ -500,8 +484,9 @@ textarea {
   font-weight: 500;
   font-size: 18px;
   color: #ffffff;
-  display: block;
-  margin: 20px auto; /* Centrar el botón */
+  position: absolute;
+  margin-left: -7vw;
+  margin-top: 2.5vh;
 }
 
 hr {
@@ -553,8 +538,4 @@ hr {
 .actions {
   position: absolute;
   left: 750px;
-}
-
-.room-types-container {
-  align-self: center;
 }

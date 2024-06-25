@@ -19,7 +19,7 @@ const Billing = () => {
     const newAmenityHTML = `
     <div className="billing-container">
     <div style="
-      height: 100px;
+      height: 60px;
       margin-top: 2%;
       width: 65.5%;
       background-color: #fff;
@@ -61,15 +61,12 @@ const Billing = () => {
     billing_table.insertAdjacentHTML('beforeend', newAmenityHTML);
   }
 
+  const [pagination, setPagination] = useState({ page: 1, limit: 10, totalPages: 1 });
   let logs = 3;
   const handleLoggingChange = e => {
-    if (isLoggedIn) {
-      logs = e.target.value;
-      fetchData()
-      return;
-    } else {
-      return;
-    }
+    const newLimit = parseInt(e.target.value);
+    fetchData(1, newLimit);
+    console.log(newLimit)
   }
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -92,17 +89,22 @@ const Billing = () => {
   }
 
   // Function to fetch bills data from server
-  const fetchData = async () => {
+  const fetchData = async (page = 1, limit = 10) => {
     const billing_table = document.querySelector('.billing-container');
     try {
       const res = await axios.get(`/payments/paymentsByUserId${userId}`);
       emptyContainer(billing_table);
       // Add each bill to the UI
       let logged = 0;
-      res.data.forEach(bill => {
-        if (logged >= logs) {
+      let start = ((page - 1) * limit) + 1;
+      for (const bill of res.data) {
+        if (logged >= limit*page) {
           updateContainer(billing_table);
-          return;
+          break;
+        }
+        logged++;
+        if (logged < start) {
+          continue;
         }
         axios.get(`rooms/by_roomID${bill.room_id}`)
           .then(res2 => {
@@ -123,15 +125,23 @@ const Billing = () => {
                     break
                 }
                 addBill(bill.paymentid + ASCIIChain(res2.data[0].title).slice(1, 10), "upload/" + res3.data[0].filename, bill.timestamp_column.slice(0, 19).replace('T', ' '), method, bill.price);
-                logged++;
               });
           });
-      });
+      };
       updateContainer(billing_table);
+      setPagination({
+        page: page,
+        limit: limit,
+        totalPages: Math.ceil(res.data.length / limit),
+      });
       return;
     } catch (error) {
       showErrorDialog("Error", error);
     }
+  };
+
+  const handlePageChange = (newPage) => {
+    fetchData(newPage, pagination.limit);
   };
 
   // Fetch data on component mount
@@ -317,12 +327,21 @@ const Billing = () => {
         <div className="billing-container">
 
         </div>
+
+        <div className="pagination-controls" style={{ textAlign: 'center', marginTop: '20px' }}>
+          <button className='pagination-button' disabled={pagination.page === 1} onClick={() => handlePageChange(1)}>First</button>
+          <button className='pagination-button' disabled={pagination.page === 1} onClick={() => handlePageChange(pagination.page - 1)}>Previous</button>
+          <span>Page {pagination.page} of {pagination.totalPages}</span>
+          <button className='pagination-button' disabled={pagination.page === pagination.totalPages} onClick={() => handlePageChange(pagination.page + 1)}>Next</button>
+          <button className='pagination-button' disabled={pagination.page === pagination.totalPages} onClick={() => handlePageChange(pagination.totalPages)}>Last</button>
+        </div>
+
       </div>
       <label className='custom-show'>Show: </label>
       <select name="lazy-logger" className="custom-select" id="lazy-logger"
         onChange={handleLoggingChange}>
         <option key={5} value={5}>5</option>
-        <option key={10} value={10}>10</option>
+        <option selected key={10} value={10}>10</option>
         <option key={15} value={15}>15</option>
         <option key={25} value={25}>25</option>
       </select>

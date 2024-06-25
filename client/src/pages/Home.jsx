@@ -99,6 +99,7 @@ const Home = () => {
           <ul>
             <li><a href="/amenities">Amenities</a></li>
             <li><a href="/rooms">Rooms</a></li>
+            <li><a href="/room_type">Room Types</a></li>
           </ul>
         </div>
         :

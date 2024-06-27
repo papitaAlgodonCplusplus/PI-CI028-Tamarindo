@@ -11,10 +11,10 @@ import '../styles/change_pass.scss'
 
 const ChangePass = () => {
   const { isLoggedIn } = useContext(AuthContext);
-
+  const { userEmail } = useContext(AuthContext);
   // State to manage form inputs
   const [inputs, setInputs] = useState({
-    email: "",
+    email: userEmail,
     pass: "",
     password: "",
     confirmPass: ""
@@ -91,13 +91,6 @@ const ChangePass = () => {
       let isError = false;
 
       // Check if inputs are filled
-      if (email === '') {
-        document.getElementById("warning-email").style.display = "block";
-        isError = true;
-      } else {
-        document.getElementById("warning-email").style.display = "none";
-      }
-
       if (password === '') {
         document.getElementById("warning-pass").style.display = "block";
         isError = true;
@@ -179,16 +172,6 @@ const ChangePass = () => {
           <p>Change Password</p>
         </div>
         <div>
-          {/* Email */}
-          <div className="emailChangePass" id="emailChangePass">
-            <div className="emailTextChangePass">
-              <p style={{ display: 'inline-block', padding: 2 }}>Email address</p>
-            </div>
-            <div className="inputEmailChangePass">
-              <input type="email-login" id="inputEmailChangePass" name="email" required onChange={handleChange}></input>
-            </div>
-            <label id="warning-email" className='warningChangePass'>Please provide an email</label>
-          </div>
           {/* Current Password */}
           <div className="passwordChangeP">
             <div className="passwordTextChangeP">

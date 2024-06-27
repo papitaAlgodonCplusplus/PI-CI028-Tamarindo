@@ -445,7 +445,35 @@ textarea {
   margin-left: 15svw;
 }
 
-.add-room-button {
+
+.room-types-title {
+  margin: 0 76px 6.5px 0;
+  display: inline-block;
+  align-self: flex-start;
+  overflow-wrap: break-word;
+  font-family: 'Poppins';
+  font-weight: 700;
+  font-size: 45px;
+  color: #000000;
+  text-align: center;
+}
+
+.MODAL-BUTTON {
+  margin: 0%;
+  margin-top: 10%;
+  border-radius: 6px;
+  border: 1px solid #1E91B6;
+  background: #1E91B6;
+  font-family: 'Poppins';
+  cursor: pointer;
+  padding-block: 2%;
+  width: 150px;
+  font-weight: 500;
+  font-size: 23px;
+  color: #ffffff;
+}
+
+.rooms .add-room-button {
   border-radius: 6px;
   border: 1px solid #1E91B6;
   background: #1E91B6;
@@ -459,4 +487,55 @@ textarea {
   position: absolute;
   margin-left: -7vw;
   margin-top: 2.5vh;
+}
+
+hr {
+  width: 90%;
+  height: 2px;
+  background-color: black;
+  border: none;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.rooms-bar {
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  background: #F5F5F5;
+  margin-top: 6%;
+  margin-bottom: 30px;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  padding: 0%;
+  padding-top: 17px;
+  width: 886px;
+  border-radius: 5px;
+  box-sizing: border-box;
+  height: 60px;
+}
+
+.roomT,
+.priceT,
+.actions {
+  padding: 0%;
+  overflow-wrap: break-word;
+  font-family: 'Poppins';
+  font-weight: 500;
+  font-size: 20px;
+  color: #181818;
+  left: 20%;
+}
+
+.roomT {
+  position: absolute;
+  left: 110px;
+}
+
+.priceT {
+  position: absolute;
+  left: 450px;
+}
+
+.actions {
+  position: absolute;
+  left: 750px;
 }

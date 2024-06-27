@@ -90,22 +90,23 @@ const Search = () => {
       const newCardHTML = `
       <div style="
       box-shadow: 0px 3px 4px 4px rgba(59, 59, 59, 0.25);
-      width: 590px;
-      height: 300px;
+      width: 420px;
+      height: 180px;
       border: 1px solid #dcdcdc;
       border-radius: 6px;
       background: #FFFFFF;
       position: relative;
-      margin-right: 13px;
       display: flex;
       flex-direction: row;
-      padding: 31px 17.2px 41px 19px;
+      padding: 15px 7.2px  0px 10px;
+      margin-left: -1vw;
+      margin-bottom: 5vh;
       box-sizing: border-box;">
         <img alt="undefined graphic" src="${imageSrc}" style="
         border-radius: 6px;
         margin-right: 18px;
-        width: 320px;
-        height: 240px;" />
+        width: 200px;
+        height: 150px;" />
         <div style="
         margin-left: 0px;
         display: inline-block;
@@ -120,11 +121,10 @@ const Search = () => {
         </div>
         <span style="
         position: absolute;
-        margin-top: 10%;
+        margin-top: 7%;
         text-align: left;
-        width: 17vw;
-        margin-left: 20vw;
-        left: 8vw;
+        width: 13vw;
+        margin-left: 17.1vw;
         align-self: flex-start;
         overflow-wrap: break-word;
         font-family: 'Poppins';
@@ -133,17 +133,18 @@ const Search = () => {
         padding-top: 5px;
         text-align: justify;
         letter-spacing: 0.1px;
-        color: #000000;">
+        color: #000000;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;">
         ${description}<br /><br />
-          <ul>
-            <li>Extra Services</li>
-          </ul>
         </span>
         <div id="room-details-button-${title}" style="
         position: absolute;
-        margin-top: 185px;
-        margin-left: 360px;
-        width: 100px;
+        margin-top: 105px;
+        margin-left: 217px;
+        width: 120px;
         height: 30px;
         padding-top: 16px;
         padding-inline: 10px;
@@ -190,6 +191,7 @@ const Search = () => {
     }
   }
 
+  const [pagination, setPagination] = useState({ page: 1, limit: 10, totalPages: 1 });
   const handleSearch = async (e) => {
     if (isLoggedIn) {
       if (e) {
@@ -254,7 +256,7 @@ const Search = () => {
     }
   }
 
-  const fetchDataFromServer = async () => {
+  const fetchDataFromServer = async (page = 1, limit = 10) => {
     if (isLoggedIn) {
       cardsContainer = document.querySelector('.container-2');
       // Fetch data from the server to display rooms
@@ -284,9 +286,14 @@ const Search = () => {
 
           const roomsData = [];
           let logged = 0;
+          let start = ((page - 1) * limit) + 1;
           for (const room of roomsResponse.data) {
-            if (logged >= logs) {
+            if (logged >= limit*page) {
               break;
+            }
+            logged++;
+            if (logged < start) {
+              continue;
             }
             const roomTypeResponse = await axios.get(`/categories/room_type_ByID${room.type_of_room}`);
             const price = roomTypeResponse.data[0].price;
@@ -322,9 +329,14 @@ const Search = () => {
         setNRooms(roomsResponse.data.length);
         setTotalRooms(roomsResponse.data.length);
         let logged = 0;
+        let start = ((page - 1) * limit) + 1;
         for (const room of roomsResponse.data) {
-          if (logged >= logs) {
+          if (logged >= limit*page) {
             break;
+          }
+          logged++;
+          if (logged < start) {
+            continue;
           }
           // Fetch room details by room ID
           const roomDetailsResponse = await axios.get(`/rooms/by_roomID${room.roomid}`);
@@ -335,6 +347,11 @@ const Search = () => {
           // Add room card to the UI
           addCardToUI(room.title, room.description, roomImagePath, room.roomid);
         }
+        setPagination({
+          page: page,
+          limit: limit,
+          totalPages: Math.ceil(roomsResponse.data.length / limit),
+        });
         updateContainer(cardsContainer);
         return;
       } catch (error) {
@@ -370,15 +387,14 @@ const Search = () => {
 
   let logs = 3;
   const handleLoggingChange = e => {
-    if (isLoggedIn) {
-      logs = e.target.value;
-      fetchDataFromServer()
-      return;
-    } else {
-      return;
-    }
+    const newLimit = parseInt(e.target.value);
+    fetchDataFromServer(1, newLimit);
+    console.log(newLimit)
   }
-  
+  const handlePageChange = (newPage) => {
+    fetchDataFromServer(newPage, pagination.limit);
+  };
+
   const handleGoBack = async e => {
     if (isLoggedIn) {
       e.preventDefault()
@@ -455,23 +471,22 @@ const Search = () => {
         <div className="frame-201">
           <p className="showing-4-of-108-places">
           </p>
-          <div className="frame-49">
-            <span className="sort-by-recommended">
-              Sort by
-            </span>
-            <select className="custom-select-2" onChange={handleSort}>
-              <option value="Recommended">Recommended</option>
-              <option value="Cheapest">Cheapest</option>
-            </select>
-          </div>
         </div>
         <div className="container-2">
+        </div>
+
+        <div className="pagination-controls" style={{ textAlign: 'center', marginTop: '20px' }}>
+          <button className='pagination-button' disabled={pagination.page === 1} onClick={() => handlePageChange(1)}>First</button>
+          <button className='pagination-button' disabled={pagination.page === 1} onClick={() => handlePageChange(pagination.page - 1)}>Previous</button>
+          <span>Page {pagination.page} of {pagination.totalPages}</span>
+          <button className='pagination-button' disabled={pagination.page === pagination.totalPages} onClick={() => handlePageChange(pagination.page + 1)}>Next</button>
+          <button className='pagination-button' disabled={pagination.page === pagination.totalPages} onClick={() => handlePageChange(pagination.totalPages)}>Last</button>
         </div>
         <label className='custom-show'>Show: </label>
         <select name="lazy-logger" className="custom-select" id="lazy-logger"
           onChange={handleLoggingChange}>
           <option key={5} value={5}>5</option>
-          <option key={10} value={10}>10</option>
+          <option selected key={10} value={10}>10</option>
           <option key={15} value={15}>15</option>
           <option key={25} value={25}>25</option>
         </select>

@@ -1,10 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import axios from 'axios';
 import { AuthContext } from '../AuthContext.js';
-import { emptyContainer, showErrorDialog, postDataWithTimeout, putDataWithTimeout, updateContainer, deleteDataWithTimeout, showWarningDialog } from '../Misc';
+import { emptyContainer, showErrorDialog, postDataWithTimeout, putDataWithTimeout, deleteDataWithTimeout, showWarningDialog, updateContainer } from '../Misc';
 import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useState, useContext } from 'react';
 import '../styles/amenities.scss';
+import '../styles/pagination_controls.scss'
 
 const Amenities = () => {
   // Bool that checks if user has logged in with valid user (client-worker-administrator)
@@ -15,7 +16,7 @@ const Amenities = () => {
     const newAmenityHTML = `
     <div className="list-container">
     <div style="
-      height: 100px;
+      height: 80px;
       margin-top: 2%;
       width: 71%;
       background-color: #fff;
@@ -105,17 +106,6 @@ const Amenities = () => {
     modifyButton.addEventListener('click', (e) => handleModify(e, title));
   }
 
-  let logs = 3;
-  const handleLoggingChange = e => {
-    if (isLoggedIn) {
-      logs = e.target.value;
-      fetchData()
-      return;
-    } else {
-      return;
-    }
-  }
-
   // Function to handle deletion of a service
   const handleDelete = async (e, id, title) => {
     if (isLoggedIn) {
@@ -124,7 +114,7 @@ const Amenities = () => {
         const warningResult = await showWarningDialog("Delete Confirmation", "Are you sure you would like to delete the amenity <strong>" + title + "</strong>?")
         if (!warningResult) return;
         await deleteDataWithTimeout(`/amenities/delete${id}`, 500);
-        fetchData()
+        fetchData(pagination.page, pagination.limit);
         window.location.reload();
       } catch (error) {
         showErrorDialog("Error", error);
@@ -136,45 +126,56 @@ const Amenities = () => {
 
   // Function to fetch services data from server
   const { userRol } = useContext(AuthContext);
-  const navigate = useNavigate()
-  const fetchData = async () => {
+  const navigate = useNavigate();
+  const fetchData = async (page = 1, limit = 10) => {
     if ((userRol !== "admin" && userRol !== "employee") || !isLoggedIn) {
-      navigate("/reservations_list") // TODO: ERROR PAGE, CANT ACCESS AS USER
+      navigate("/home");
       return;
     }
-    const amenities_table = document.querySelector('.amenities-container');
+
     try {
-      const res = await axios.get("/amenities");
-      emptyContainer(amenities_table);
-      // Add each service to the UI
-      let logged = 0;
-      res.data.forEach(service => {
-        if (logged >= logs) {
-          updateContainer(amenities_table);
-          return;
-        }
+      const res = await axios.get(`/amenities/paginated_services?page=${page}&limit=${limit}`);
+      const amenities_container = document.querySelector('.amenities-container');
+      emptyContainer(amenities_container)
+      amenities_container.innerHTML = ''; // Clear the container before rendering new amenities
+      res.data.data.forEach(service => {
         addAmenity(service.service_name, service.service_price, service.serviceid, service.image_path);
-        logged++;
+        updateContainer(amenities_container)
       });
-      updateContainer(amenities_table);
-      return;
+      setPagination({
+        page: res.data.pagination.page,
+        limit: limit,
+        totalPages: res.data.pagination.totalPages,
+      });
     } catch (error) {
       showErrorDialog("Error", error);
     }
+  };
+
+  const [pagination, setPagination] = useState({ page: 1, limit: 10, totalPages: 1 });
+
+  const handlePageChange = (newPage) => {
+    fetchData(newPage, pagination.limit);
+  };
+
+  const handleLimitChange = (event) => {
+    const newLimit = parseInt(event.target.value);
+    fetchData(1, newLimit);
+    console.log(newLimit)
   };
 
   const [inputs, setInputs] = useState({
     title: "",
     fee: "",
     file_path: "",
-  })
+  });
 
   const [data, setData] = useState({
     title: "",
     fee: "",
     file_path: "",
     id: "",
-  })
+  });
 
   const [file_changed, setFileChanged] = useState(false);
 
@@ -183,27 +184,18 @@ const Amenities = () => {
     if (isLoggedIn) {
       try {
         e.preventDefault();
-        const res = await axios.get(`amenities/get_service${title}`)
+        const res = await axios.get(`amenities/get_service${title}`);
         setData(prevData => ({
           ...prevData,
-          title: res.data[0].service_name
-        }));
-        setData(prevData => ({
-          ...prevData,
-          fee: res.data[0].service_price
-        }));
-        setData(prevData => ({
-          ...prevData,
-          file_path: res.data[0].image_path
-        }));
-        setData(prevData => ({
-          ...prevData,
-          id: res.data[0].serviceid
+          title: res.data[0].service_name,
+          fee: res.data[0].service_price,
+          file_path: res.data[0].image_path,
+          id: res.data[0].serviceid,
         }));
         const imagePreview2 = document.getElementById('image-preview2');
         imagePreview2.src = res.data[0].image_path;
         imagePreview2.style.visibility = 'visible';
-        displayModal2()
+        displayModal2();
       } catch (error) {
         showErrorDialog("Error", error);
       }
@@ -222,13 +214,13 @@ const Amenities = () => {
         // Check if the entered value is negative
         if (parseFloat(newValue) < 0) {
           e.target.value = 0;
-          showErrorDialog("Error", "Fee can't be negative")
+          showErrorDialog("Error", "Fee can't be negative");
           return;
         } else {
-          setInputs(prev => ({ ...prev, [e.target.name]: e.target.value }))
+          setInputs(prev => ({ ...prev, [e.target.name]: e.target.value }));
         }
       } else {
-        setInputs(prev => ({ ...prev, [e.target.name]: e.target.value }))
+        setInputs(prev => ({ ...prev, [e.target.name]: e.target.value }));
       }
     } else {
       return;
@@ -243,13 +235,13 @@ const Amenities = () => {
         // Check if the entered value is negative
         if (parseFloat(newValue) < 0) {
           e.target.value = 0;
-          showErrorDialog("Error", "Fee can't be negative")
+          showErrorDialog("Error", "Fee can't be negative");
           return;
         } else {
-          setData(prev => ({ ...prev, [e.target.name]: e.target.value }))
+          setData(prev => ({ ...prev, [e.target.name]: e.target.value }));
         }
       } else {
-        setData(prev => ({ ...prev, [e.target.name]: e.target.value }))
+        setData(prev => ({ ...prev, [e.target.name]: e.target.value }));
       }
     } else {
       return;
@@ -259,7 +251,7 @@ const Amenities = () => {
   // Function to handle form submission
   const handleSubmit = async e => {
     if (isLoggedIn) {
-      e.preventDefault()
+      e.preventDefault();
       let isError = false;
       const title = inputs.title.trim();
       const fee = inputs.fee.trim();
@@ -311,12 +303,12 @@ const Amenities = () => {
             ...prevData,
             file_path: "./upload/" + filename.data
           }));
-          inputs.file_path = "./upload/" + filename.data
+          inputs.file_path = "./upload/" + filename.data;
         }
 
         // Adding room data to database
         await postDataWithTimeout("/amenities/add_amenity", inputs, 500);
-        fetchData();
+        fetchData(pagination.page, pagination.limit);
         closeModal();
         setFileChanged(false);
         window.location.reload();
@@ -355,7 +347,7 @@ const Amenities = () => {
           });
 
           // Setting file_path
-          file_path = "./upload/" + filename.data
+          file_path = "./upload/" + filename.data;
         }
 
         // Update amenity on the database
@@ -364,9 +356,9 @@ const Amenities = () => {
           fee: data.fee,
           file_path: file_path,
           service_id: data.id
-        }
+        };
         await putDataWithTimeout(`/amenities/update_amenity`, req, 500);
-        fetchData()
+        fetchData(pagination.page, pagination.limit);
         closeModal2();
         setFileChanged(false);
         return;
@@ -472,8 +464,8 @@ const Amenities = () => {
 
   const handleGoBack = async e => {
     if (isLoggedIn) {
-      e.preventDefault()
-      navigate("/home")
+      e.preventDefault();
+      navigate("/home");
     } else {
       return;
     }
@@ -504,14 +496,20 @@ const Amenities = () => {
         </div>
       </div>
 
-      <div>
-        <div className="amenities-container">
-
-        </div>
+      <div className="amenities-container">
+        {/* The amenities will be rendered here by the addAmenity function */}
       </div>
+
+      <div className="pagination-controls" style={{ textAlign: 'center', marginTop: '20px' }}>
+        <button className='pagination-button' disabled={pagination.page === 1} onClick={() => handlePageChange(1)}>First</button>
+        <button className='pagination-button' disabled={pagination.page === 1} onClick={() => handlePageChange(pagination.page - 1)}>Previous</button>
+        <span>Page {pagination.page} of {pagination.totalPages}</span>
+        <button className='pagination-button' disabled={pagination.page === pagination.totalPages} onClick={() => handlePageChange(pagination.page + 1)}>Next</button>
+        <button className='pagination-button' disabled={pagination.page === pagination.totalPages} onClick={() => handlePageChange(pagination.totalPages)}>Last</button>
+      </div>
+
       <label className='custom-show'>Show: </label>
-      <select name="lazy-logger" className="custom-select" id="lazy-logger"
-        onChange={handleLoggingChange}>
+      <select name="lazy-logger" className="custom-select" id="lazy-logger" value={pagination.limit} onChange={handleLimitChange}>
         <option key={5} value={5}>5</option>
         <option key={10} value={10}>10</option>
         <option key={15} value={15}>15</option>
@@ -530,7 +528,7 @@ const Amenities = () => {
             </div>
             <label id="warning-photo" className='red-label-a'>Please provide an image</label>
             {/* Input field for amenity title */}
-            <label htmlFor="title">Title</label><br />
+            <label htmlFor="title" className="title">Title</label><br />
             <input required type="text" maxLength="28" id="title" name="title" onChange={handleChange} /><br />
             <label id="warning-title" className='red-label-a'>Please provide a title</label>
             {/* Input field for amenity fee */}
@@ -554,7 +552,7 @@ const Amenities = () => {
               <img id="image-preview2" className="image-preview2" src={data.file_path} alt="Preview" />
             </div>
             {/* Input field for amenity title */}
-            <label htmlFor="title">Title</label><br />
+            <label htmlFor="title" className="title2">Title</label><br />
             <input placeholder={data.title} maxLength="28" type="text" id="title_modify" name="title" onChange={handleModifyChange} /><br />
             {/* Input field for amenity fee */}
             <label htmlFor="fee">Fee</label><br />

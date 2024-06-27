@@ -26,15 +26,15 @@ const Rooms = () => {
     room_type_price: 0,
   })
 
+  
   const handleLoggingChange = e => {
-    if (isLoggedIn) {
-      logs = e.target.value;
-      fetchData()
-      return;
-    } else {
-      return;
-    }
+    const newLimit = parseInt(e.target.value);
+    fetchData(1, newLimit);
+    console.log(newLimit)
   }
+  const handlePageChange = (newPage) => {
+    fetchData(newPage, pagination.limit);
+  };
 
 
   // Function to add a card to the UI
@@ -187,8 +187,9 @@ const Rooms = () => {
     }
   }
 
+  const [pagination, setPagination] = useState({ page: 1, limit: 10, totalPages: 1 });
   // Function to fetch data and populate UI
-  const fetchData = useCallback(async () => {
+  const fetchData = async (page = 1, limit = 10) => {
     if ((userRol !== "admin" && userRol !== "employee") || !isLoggedIn) {
       navigate("/reservations_list") // TODO: ERROR PAGE, CANT ACCESS AS USER
       return;
@@ -214,15 +215,17 @@ const Rooms = () => {
 
       // Counter for lazy logging
       let logged = 0;
+      let start = ((page - 1) * limit) + 1;
+      
       // Adding cards for each room to UI
-      console.log(roomsResponse)
-      roomsResponse.data.forEach(room => {
-        if (logged >= logs) {
-          updateContainer(cardsContainer);
-          return;
+      for (const room of roomsResponse.data) {
+        if (logged >= limit*page) {
+          break;
         }
-
-        console.log(room)
+        logged++;
+        if (logged < start) {
+          continue;
+        }
         const filepath = "/upload/" + room.filename;
 
         let selectedRoomType;
@@ -234,20 +237,23 @@ const Rooms = () => {
           }
         }
 
-        // Increment logged cards
-        logged++;
         // Adding card for the room to UI
         addCard(room.title, room.description, selectedRoomType.class_name, filepath, room.roomid);
-      });
+      };
 
       // Updating cards container
       updateContainer(cardsContainer);
+      setPagination({
+        page: page,
+        limit: limit,
+        totalPages: Math.ceil(roomsResponse.data.length / limit),
+      });
 
       return;
     } catch (error) {
       showErrorDialog("An error occurred:", error);
     }
-  });
+  };
 
 
   useEffect(() => {
@@ -622,11 +628,19 @@ const Rooms = () => {
           <div className="list-container">
           </div>
 
+          <div className="pagination-controls" style={{ textAlign: 'center', marginTop: '20px' }}>
+            <button className='pagination-button' disabled={pagination.page === 1} onClick={() => handlePageChange(1)}>First</button>
+            <button className='pagination-button' disabled={pagination.page === 1} onClick={() => handlePageChange(pagination.page - 1)}>Previous</button>
+            <span>Page {pagination.page} of {pagination.totalPages}</span>
+            <button className='pagination-button' disabled={pagination.page === pagination.totalPages} onClick={() => handlePageChange(pagination.page + 1)}>Next</button>
+            <button className='pagination-button' disabled={pagination.page === pagination.totalPages} onClick={() => handlePageChange(pagination.totalPages)}>Last</button>
+          </div>
+
           <label className="custom-show">Show: </label>
           <select name="lazy-logger" className="custom-select" id="lazy-logger"
             onChange={handleLoggingChange}>
             <option key={5} value={5}>5</option>
-            <option key={10} value={10}>10</option>
+            <option selected key={10} value={10}>10</option>
             <option key={15} value={15}>15</option>
             <option key={25} value={25}>25</option>
           </select>

@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 const ReservationsList = () => {
   const { isLoggedIn } = useContext(AuthContext)
+  const [pagination, setPagination] = useState({ page: 1, limit: 10, totalPages: 1 });
 
   const [selectedDateRange, setSelectedDateRange] = useState([
     new DateObject({ hour: 7 }),
@@ -20,7 +21,7 @@ const ReservationsList = () => {
     const newReservationHTML = `
     <div className="reservations-container">
     <div style="
-      height: 100px;
+      height: 70px;
       margin-left: 100px;
       margin-top: 2%;
       margin-bottom: 2vh;
@@ -35,8 +36,8 @@ const ReservationsList = () => {
       position: relative; /* Add position: relative to the parent div */">
       <img style="
         margin-left: 35px;
-        max-width: 90px;
-        max-height: 90px;
+        width: 100px;
+        height: 70px;
         margin-right: 24px;
         margin-bottom: 10px;" src=${filename} alt="${title}-icon"/>
       <div style="
@@ -245,7 +246,7 @@ const ReservationsList = () => {
   const { userId } = useContext(AuthContext);
   const [fetched, setFetched] = useState(false);
   let reservations = [];
-  const fetchData = async () => {
+  const fetchData = async (page = 1, limit = 10) => {
     if (isLoggedIn) {
       // Selecting the services container
       const servicesContainer = document.querySelector('.reservations-container');
@@ -258,10 +259,15 @@ const ReservationsList = () => {
         const res = await axios.get(`/reservations/by_userID${userId}`);
 
         let logged = 0;
+        let start = ((page - 1) * limit) + 1;
         // Iterating through each reservation
         for (const reservation of res.data) {
-          if (logged >= logs) {
+          if (logged >= limit*page) {
             break;
+          }
+          logged++;
+          if (logged < start) {
+            continue;
           }
           // Formatting check-in and check-out dates
           const checkIn = new Date(reservation.check_in).toISOString().slice(0, 19).replace('T', ' ');
@@ -288,6 +294,11 @@ const ReservationsList = () => {
           // Updating the services container
           updateContainer(servicesContainer);
         }
+        setPagination({
+          page: page,
+          limit: limit,
+          totalPages: Math.ceil(res.data.length / limit),
+        });
         return;
       } catch (error) {
         showErrorDialog("An error occurred:", error);
@@ -342,14 +353,13 @@ const ReservationsList = () => {
 
   let logs = 3;
   const handleLoggingChange = e => {
-    if (isLoggedIn) {
-      logs = e.target.value;
-      fetchData()
-      return;
-    } else {
-      return;
-    }
+    const newLimit = parseInt(e.target.value);
+    fetchData(1, newLimit);
+    console.log(newLimit)
   }
+  const handlePageChange = (newPage) => {
+    fetchData(newPage, pagination.limit);
+  };
 
   // State variable for room ID
   const handleModifyConfirm = async (e) => {
@@ -718,11 +728,19 @@ const ReservationsList = () => {
         </div>
       </div>
 
+      <div className="pagination-controls" style={{ textAlign: 'center', marginTop: '20px' }}>
+          <button className='pagination-button' disabled={pagination.page === 1} onClick={() => handlePageChange(1)}>First</button>
+          <button className='pagination-button' disabled={pagination.page === 1} onClick={() => handlePageChange(pagination.page - 1)}>Previous</button>
+          <span>Page {pagination.page} of {pagination.totalPages}</span>
+          <button className='pagination-button' disabled={pagination.page === pagination.totalPages} onClick={() => handlePageChange(pagination.page + 1)}>Next</button>
+          <button className='pagination-button' disabled={pagination.page === pagination.totalPages} onClick={() => handlePageChange(pagination.totalPages)}>Last</button>
+        </div>
+
       <label className='custom-show'>Show: </label>
       <select name="lazy-logger" className="custom-select" id="lazy-logger"
         onChange={handleLoggingChange}>
         <option key={5} value={5}>5</option>
-        <option key={10} value={10}>10</option>
+        <option selected key={10} value={10}>10</option>
         <option key={15} value={15}>15</option>
         <option key={25} value={25}>25</option>
       </select>

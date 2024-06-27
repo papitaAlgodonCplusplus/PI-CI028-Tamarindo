@@ -35,7 +35,7 @@
 }
 
 .billing_page .frame-40 {
-  margin-left: 30vw;
+  margin-left: 22vw;
   display: flex;
   flex-direction: row;
   align-self: flex-start;
@@ -43,7 +43,8 @@
   width: fit-content;
   box-sizing: border-box;
   width: 40vw;
-  height: 10vh;
+  height: 5vh;
+  margin-top: 3vh;
 }
 
 .billing_page .label-text-5 {
@@ -84,8 +85,8 @@
 
 .billing_page .custom-filter {
   position: absolute;
-  margin-left: 32vw;
-  margin-top: 4vh;
+  margin-left: 24vw;
+  margin-top: 6vh;
 }
 
 .billing_page .text-field-2 {
@@ -154,7 +155,7 @@ hr {
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   background: #F5F5F5;
   margin-top: 5%;
-  margin-left: 27%;
+  margin-left: 24%;
   position: relative;
   display: flex;
   flex-direction: row;
@@ -162,7 +163,7 @@ hr {
   padding-top: 1%;
   padding-bottom: 1%;
   margin-bottom: 5vh;
-  width: 51%;
+  width: 53%;
   box-sizing: border-box;
 }
 
@@ -214,7 +215,7 @@ hr {
 
 .billing_page .custom-show {
   position: relative;
-  margin-left: 26.5vw;
+  margin-left: 24vw;
 }
 
 .billing_page .custom-select {
@@ -447,5 +448,5 @@ input[type="title"] {
 }
 
 .billing-container {
-  margin-left: 27%;
+  margin-left: 24%;
 }

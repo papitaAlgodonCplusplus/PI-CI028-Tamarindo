@@ -14,6 +14,7 @@ import Details from "./pages/Details";
 import MyAccount from "./pages/MyAccount.jsx";
 import Billing from "./pages/Billing.jsx";
 import AboutUs from "./pages/AboutUs.jsx";
+import ReservationSearch from "./pages/ReservationSearch.jsx";
 // import Reservation from "./pages/Reservation.jsx";
 import Payment from "./pages/Payment.jsx";
 import Amenities from "./pages/Amenities.jsx";
@@ -91,6 +92,10 @@ const router = createBrowserRouter([
       {
         path: "/about_us",
         element: <AboutUs />,
+      },
+      {
+        path: "/reservation_search",
+        element: <ReservationSearch />,
       },
     ],
     //   {

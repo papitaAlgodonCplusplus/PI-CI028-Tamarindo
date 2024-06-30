@@ -482,12 +482,14 @@ const ReservationSearch = () => {
         e.preventDefault();
       }
 
+      // Verify if the email is valid
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(inputs.email)) {
         showErrorDialog("An error occurred:", "Please enter a valid email address.");
         return;
       }
 
+      // Verify if the email is register in the database
       const userIDClient = await axios.get(`/auth/getUserID${inputs.email}`);
       if (userIDClient.data.length <= 0) {
         showErrorDialog("The email entered is not registered:", "Please verify the information.");

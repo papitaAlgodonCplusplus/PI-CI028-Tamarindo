@@ -98,7 +98,7 @@ const Billing = () => {
       let logged = 0; let result = false;
       let start = ((page - 1) * limit) + 1;
       for (const bill of res.data) {
-        if (logged >= limit*page) {
+        if (logged >= limit * page) {
           updateContainer(billing_table);
           break;
         }
@@ -139,12 +139,14 @@ const Billing = () => {
       if (!result) {
         // No rooms to show
         document.getElementById("no-result").style.display = "flex";
-        setPagination({
-          page: page,
-          limit: limit,
-          totalPages: 1,
-        });
+      } else {
+        document.getElementById("no-result").style.display = "none";
       }
+      setPagination({
+        page: page,
+        limit: limit,
+        totalPages: 1,
+      });
       return;
     } catch (error) {
       showErrorDialog("Error", error);

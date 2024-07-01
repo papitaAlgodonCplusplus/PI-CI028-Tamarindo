@@ -521,10 +521,6 @@ const ReservationSearch = () => {
             // Fetching room data for the reservation
             const res2 = await axios.get(`/rooms/by_roomID${reservation.id_room}`);
 
-            if (!res2.data[0].title.includes(inputs.searchQuery)) {
-              continue;
-            }
-
             // Fetching image data for the room
             const image = await axios.get(`/files/get_image_by_id${res2.data[0].imageid}`);
             const filepath = "/upload/" + image.data[0].filename;

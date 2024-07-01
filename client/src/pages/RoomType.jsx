@@ -145,7 +145,7 @@ const RoomType = () => {
       emptyContainer(roomTypesContainer);
 
       // Adding room types to UI
-      let logged = 0;
+      let logged = 0; let result = false;
       let start = ((page - 1) * limit) + 1;
       // Iterating through each reservation
       for (const room_type of roomTypesResponse.data) {
@@ -156,6 +156,7 @@ const RoomType = () => {
         if (logged < start) {
           continue;
         }
+        result = true;
         addRoomType(room_type.class_name, room_type.price, room_type.categoryid);
       };
 
@@ -168,8 +169,15 @@ const RoomType = () => {
         totalPages: Math.ceil(roomTypesResponse.data.length / limit),
       });
 
-      console.log("printed", limit)
-
+      if (!result) {
+        // No rooms to show
+        document.getElementById("no-result-roomTypes").style.display = "flex";
+        setPagination({
+          page: page,
+          limit: limit,
+          totalPages: 1,
+        });
+      }
       return;
     } catch (error) {
       showErrorDialog("An error occurred:", error);
@@ -336,6 +344,7 @@ const RoomType = () => {
         <div className="room_types-container">
 
         </div>
+        <label id="no-result-roomTypes" className='noResultRoomTypes'>No room types to show</label>
       </div>
 
       <div className="pagination-controls" style={{ textAlign: 'center', marginTop: '20px' }}>

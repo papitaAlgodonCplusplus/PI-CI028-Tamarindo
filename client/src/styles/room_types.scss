@@ -51,6 +51,17 @@ hr {
   color: #181818;
 }
 
+.noResultRoomTypes {
+  font-size: 1.5vi;
+  color: rgb(161, 7, 7);
+  margin-left: 23.5vw;
+  position: relative;
+  display: flex;
+  display: none;
+  margin-top: 6vh;
+  margin-bottom: -2vh;
+}
+
 .room_types-bar .description {
   padding: 0%;
   overflow-wrap: break-word;

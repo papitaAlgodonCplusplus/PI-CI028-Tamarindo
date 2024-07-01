@@ -79,7 +79,7 @@ const Search = () => {
 
           if (!result) {
             // No rooms to show
-            document.getElementById("no-result-room").style.display = "flex";
+            document.getElementById("no-result-search").style.display = "flex";
           }
           return;
         } catch (error) {
@@ -237,7 +237,7 @@ const Search = () => {
           
           if (!result) {
             // No rooms to show
-            document.getElementById("no-result-room").style.display = "flex";
+            document.getElementById("no-result-search").style.display = "flex";
           }
           return;
         } catch (error) {
@@ -371,7 +371,7 @@ const Search = () => {
 
         if (!result) {
           // No rooms to show
-          document.getElementById("no-result-room").style.display = "flex";
+          document.getElementById("no-result-search").style.display = "flex";
           setPagination({
             page: page,
             limit: limit,
@@ -492,7 +492,7 @@ const Search = () => {
       </div>
 
       <div className="results">
-      <label id="no-result-room" className='noResultRooms'>Couldn't find a room</label>
+      <label id="no-result-search" className='noResultSearch'>Couldn't find a room</label>
         <div className="frame-201">
           <p className="showing-4-of-108-places">
           </p>

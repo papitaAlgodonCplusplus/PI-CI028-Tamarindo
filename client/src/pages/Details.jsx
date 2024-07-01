@@ -4,7 +4,7 @@ import { Calendar } from "react-multi-date-picker"
 import { Context } from '../Context';
 import { DateObject } from "react-multi-date-picker"
 import { useNavigate } from "react-router-dom";
-import { showErrorDialog, showWarningDialog } from "../Misc.js";
+import { showErrorDialog } from "../Misc.js";
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import Vector from "../vectors/Vector_x2.svg";
 import Vector1 from "../vectors/Vector1_x2.svg";
@@ -102,6 +102,39 @@ const Details = () => {
   const descRef = useRef(null); // Ref for description
   const priceRef = useRef(null); // Ref for description 
   const { changeBookingDates } = useContext(Context)
+  const [selectedService, setServiceOption] = useState('');
+  const [services, setServices] = useState([]);
+  const [servicesList, setServicesList] = useState([]);
+  const handleServiceChange = (e) => {
+    setServiceOption(e.target.value);
+  };
+
+  // Function to handle the addition of a new service to the services list
+  const handleAddService = (event) => {
+    // Check if the services list already includes the selected service option
+    if (servicesList.includes(selectedService)) {
+      // If the service option already exists, show an error dialog
+      showErrorDialog("Error: ", "Service option already exists in the list.", false, navigate);
+    } else {
+      // If the service option doesn't exist, add it to the services list
+      setServicesList(previousList => [...previousList, selectedService]);
+
+      // Fetch the price of the selected service from the backend
+      axios.get(`amenities/get_service${selectedService}`)
+        .then(response => {
+          // Add the selected service as a new label to the amenities list
+          const amenitiesList = document.querySelector('.amenities-list');
+          const newLabel = document.createElement('label');
+          newLabel.textContent = selectedService;
+          newLabel.classList.add('amenity');
+          amenitiesList.appendChild(newLabel);
+        })
+        .catch(error => {
+          // If there's an error fetching the service price, show an error dialog
+          showErrorDialog('Error fetching service price:', error, false, navigate);
+        });
+    }
+  }
 
   const handleFilterCalendarChange = async (newDatesRange, event) => {
     if (isLoggedIn) {
@@ -109,6 +142,7 @@ const Details = () => {
         setValues(newDatesRange);
         if (newDatesRange[1]) {
           changeBookingDates(newDatesRange)
+          // setAmenities(servicesList)
           navigate("/pay")
         }
       } catch (error) {
@@ -149,8 +183,6 @@ const Details = () => {
     }
   };
 
-  const { userId } = useContext(AuthContext)
-
   // Function to handle booking
   const handleBook = async e => {
     toggleModal()
@@ -160,6 +192,17 @@ const Details = () => {
   const fetchData = async () => {
     if (isLoggedIn) {
       try {
+        // Fetch services data
+        axios.get('/amenities').then(response => {
+          console.log(response)
+          // Set the services state with the fetched data
+          setServices(response.data);
+          // Set the default service option if any
+          if (response.data[0]) {
+            setServiceOption(response.data[0].service_name);
+          }
+        });
+
         const roomID = lastRoomClickedID; // Get the ID of the room
         const res = await axios.get(`/filters/retrieve_room${roomID}`); // Fetch room data
         // Fetch images for each item in res.data
@@ -186,12 +229,16 @@ const Details = () => {
   };
 
   // Effect hook to fetch data on component mount
+  const [fetched, setFetched] = useState(false)
   useEffect(() => {
     emailjs.init("SJ4OEzBWXm7Df5Ni-")
     if (!isLoggedIn) {
       navigate("/")
     }
-    fetchData();
+    if (!fetched) {
+      fetchData();
+      setFetched(true)
+    }
   });
 
   const handleGoBack = async e => {
@@ -331,20 +378,42 @@ const Details = () => {
 
       {/* Modal for booking dates, visible if modalVisible is true */}
       {modalVisible && (
-        <Calendar className="booking_calendar"
-          value={values}
-          onChange={(newDatesRange, event) => handleFilterCalendarChange(newDatesRange, event)}
-          mapDays={({ date }) => {
-            let className;
-            const strDate = date.format();
+        <div>
+          <Calendar className="booking_calendar"
+            value={values}
+            onChange={(newDatesRange, event) => handleFilterCalendarChange(newDatesRange, event)}
+            mapDays={({ date }) => {
+              let className;
+              const strDate = date.format();
 
-            if (isReserved(strDate)) className = "reserved";
-            if (className) return { className, disabled: true };
-          }}
-          range
-          numberOfMonths={2}
-          showOtherDays
-        />
+              if (isReserved(strDate)) className = "reserved";
+              if (className) return { className, disabled: true };
+            }}
+            range
+            numberOfMonths={2}
+            showOtherDays
+          />
+
+          <div className="white_yo">
+            <div className="add-amenities">
+              Add Amenities
+            </div>
+            <img alt="undefined graphic" onClick={handleAddService} src={require("../assets/Plus.png")} className='plus-img'></img>
+            {/* Dropdown for selecting services */}
+            <div className="custom-select">
+              <select name="services_selector" onChange={handleServiceChange} value={selectedService} required>
+                {/* Mapping services to options */}
+                {services.map(service => (
+                  <option key={service.serviceid} value={service.service_name}>
+                    ~ {service.service_name} ~ [${service.service_price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}]
+                  </option>
+                ))}
+              </select>
+              <div className="amenities-list">
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
     // Show error to user, that hasnt logged in

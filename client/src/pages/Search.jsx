@@ -28,6 +28,7 @@ const Search = () => {
   const { homeDates, homeSearch } = useContext(Context)
   const { changeHomeDates, changeHomeSearch } = useContext(Context)
 
+
   const handleFilterCalendarChange = async (newDatesRange, event) => {
     if (isLoggedIn) {
       cardsContainer = document.querySelector('.container-2');
@@ -115,15 +116,21 @@ const Search = () => {
         width: 200px;
         height: 150px;" />
         <div style="
-        margin-left: 0px;
+        position: absolute;
+        width: 180px;
+        margin-left: 17vw;
         display: inline-block;
         overflow-wrap: break-word;
         font-family: 'Poppins';
         font-weight: bold;
         font-size: 22px;
-        text-align: center;
         letter-spacing: 0.2px;
-        color: #1A1A1A;">
+        color: #1A1A1A;
+        overflow: hidden;
+        overflow-wrap: break-word;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;">
         ${title}
         </div>
         <span style="

@@ -95,7 +95,7 @@ const Billing = () => {
       const res = await axios.get(`/payments/paymentsByUserId${userId}`);
       emptyContainer(billing_table);
       // Add each bill to the UI
-      let logged = 0;
+      let logged = 0; let result = false;
       let start = ((page - 1) * limit) + 1;
       for (const bill of res.data) {
         if (logged >= limit*page) {
@@ -106,6 +106,7 @@ const Billing = () => {
         if (logged < start) {
           continue;
         }
+        result = true;
         axios.get(`rooms/by_roomID${bill.room_id}`)
           .then(res2 => {
             axios.get(`files/get_image_by_roomid${bill.room_id}`)
@@ -134,6 +135,16 @@ const Billing = () => {
         limit: limit,
         totalPages: Math.ceil(res.data.length / limit),
       });
+
+      if (!result) {
+        // No rooms to show
+        document.getElementById("no-result").style.display = "flex";
+        setPagination({
+          page: page,
+          limit: limit,
+          totalPages: 1,
+        });
+      }
       return;
     } catch (error) {
       showErrorDialog("Error", error);
@@ -325,8 +336,8 @@ const Billing = () => {
 
       <div>
         <div className="billing-container">
-
         </div>
+        <label id="no-result" className='noResult'>Couldn't find a billing history</label>
 
         <div className="pagination-controls" style={{ textAlign: 'center', marginTop: '20px' }}>
           <button className='pagination-button' disabled={pagination.page === 1} onClick={() => handlePageChange(1)}>First</button>

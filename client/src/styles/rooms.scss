@@ -394,6 +394,17 @@ textarea {
   left: 110px;
 }
 
+.noResultRooms {
+  font-size: 1.5vi;
+  color: rgb(161, 7, 7);
+  margin-left: 23.5vw;
+  position: relative;
+  display: flex;
+  display: none;
+  margin-top: 6vh;
+  margin-bottom: -2vh;
+}
+
 .rooms-bar .description {
   overflow-wrap: break-word;
   font-family: 'Poppins';

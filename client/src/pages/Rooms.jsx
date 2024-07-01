@@ -216,7 +216,7 @@ const Rooms = () => {
       // Counter for lazy logging
       let logged = 0;
       let start = ((page - 1) * limit) + 1;
-      
+      let result = false;
       // Adding cards for each room to UI
       for (const room of roomsResponse.data) {
         if (logged >= limit*page) {
@@ -236,7 +236,7 @@ const Rooms = () => {
             break;
           }
         }
-
+        result = true;
         // Adding card for the room to UI
         addCard(room.title, room.description, selectedRoomType.class_name, filepath, room.roomid);
       };
@@ -249,6 +249,15 @@ const Rooms = () => {
         totalPages: Math.ceil(roomsResponse.data.length / limit),
       });
 
+      if (!result) {
+        // No rooms to show
+        document.getElementById("no-result-rooms").style.display = "flex";
+        setPagination({
+          page: page,
+          limit: limit,
+          totalPages: 1,
+        });
+      }
       return;
     } catch (error) {
       showErrorDialog("An error occurred:", error);
@@ -627,7 +636,8 @@ const Rooms = () => {
           </div>
           <div className="list-container">
           </div>
-
+            
+          <label id="no-result-rooms" className='noResultRooms'>No rooms to show</label>
           <div className="pagination-controls" style={{ textAlign: 'center', marginTop: '20px' }}>
             <button className='pagination-button' disabled={pagination.page === 1} onClick={() => handlePageChange(1)}>First</button>
             <button className='pagination-button' disabled={pagination.page === 1} onClick={() => handlePageChange(pagination.page - 1)}>Previous</button>

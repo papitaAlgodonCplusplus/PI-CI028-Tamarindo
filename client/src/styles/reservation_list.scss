@@ -292,6 +292,17 @@
   box-sizing: border-box;
 }
 
+.noResult {
+  font-size: 1.5vi;
+  color: rgb(161, 7, 7);
+  margin-left: 39vw;
+  position: relative;
+  display: flex;
+  // display: none;
+  margin-top: 7vh;
+  margin-bottom: 5vh;
+}
+
 .MDPI {
   width: 11vw;
   height: 20vh;
@@ -314,7 +325,6 @@
   display: flex;
   flex-wrap: wrap;
 }
-
 
 .m-r .check-in {
   border-radius: 4px 4px 0 0;

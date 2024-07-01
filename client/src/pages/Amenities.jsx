@@ -138,8 +138,10 @@ const Amenities = () => {
       const amenities_container = document.querySelector('.amenities-container');
       emptyContainer(amenities_container)
       amenities_container.innerHTML = ''; // Clear the container before rendering new amenities
+      let result = false;
       res.data.data.forEach(service => {
         addAmenity(service.service_name, service.service_price, service.serviceid, service.image_path);
+        result = true;
         updateContainer(amenities_container)
       });
       setPagination({
@@ -147,6 +149,16 @@ const Amenities = () => {
         limit: limit,
         totalPages: res.data.pagination.totalPages,
       });
+
+      if (!result) {
+        // No rooms to show
+        document.getElementById("no-result-amenities").style.display = "flex";
+        setPagination({
+          page: page,
+          limit: limit,
+          totalPages: 1,
+        });
+      }
     } catch (error) {
       showErrorDialog("Error", error);
     }
@@ -499,6 +511,7 @@ const Amenities = () => {
       <div className="amenities-container">
         {/* The amenities will be rendered here by the addAmenity function */}
       </div>
+      <label id="no-result-amenities" className='noResultAmenities'>No amenities to show</label>
 
       <div className="pagination-controls" style={{ textAlign: 'center', marginTop: '20px' }}>
         <button className='pagination-button' disabled={pagination.page === 1} onClick={() => handlePageChange(1)}>First</button>

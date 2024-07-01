@@ -250,7 +250,7 @@ const ReservationsList = () => {
     if (isLoggedIn) {
       // Selecting the services container
       const servicesContainer = document.querySelector('.reservations-container');
-
+      let result = false;
       try {
         // Clearing the services container
         emptyContainer(servicesContainer);
@@ -269,6 +269,8 @@ const ReservationsList = () => {
           if (logged < start) {
             continue;
           }
+
+          result = true;
           // Formatting check-in and check-out dates
           const checkIn = new Date(reservation.check_in).toISOString().slice(0, 19).replace('T', ' ');
           const checkOut = new Date(reservation.check_out).toISOString().slice(0, 19).replace('T', ' ');
@@ -294,11 +296,22 @@ const ReservationsList = () => {
           // Updating the services container
           updateContainer(servicesContainer);
         }
+
         setPagination({
           page: page,
           limit: limit,
           totalPages: Math.ceil(res.data.length / limit),
         });
+
+        if (!result) {
+          // No rooms to show
+          document.getElementById("no-result").style.display = "flex";
+          setPagination({
+            page: page,
+            limit: limit,
+            totalPages: 1,
+          });
+        }
         return;
       } catch (error) {
         showErrorDialog("An error occurred:", error);
@@ -493,7 +506,9 @@ const ReservationsList = () => {
       }
       const servicesContainer = document.querySelector('.reservations-container');
       const searchTerm = inputs.searchQuery;
+      // No rooms to show
       if (searchTerm.trim() === '') {
+        
         return;
       } else {
         try {
@@ -502,11 +517,12 @@ const ReservationsList = () => {
 
           // Fetching reservations data for the current user
           const res = await axios.get(`/reservations/by_userID${userId}`);
-
+          let result = false;
           let logged = 0;
           // Iterating through each reservation
           for (const reservation of res.data) {
             if (logged >= logs) {
+              // document.getElementById("no-result").style.display = "flex";
               break;
             }
             // Formatting check-in and check-out dates
@@ -531,12 +547,20 @@ const ReservationsList = () => {
             if (res3.data[0].id_method === 1) {
               status = 'Approved'
             }
-
+            
+            result = true;
             // Adding reservation to the services container
             addReservation(res2.data[0].title, checkIn, checkOut, filepath, status, reservation.reservationid);
 
             // Updating the services container
             updateContainer(servicesContainer);
+          }
+
+          if (!result) {
+            // No rooms to show
+            document.getElementById("no-result").style.display = "flex";
+          } else {
+            document.getElementById("no-result").style.display = "none";
           }
           return;
         } catch (error) {
@@ -591,11 +615,13 @@ const ReservationsList = () => {
 
           // Fetching reservations data for the current user
           const res = await axios.get(`/reservations/by_userID${userId}`);
-
+          let result = false;
           let logged = 0;
           // Iterating through each reservation
           for (const reservation of res.data) {
+            // No rooms to show
             if (logged >= logs) {
+              document.getElementById("no-result").style.display = "flex";
               break;
             }
             // Formatting check-in and check-out dates
@@ -620,12 +646,20 @@ const ReservationsList = () => {
             if (res3.data[0].id_method === 1) {
               status = 'Approved'
             }
-
+            
+            result = true;
             // Adding reservation to the services container
             addReservation(res2.data[0].title, checkIn, checkOut, filepath, status, reservation.reservationid);
 
             // Updating the services container
             updateContainer(servicesContainer);
+          }
+
+          if (!result) {
+            // No rooms to show
+            document.getElementById("no-result").style.display = "flex";
+          } else {
+            document.getElementById("no-result").style.display = "none";
           }
           return;
         } catch (error) {
@@ -723,18 +757,17 @@ const ReservationsList = () => {
       </div>
 
       <div>
-        <div className="reservations-container">
-
-        </div>
+        <div className="reservations-container"> </div>
+        <label id="no-result" className='noResult'>Couldn't find a reservation</label>
       </div>
 
       <div className="pagination-controls" style={{ textAlign: 'center', marginTop: '20px' }}>
-          <button className='pagination-button' disabled={pagination.page === 1} onClick={() => handlePageChange(1)}>First</button>
-          <button className='pagination-button' disabled={pagination.page === 1} onClick={() => handlePageChange(pagination.page - 1)}>Previous</button>
-          <span>Page {pagination.page} of {pagination.totalPages}</span>
-          <button className='pagination-button' disabled={pagination.page === pagination.totalPages} onClick={() => handlePageChange(pagination.page + 1)}>Next</button>
-          <button className='pagination-button' disabled={pagination.page === pagination.totalPages} onClick={() => handlePageChange(pagination.totalPages)}>Last</button>
-        </div>
+        <button className='pagination-button' disabled={pagination.page === 1} onClick={() => handlePageChange(1)}>First</button>
+        <button className='pagination-button' disabled={pagination.page === 1} onClick={() => handlePageChange(pagination.page - 1)}>Previous</button>
+        <span>Page {pagination.page} of {pagination.totalPages}</span>
+        <button className='pagination-button' disabled={pagination.page === pagination.totalPages} onClick={() => handlePageChange(pagination.page + 1)}>Next</button>
+        <button className='pagination-button' disabled={pagination.page === pagination.totalPages} onClick={() => handlePageChange(pagination.totalPages)}>Last</button>
+      </div>
 
       <label className='custom-show'>Show: </label>
       <select name="lazy-logger" className="custom-select" id="lazy-logger"

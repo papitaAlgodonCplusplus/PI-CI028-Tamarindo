@@ -60,6 +60,7 @@ const Search = () => {
           const availableRoomsResponse = await axios.get('/filters/search_available_rooms', { params: requestParams });
           emptyContainer(cardsContainer);
           setNRooms(availableRoomsResponse.data.length);
+          let result = false;
           for (const room of availableRoomsResponse.data) {
             // Fetch room details by room ID
             const roomDetailsResponse = await axios.get(`/rooms/by_roomID${room.roomid}`);
@@ -69,11 +70,17 @@ const Search = () => {
             // Construct room image path
             const roomImagePath = "/upload/" + roomImage.data[0].filename;
             // Add room card to the UI
+            result = true;
             addCardToUI(room.title, room.description, roomImagePath, room.roomid);
           }
           // Update UI container with new room cards
           updateContainer(cardsContainer);
           changeHomeDates([]);
+
+          if (!result) {
+            // No rooms to show
+            document.getElementById("no-result-search").style.display = "flex";
+          }
           return;
         } catch (error) {
           showErrorDialog("An error occurred:", error, false, navigate);
@@ -214,7 +221,7 @@ const Search = () => {
           });
           emptyContainer(cardsContainer);
           setNRooms(searchResults.data.length);
-
+          let result = false;
           for (const room of searchResults.data) {
             // Fetch room details by room ID
             const roomDetailsResponse = await axios.get(`/rooms/by_roomID${room.roomid}`);
@@ -223,9 +230,15 @@ const Search = () => {
             // Construct room image path
             const roomImagePath = "/upload/" + roomImage.data[0].filename;
             // Add room card to the UI
+            result = true;
             addCardToUI(room.title, room.description, roomImagePath, room.roomid);
           }
           updateContainer(cardsContainer);
+          
+          if (!result) {
+            // No rooms to show
+            document.getElementById("no-result-search").style.display = "flex";
+          }
           return;
         } catch (error) {
           showErrorDialog("An error occurred:", error, false, navigate);
@@ -324,6 +337,7 @@ const Search = () => {
           return;
         }
 
+        let result = false;
         const roomsResponse = await axios.get("/rooms");
         emptyContainer(cardsContainer);
         setNRooms(roomsResponse.data.length);
@@ -345,6 +359,7 @@ const Search = () => {
           // Construct room image path
           const roomImagePath = "/upload/" + roomImage.data[0].filename;
           // Add room card to the UI
+          result = true;
           addCardToUI(room.title, room.description, roomImagePath, room.roomid);
         }
         setPagination({
@@ -353,6 +368,16 @@ const Search = () => {
           totalPages: Math.ceil(roomsResponse.data.length / limit),
         });
         updateContainer(cardsContainer);
+
+        if (!result) {
+          // No rooms to show
+          document.getElementById("no-result-search").style.display = "flex";
+          setPagination({
+            page: page,
+            limit: limit,
+            totalPages: 1,
+          });
+        }
         return;
       } catch (error) {
         showErrorDialog("An error occurred:", error, false, navigate);
@@ -467,7 +492,7 @@ const Search = () => {
       </div>
 
       <div className="results">
-
+      <label id="no-result-search" className='noResultSearch'>Couldn't find a room</label>
         <div className="frame-201">
           <p className="showing-4-of-108-places">
           </p>

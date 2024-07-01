@@ -83,7 +83,6 @@ const ChangePass = () => {
   const handleSubmitChangeP = async e => {
     if (isLoggedIn) {
       // Set inputs
-      const email = inputs.email.trim();
       const password = inputs.pass.trim();
       const newPassword = inputs.password.trim();
       const confirmPassword = inputs.confirmPass.trim();

@@ -120,6 +120,19 @@ export const getReservationByRoomID = (req, res) => {
   });
 };
 
+export const getReservationByRoomTitle = (req, res) => {
+  const roomTitle = req.params.roomTitle;
+  const q = "SELECT r.* FROM reservations r JOIN rooms h ON r.id_room = h.roomid WHERE h.title = ?;";
+
+  db.query(q, [roomTitle], (err, data) => {
+    if (err) {
+      return res.status(500).json("Error fetch reservations data");
+    }
+
+    return res.status(200).json(data);
+  });
+};
+
 export const updateReservation = (req, res) => {
   const { reservationID, check_in, check_out } = req.body;
   const updateQuery = `

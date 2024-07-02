@@ -122,9 +122,10 @@ export const getReservationByRoomID = (req, res) => {
 
 export const getReservationByRoomTitle = (req, res) => {
   const roomTitle = req.params.roomTitle;
-  const q = "SELECT r.* FROM reservations r JOIN rooms h ON r.id_room = h.roomid WHERE h.title = ?;";
+  const roomTitleWithWildcards = '%' + roomTitle + '%';
+  const q = "SELECT r.* FROM reservations r JOIN rooms h ON r.id_room = h.roomid WHERE h.title LIKE ?";
 
-  db.query(q, [roomTitle], (err, data) => {
+  db.query(q, [roomTitleWithWildcards], (err, data) => {
     if (err) {
       return res.status(500).json("Error fetch reservations data");
     }

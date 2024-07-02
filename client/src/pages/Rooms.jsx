@@ -252,11 +252,6 @@ const Rooms = () => {
       if (!result) {
         // No rooms to show
         document.getElementById("no-result-rooms").style.display = "flex";
-        setPagination({
-          page: page,
-          limit: limit,
-          totalPages: 1,
-        });
       }
       return;
     } catch (error) {

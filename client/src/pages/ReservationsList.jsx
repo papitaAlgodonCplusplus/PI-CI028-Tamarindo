@@ -698,7 +698,7 @@ const ReservationsList = () => {
       <input autoComplete="new-password"
         value={inputs.searchQuery}
         placeholder="Search Room by Name"
-        onChange={handleChange} maxLength={33} name="searchQuery" className='input_az'></input>
+        onChange={handleChange} maxLength={33} name="searchQuery" className='input_az0'></input>
 
       <div className="frame-40">
         <div className="check-in">
@@ -736,7 +736,7 @@ const ReservationsList = () => {
         />
       )}
 
-      <label className='custom-filter'>Filter By: </label>
+      <label className='custom-filter0'>Filter By: </label>
 
       <div className="reservations-bar">
         <div className="reservations-info-bar">

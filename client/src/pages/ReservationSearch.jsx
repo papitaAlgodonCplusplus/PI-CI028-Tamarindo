@@ -245,7 +245,7 @@ const ReservationSearch = () => {
   const { userId } = useContext(AuthContext);
   const [fetched, setFetched] = useState(false);
   let reservations = [];
-  const fetchData = async () => {
+  const fetchData = async (page = 1, limit = 10) => {
     if (isLoggedIn) {
       // Selecting the services container
       const servicesContainer = document.querySelector('.reservations-container');
@@ -258,10 +258,15 @@ const ReservationSearch = () => {
         const res = await axios.get(`/reservations/by_userID${userId}`);
 
         let logged = 0;
+        let start = ((page - 1) * limit) + 1;
         // Iterating through each reservation
         for (const reservation of res.data) {
-          if (logged >= logs) {
+          if (logged >= limit*page) {
             break;
+          }
+          logged++;
+          if (logged < start) {
+            continue;
           }
           // Formatting check-in and check-out dates
           const checkIn = new Date(reservation.check_in).toISOString().slice(0, 19).replace('T', ' ');
@@ -288,6 +293,11 @@ const ReservationSearch = () => {
           // Updating the services container
           updateContainer(servicesContainer);
         }
+        setPagination({
+          page: page,
+          limit: limit,
+          totalPages: Math.ceil(res.data.length / limit),
+        });
         return;
       } catch (error) {
         showErrorDialog("An error occurred:", error);
@@ -342,13 +352,8 @@ const ReservationSearch = () => {
 
   let logs = 3;
   const handleLoggingChange = e => {
-    if (isLoggedIn) {
-      logs = e.target.value;
-      fetchData()
-      return;
-    } else {
-      return;
-    }
+    const newLimit = parseInt(e.target.value);
+    fetchData(1, newLimit);
   }
 
   // State variable for room ID
@@ -471,9 +476,11 @@ const ReservationSearch = () => {
     }
   }
 
-  const [nRooms, setNRooms] = useState(0);
-  var inDate = useRef('--/--/----');
-  var outDate = useRef('--/--/----');
+  const handlePageChange = (newPage) => {
+    fetchData(newPage, pagination.limit);
+  };
+  
+  const [pagination, setPagination] = useState({ page: 1, limit: 10, totalPages: 1 });
 
 
   const handleSearch = async (e) => {
@@ -495,13 +502,58 @@ const ReservationSearch = () => {
         showErrorDialog("The email entered is not registered:", "Please verify the information.");
         return;
       }
-      
+
       const servicesContainer = document.querySelector('.reservations-container');
       const searchTerm = inputs.email;
       if (searchTerm.trim() === '') {
         return;
       } else {
         try {
+          if (inputs.searchQuery.trim() === '') {
+          } else {
+            try {
+              // Clearing the services container
+              emptyContainer(servicesContainer);
+
+              // Fetching reservations data for the current user
+              const res = await axios.get(`/reservations/get_reservations_by_room_title${inputs.searchQuery}`);
+
+              let logged = 0;
+              // Iterating through each reservation
+              for (const reservation of res.data) {
+                if (logged >= logs) {
+                  break;
+                }
+                // Formatting check-in and check-out dates
+                const checkIn = new Date(reservation.check_in).toISOString().slice(0, 19).replace('T', ' ');
+                const checkOut = new Date(reservation.check_out).toISOString().slice(0, 19).replace('T', ' ');
+
+                // Fetching room data for the reservation
+                const res2 = await axios.get(`/rooms/by_roomID${reservation.id_room}`);
+
+                // Fetching image data for the room
+                const image = await axios.get(`/files/get_image_by_id${res2.data[0].imageid}`);
+                const filepath = "/upload/" + image.data[0].filename;
+
+                // Fetching payment data for the reservation
+                const res3 = await axios.get(`/payments/payment_byPaymentID${reservation.payment_id}`);
+
+                let status = 'Awaiting'
+                if (res3.data[0].id_method === 1) {
+                  status = 'Approved'
+                }
+
+                // Adding reservation to the services container
+                addReservation(res2.data[0].title, checkIn, checkOut, filepath, status, reservation.reservationid);
+
+                // Updating the services container
+                updateContainer(servicesContainer);
+              }
+              return;
+            } catch (error) {
+              showErrorDialog("An error occurred:", error, false, navigate);
+            }
+          }
           // Clearing the services container
           emptyContainer(servicesContainer);
 
@@ -549,95 +601,6 @@ const ReservationSearch = () => {
     }
   }
 
-  function isDateBetween(targetDate, startDate, endDate) {
-    // Convert the date strings to Date objects
-    const target = new Date(targetDate);
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-
-    // Check if the target date is between the start and end dates
-    return target >= start && target <= end;
-  }
-
-  const handleFilterCalendarChange = async (newDatesRange, event) => {
-    if (isLoggedIn) {
-      const servicesContainer = document.querySelector('.reservations-container');
-      // Update selected dates
-      setValues(newDatesRange);
-      let requestParams;
-      if (newDatesRange[0]) inDate.current = newDatesRange[0].toString()
-      if (newDatesRange[1]) outDate.current = newDatesRange[1].toString()
-      if (newDatesRange[1]) {
-        // Set default time for check-in and check-out dates
-        const checkInDateTime = newDatesRange[0].set({
-          hour: 7,
-          minute: 0,
-          second: 0,
-        }).format('YYYY-MM-DD HH:mm:ss');
-
-        const checkOutDateTime = newDatesRange[1].set({
-          hour: 18,
-          minute: 0,
-          second: 0,
-        }).format('YYYY-MM-DD HH:mm:ss');
-
-        // Assign to requestParams
-        requestParams = {
-          check_in_date: checkInDateTime,
-          check_out_date: checkOutDateTime,
-        };
-        try {
-          // Clearing the services container
-          emptyContainer(servicesContainer);
-
-          // Fetching reservations data for the current user
-          const res = await axios.get(`/reservations/by_userID${userId}`);
-
-          let logged = 0;
-          // Iterating through each reservation
-          for (const reservation of res.data) {
-            if (logged >= logs) {
-              break;
-            }
-            // Formatting check-in and check-out dates
-            const checkIn = new Date(reservation.check_in).toISOString().slice(0, 19).replace('T', ' ');
-            const checkOut = new Date(reservation.check_out).toISOString().slice(0, 19).replace('T', ' ');
-
-            if (!(isDateBetween(requestParams.check_in_date, checkIn, checkOut) || isDateBetween(requestParams.check_out_date, checkIn, checkOut))) {
-              continue;
-            }
-
-            // Fetching room data for the reservation
-            const res2 = await axios.get(`/rooms/by_roomID${reservation.id_room}`);
-
-            // Fetching image data for the room
-            const image = await axios.get(`/files/get_image_by_id${res2.data[0].imageid}`);
-            const filepath = "/upload/" + image.data[0].filename;
-
-            // Fetching payment data for the reservation
-            const res3 = await axios.get(`/payments/payment_byPaymentID${reservation.payment_id}`);
-
-            let status = 'Awaiting'
-            if (res3.data[0].id_method === 1) {
-              status = 'Approved'
-            }
-
-            // Adding reservation to the services container
-            addReservation(res2.data[0].title, checkIn, checkOut, filepath, status, reservation.reservationid);
-
-            // Updating the services container
-            updateContainer(servicesContainer);
-          }
-          return;
-        } catch (error) {
-          showErrorDialog("An error occurred:", error, false, navigate);
-        }
-      }
-    } else {
-      return;
-    }
-  }
-  
   const handleGoBack = async e => {
     if (isLoggedIn) {
       e.preventDefault()
@@ -667,9 +630,15 @@ const ReservationSearch = () => {
 
       <label className='custom-filter'>Filter By: </label>
 
-      <div className="search-button">
-          <button type="submit" className='create' onClick={handleSearch}>Search</button>
+      <input autoComplete="new-password"
+        value={inputs.searchQuery}
+        placeholder="Search reservation by room name"
+        onChange={handleChange} maxLength={33} name="searchQuery" className='input_az2'></input>
+
+      <div className="search-button2">
+        <button type="submit" className='create' onClick={handleSearch}>Search</button>
       </div>
+
 
       <div className="reservations-bar">
         <div className="reservations-info-bar">
@@ -697,11 +666,19 @@ const ReservationSearch = () => {
         </div>
       </div>
 
+      <div className="pagination-controls" style={{ textAlign: 'center', marginTop: '20px' }}>
+        <button className='pagination-button' disabled={pagination.page === 1} onClick={() => handlePageChange(1)}>First</button>
+        <button className='pagination-button' disabled={pagination.page === 1} onClick={() => handlePageChange(pagination.page - 1)}>Previous</button>
+        <span>Page {pagination.page} of {pagination.totalPages}</span>
+        <button className='pagination-button' disabled={pagination.page === pagination.totalPages} onClick={() => handlePageChange(pagination.page + 1)}>Next</button>
+        <button className='pagination-button' disabled={pagination.page === pagination.totalPages} onClick={() => handlePageChange(pagination.totalPages)}>Last</button>
+      </div>
+
       <label className='custom-show'>Show: </label>
       <select name="lazy-logger" className="custom-select" id="lazy-logger"
         onChange={handleLoggingChange}>
         <option key={5} value={5}>5</option>
-        <option key={10} value={10}>10</option>
+        <option selected key={10} value={10}>10</option>
         <option key={15} value={15}>15</option>
         <option key={25} value={25}>25</option>
       </select>

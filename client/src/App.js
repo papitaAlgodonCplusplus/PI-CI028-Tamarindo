@@ -16,11 +16,8 @@ import MyAccount from "./pages/MyAccount.jsx";
 import Billing from "./pages/Billing.jsx";
 import AboutUs from "./pages/AboutUs.jsx";
 import ReservationSearch from "./pages/ReservationSearch.jsx";
-import ReservationSearchRoom from "./pages/ReservationSearchRoom.jsx";
-// import Reservation from "./pages/Reservation.jsx";
 import Payment from "./pages/Payment.jsx";
 import Amenities from "./pages/Amenities.jsx";
-// import ReservationsAdmin from "./pages/ReservationsAdmin.jsx";
 
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 
@@ -103,24 +100,7 @@ const router = createBrowserRouter([
         path: "/reservation_search",
         element: <ReservationSearch />,
       },
-      {
-        path: "/reservation_search_room",
-        element: <ReservationSearchRoom />,
-      },
     ],
-    //   {
-    //     path: "/rooms",
-    //     element: <Rooms />,
-    //   },
-    //   {
-    //     path: "/reservation",
-    //     element: <Reservation />,
-    //   },
-    //   {
-    //     path: "/reservations_admin",
-    //     element: <ReservationsAdmin />
-    //   }
-    // ]
   },
 ]);
 

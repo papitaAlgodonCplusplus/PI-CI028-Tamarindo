@@ -142,11 +142,6 @@ const Billing = () => {
       } else {
         document.getElementById("no-result").style.display = "none";
       }
-      setPagination({
-        page: page,
-        limit: limit,
-        totalPages: 1,
-      });
       return;
     } catch (error) {
       showErrorDialog("Error", error);

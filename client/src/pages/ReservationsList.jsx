@@ -309,11 +309,6 @@ const ReservationsList = () => {
         } else { 
           document.getElementById("no-result").style.display = "none";
         }
-        setPagination({
-          page: page,
-          limit: limit,
-          totalPages: 1,
-        });
         return;
       } catch (error) {
         showErrorDialog("An error occurred:", error);
@@ -370,7 +365,6 @@ const ReservationsList = () => {
   const handleLoggingChange = e => {
     const newLimit = parseInt(e.target.value);
     fetchData(1, newLimit);
-    console.log(newLimit)
   }
   const handlePageChange = (newPage) => {
     fetchData(newPage, pagination.limit);

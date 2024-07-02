@@ -10,6 +10,7 @@ export const Provider = ({ children }) => {
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [homeDates, setHomeDates] = useState([]);
   const [bookingDates, setBookingDates] = useState([]);
+  const [amenities, setAmenitiesList] = useState([]);
 
   const changeHomeDates = (newDates) => {
     setHomeDates(newDates)
@@ -17,6 +18,10 @@ export const Provider = ({ children }) => {
 
   const changeHomeSearch = (newSearch) => {
     setHomeSearch(newSearch)
+  }
+
+  const changeAmenitiesList = (amenities) => {
+    setAmenitiesList(amenities)
   }
 
   const changeBookingDates = (newDates) => {
@@ -54,7 +59,9 @@ export const Provider = ({ children }) => {
       paymentMethod,
       changePaymentMethod,
       bookingDates,
-      changeBookingDates
+      changeBookingDates,
+      amenities,
+      changeAmenitiesList
     }}>
       {children}
     </Context.Provider>

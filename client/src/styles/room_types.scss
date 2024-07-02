@@ -1,4 +1,3 @@
-
 .room_types_page {
   width: 1250px;
   margin: 0 auto;
@@ -252,6 +251,12 @@ input[type="number"]::-webkit-outer-spin-button {
   align-items: center;
   overflow-x: hidden;
   margin-top: 1%;
+}
+
+.myForm .error {
+  font-size: 16px;
+  color: rgb(161, 7, 7);
+  margin-bottom: 5vh;
 }
 
 .myForm div,

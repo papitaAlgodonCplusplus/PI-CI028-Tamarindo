@@ -505,7 +505,7 @@ const ReservationSearch = () => {
           disabled={page === 1}
           onClick={() => handlePageChange(page - 1)}
         >
-          &laquo; Previous
+          &laquo; Prev
         </button>
         {pages.map((p, index) => (
           <button

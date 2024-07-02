@@ -48,7 +48,7 @@ const RoomType = () => {
   
     return (
       <div className="pagination-controls">
-        <button className="pagination-button" disabled={page === 1} onClick={() => handlePageChange(page - 1)}>&laquo; Previous</button>
+        <button className="pagination-button" disabled={page === 1} onClick={() => handlePageChange(page - 1)}>&laquo; Prev</button>
         {pages.map((p, index) => (
           <button
             key={index}

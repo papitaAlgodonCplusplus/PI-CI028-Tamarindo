@@ -39,13 +39,16 @@ hr {
 }
 
 .rooms .custom-show {
-  position: relative;
-  margin-left: -62vw;
+  position: absolute;
+  margin-left: 75.5vw;
+  margin-top: -4vh;
 }
 
 .rooms .custom-select {
-  position: relative;
-  left: 1vw;
+  position: absolute;
+  margin-left: 80vw;
+  margin-top: -3.7vh;
+  width: 3vw;
 }
 
 .rooms {

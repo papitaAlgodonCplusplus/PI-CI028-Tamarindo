@@ -261,7 +261,7 @@ const ReservationSearch = () => {
         let start = ((page - 1) * limit) + 1;
         // Iterating through each reservation
         for (const reservation of res.data) {
-          if (logged >= limit*page) {
+          if (logged >= limit * page) {
             break;
           }
           logged++;
@@ -483,7 +483,7 @@ const ReservationSearch = () => {
   const renderPagination = () => {
     const { page, totalPages } = pagination;
     const pages = [];
-  
+
     if (totalPages <= 5) {
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
@@ -497,7 +497,7 @@ const ReservationSearch = () => {
         pages.push(1, '...', page - 1, page, page + 1, '...', totalPages);
       }
     }
-  
+
     return (
       <div className="pagination-controls">
         <button
@@ -714,17 +714,7 @@ const ReservationSearch = () => {
         </div>
       </div>
 
-      {renderPagination()} 
-
-      <label className='custom-show'>Show: </label>
-      <select name="lazy-logger" className="custom-select" id="lazy-logger"
-        onChange={handleLoggingChange}>
-        <option key={5} value={5}>5</option>
-        <option selected key={10} value={10}>10</option>
-        <option key={15} value={15}>15</option>
-        <option key={25} value={25}>25</option>
-      </select>
-
+      {renderPagination()}
       <div id="calendar-modal-modify" className="form-modal-2">
         <div className="form-modal-content-2">
           <span className="close-modal-x" onClick={closeModal}>&times;</span>
@@ -804,6 +794,14 @@ const ReservationSearch = () => {
           <div className="overlay"></div>
         </div>
       </div>
+      <label className='custom-showmr'>Show: </label>
+      <select name="lazy-logger" className="custom-selectme" id="lazy-logger"
+        onChange={handleLoggingChange}>
+        <option key={5} value={5}>5</option>
+        <option selected key={10} value={10}>10</option>
+        <option key={15} value={15}>15</option>
+        <option key={25} value={25}>25</option>
+      </select>
     </div>
     // Show error to user, that hasnt logged in
     : <div>{showErrorDialog("Error: ", "Login to access", true, navigate)}</div>)

@@ -91,7 +91,16 @@ hr {
 }
 
 .room_types_page .custom-show {
-  margin-left: 19.5vw;
+  position: absolute;
+  margin-left: 70vw;
+  margin-top: -4vh;
+}
+
+.room_types_page .custom-select {
+  position: absolute;
+  margin-left: 74vw;
+  margin-top: -3.7vh;
+  width: 3vw;
 }
 
 .add-room_type-button {

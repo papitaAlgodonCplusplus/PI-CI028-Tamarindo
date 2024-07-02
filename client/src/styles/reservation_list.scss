@@ -495,14 +495,17 @@
   box-sizing: border-box;
 }
 
-.m-r .custom-show {
-  position: relative;
-  margin-left: 8vw;
+.m-r .custom-showmr {
+  position: absolute;
+  margin-left: 83vw;
+  margin-top: -3vh;
 }
 
-.m-r .custom-select {
-  position: relative;
-  left: 1vw;
+.m-r .custom-selectme {
+  position: absolute;
+  margin-left: 87vw;
+  margin-top: -2.8vh;
+  width: 3vw;
 }
 
 

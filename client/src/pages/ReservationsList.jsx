@@ -262,7 +262,7 @@ const ReservationsList = () => {
         let start = ((page - 1) * limit) + 1;
         // Iterating through each reservation
         for (const reservation of res.data) {
-          if (logged >= limit*page) {
+          if (logged >= limit * page) {
             break;
           }
           logged++;
@@ -306,7 +306,7 @@ const ReservationsList = () => {
         if (!result) {
           // No rooms to show
           document.getElementById("no-result").style.display = "flex";
-        } else { 
+        } else {
           document.getElementById("no-result").style.display = "none";
         }
         return;
@@ -373,7 +373,7 @@ const ReservationsList = () => {
   const renderPagination = () => {
     const { page, totalPages } = pagination;
     const pages = [];
-  
+
     if (totalPages <= 5) {
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
@@ -387,7 +387,7 @@ const ReservationsList = () => {
         pages.push(1, '...', page - 1, page, page + 1, '...', totalPages);
       }
     }
-  
+
     return (
       <div className="pagination-controls">
         <button
@@ -552,7 +552,7 @@ const ReservationsList = () => {
       const searchTerm = inputs.searchQuery;
       // No rooms to show
       if (searchTerm.trim() === '') {
-        
+
         return;
       } else {
         try {
@@ -591,7 +591,7 @@ const ReservationsList = () => {
             if (res3.data[0].id_method === 1) {
               status = 'Approved'
             }
-            
+
             result = true;
             // Adding reservation to the services container
             addReservation(res2.data[0].title, checkIn, checkOut, filepath, status, reservation.reservationid);
@@ -690,7 +690,7 @@ const ReservationsList = () => {
             if (res3.data[0].id_method === 1) {
               status = 'Approved'
             }
-            
+
             result = true;
             // Adding reservation to the services container
             addReservation(res2.data[0].title, checkIn, checkOut, filepath, status, reservation.reservationid);
@@ -714,7 +714,7 @@ const ReservationsList = () => {
       return;
     }
   }
-  
+
   const handleGoBack = async e => {
     if (isLoggedIn) {
       e.preventDefault()
@@ -807,15 +807,6 @@ const ReservationsList = () => {
 
       {renderPagination()}
 
-      <label className='custom-show'>Show: </label>
-      <select name="lazy-logger" className="custom-select" id="lazy-logger"
-        onChange={handleLoggingChange}>
-        <option key={5} value={5}>5</option>
-        <option selected key={10} value={10}>10</option>
-        <option key={15} value={15}>15</option>
-        <option key={25} value={25}>25</option>
-      </select>
-
       <div id="calendar-modal-modify" className="form-modal-2">
         <div className="form-modal-content-2">
           <span className="close-modal-x" onClick={closeModal}>&times;</span>
@@ -895,6 +886,14 @@ const ReservationsList = () => {
           <div className="overlay"></div>
         </div>
       </div>
+      <label className='custom-showmr'>Show: </label>
+      <select name="lazy-logger" className="custom-selectme" id="lazy-logger"
+        onChange={handleLoggingChange}>
+        <option key={5} value={5}>5</option>
+        <option selected key={10} value={10}>10</option>
+        <option key={15} value={15}>15</option>
+        <option key={25} value={25}>25</option>
+      </select>
     </div>
     // Show error to user, that hasnt logged in
     : <div>{showErrorDialog("Error: ", "Login to access", true, navigate)}</div>)

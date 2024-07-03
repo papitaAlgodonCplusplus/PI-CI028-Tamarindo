@@ -566,7 +566,6 @@ const ReservationsList = () => {
           // Iterating through each reservation
           for (const reservation of res.data) {
             if (logged >= logs) {
-              // document.getElementById("no-result").style.display = "flex";
               break;
             }
             // Formatting check-in and check-out dates

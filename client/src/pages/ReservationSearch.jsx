@@ -257,7 +257,7 @@ const ReservationSearch = () => {
         // Fetching reservations data for the current user
         const res = await axios.get(`/reservations/by_userID${userId}`);
 
-        let logged = 0;
+        let logged = 0; let result = false;
         let start = ((page - 1) * limit) + 1;
         // Iterating through each reservation
         for (const reservation of res.data) {
@@ -287,6 +287,7 @@ const ReservationSearch = () => {
             status = 'Approved'
           }
 
+          result = true;
           // Adding reservation to the services container
           addReservation(res2.data[0].title, checkIn, checkOut, filepath, status, reservation.reservationid);
 
@@ -298,6 +299,18 @@ const ReservationSearch = () => {
           limit: limit,
           totalPages: Math.ceil(res.data.length / limit),
         });
+
+        if (!result) {
+          // No rooms to show
+          document.getElementById("no-result-reserv-search").style.display = "flex";
+          setPagination({
+            page: page,
+            limit: limit,
+            totalPages: 1,
+          });
+        } else {
+          document.getElementById("no-result-reserv-search").style.display = "none";
+        }
         return;
       } catch (error) {
         showErrorDialog("An error occurred:", error);
@@ -712,6 +725,7 @@ const ReservationSearch = () => {
         <div className="reservations-container">
 
         </div>
+        <label id="no-result-reserv-search" className='noResultResSearch'>Couldn't find a reservation</label>
       </div>
 
       {renderPagination()}

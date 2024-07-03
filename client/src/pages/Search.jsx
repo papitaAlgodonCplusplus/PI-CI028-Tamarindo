@@ -8,6 +8,7 @@ import { emptyContainer, updateContainer, showErrorDialog } from "../Misc.js";
 import React, { useRef, useState, useEffect, useContext } from 'react';
 import '../styles/search_page.scss'
 
+
 const Search = () => {
   // Bool that checks if user has logged in with valid user (client-worker-administrator)
   const { isLoggedIn } = useContext(AuthContext);
@@ -427,6 +428,54 @@ const Search = () => {
     fetchDataFromServer(newPage, pagination.limit);
   };
 
+  const renderPagination = () => {
+    const { page, totalPages } = pagination;
+    const pages = [];
+  
+    if (totalPages <= 5) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      if (page <= 3) {
+        pages.push(1, 2, 3, 4, '...', totalPages);
+      } else if (page > totalPages - 3) {
+        pages.push(1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+      } else {
+        pages.push(1, '...', page - 1, page, page + 1, '...', totalPages);
+      }
+    }
+  
+    return (
+      <div className="pagination-controls">
+        <button
+          className="pagination-button previous"
+          disabled={page === 1}
+          onClick={() => handlePageChange(page - 1)}
+        >
+          &laquo; Prev
+        </button>
+        {pages.map((p, index) => (
+          <button
+            key={index}
+            className={`pagination-button ${p === page ? 'active' : ''}`}
+            onClick={() => typeof p === 'number' && handlePageChange(p)}
+            disabled={typeof p !== 'number'}
+          >
+            {p}
+          </button>
+        ))}
+        <button
+          className="pagination-button next"
+          disabled={page === totalPages}
+          onClick={() => handlePageChange(page + 1)}
+        >
+          Next &raquo;
+        </button>
+      </div>
+    );
+  };
+  
   const handleGoBack = async e => {
     if (isLoggedIn) {
       e.preventDefault()
@@ -507,13 +556,8 @@ const Search = () => {
         <div className="container-2">
         </div>
 
-        <div className="pagination-controls" style={{ textAlign: 'center', marginTop: '20px' }}>
-          <button className='pagination-button' disabled={pagination.page === 1} onClick={() => handlePageChange(1)}>First</button>
-          <button className='pagination-button' disabled={pagination.page === 1} onClick={() => handlePageChange(pagination.page - 1)}>Previous</button>
-          <span>Page {pagination.page} of {pagination.totalPages}</span>
-          <button className='pagination-button' disabled={pagination.page === pagination.totalPages} onClick={() => handlePageChange(pagination.page + 1)}>Next</button>
-          <button className='pagination-button' disabled={pagination.page === pagination.totalPages} onClick={() => handlePageChange(pagination.totalPages)}>Last</button>
-        </div>
+        {renderPagination()}
+
         <label className='custom-show'>Show: </label>
         <select name="lazy-logger" className="custom-select" id="lazy-logger"
           onChange={handleLoggingChange}>

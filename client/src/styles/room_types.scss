@@ -1,4 +1,3 @@
-
 .room_types_page {
   width: 1250px;
   margin: 0 auto;
@@ -92,7 +91,16 @@ hr {
 }
 
 .room_types_page .custom-show {
-  margin-left: 19.5vw;
+  position: absolute;
+  margin-left: 70vw;
+  margin-top: -4vh;
+}
+
+.room_types_page .custom-select {
+  position: absolute;
+  margin-left: 74vw;
+  margin-top: -3.7vh;
+  width: 3vw;
 }
 
 .add-room_type-button {
@@ -252,6 +260,12 @@ input[type="number"]::-webkit-outer-spin-button {
   align-items: center;
   overflow-x: hidden;
   margin-top: 1%;
+}
+
+.myForm .error {
+  font-size: 16px;
+  color: rgb(161, 7, 7);
+  margin-bottom: 5vh;
 }
 
 .myForm div,

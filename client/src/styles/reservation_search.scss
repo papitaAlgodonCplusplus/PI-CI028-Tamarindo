@@ -69,6 +69,13 @@
   box-sizing: border-box;
 }
 
+.search-button2{
+  position: absolute;
+  margin-top: -0.2vh;
+  margin-left: 76%;
+}
+
+
 .my-reservations .vector {
   width: 28px;
   height: 26px;
@@ -204,6 +211,7 @@
 .reservations-bar .check-in {
   padding: 0%;
   margin-right: 5.5vw;
+  margin-top: 5.5vw;
   overflow-wrap: break-word;
   font-family: 'Poppins';
   font-weight: 500;
@@ -292,17 +300,6 @@
   box-sizing: border-box;
 }
 
-.noResult {
-  font-size: 1.5vi;
-  color: rgb(0, 0, 0);
-  margin-left: 40vw;
-  position: relative;
-  display: flex;
-  // display: none;
-  margin-top: 7vh;
-  margin-bottom: 5vh;
-}
-
 .MDPI {
   width: 11vw;
   height: 20vh;
@@ -325,6 +322,7 @@
   display: flex;
   flex-wrap: wrap;
 }
+
 
 .m-r .check-in {
   border-radius: 4px 4px 0 0;
@@ -399,16 +397,10 @@
   width: 20px;
 }
 
-.custom-filter0 {
-  position: absolute;
-  margin-top: -5.5vh;
-  margin-left: 11vw;
-}
-
 .m-r .custom-filter {
   position: absolute;
-  margin-top: -5.5vh;
-  margin-left: 11vw;
+  margin-top: 1%;
+  margin-left: 10vw;
 }
 
 .m-r .text-field-2 {
@@ -466,28 +458,12 @@
 } 
 
 
-.input_az2 {
-  position: absolute;
-  margin-left: 53vw;
-  width: 20vw;
-  height: 7vh;
-  margin-top: -0.5vh;
-}
-
-.input_az0 {
-  position: absolute;
-  margin-left: 17vw;
-  width: 20vw;
-  height: 7vh;
-  margin-top: 2.1vh;
-}
-
 .input_az {
   position: absolute;
-  margin-left: 17vw;
-  width: 20vw;
+  margin-left: 16vw;
+  width: 35vw;
   height: 7vh;
-  margin-top: 2.1vh;
+  margin-top: -0.5vh;
 }
 
 .MDdata-amenitiesspace {
@@ -569,3 +545,4 @@
 .MDspace {
   margin-bottom: 3%;
 }
+

@@ -37,8 +37,8 @@ const Navbar = () => {
         <h1 onClick={handleReturn}>Hotel</h1>
         <img className="logo" alt="undefined graphic" onClick={handleReturn} src={require("../assets/Logo.PNG")}></img>
         <ul>
-          <li><a href="/services">Services</a></li>
-          <li><a href="/reviews">Reviews</a></li>
+          <li><a href="mailto:alexquesada22@gmail.com">Contact</a></li>
+          <li><a href="/search">Our Rooms</a></li>
           <li><a href="/about_us">About Us</a></li>
         </ul>
         <img src={img_source} className='pfp' alt="pfp" onClick={toggleModal}></img>

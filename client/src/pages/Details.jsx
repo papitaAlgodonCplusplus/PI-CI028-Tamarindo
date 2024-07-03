@@ -101,7 +101,8 @@ const Details = () => {
   const titleRef = useRef(null); // Ref for title
   const descRef = useRef(null); // Ref for description
   const priceRef = useRef(null); // Ref for description 
-  const { changeBookingDates } = useContext(Context)
+  const { changeBookingDates } = useContext(Context) 
+  const { changeAmenitiesList } = useContext(Context)
   const [selectedService, setServiceOption] = useState('');
   const [services, setServices] = useState([]);
   const [servicesList, setServicesList] = useState([]);
@@ -127,6 +128,18 @@ const Details = () => {
           const newLabel = document.createElement('label');
           newLabel.textContent = selectedService;
           newLabel.classList.add('amenity');
+
+          const deleteButton = document.createElement('button');
+          deleteButton.textContent = ' x';
+          deleteButton.classList.add('delete-button');
+
+
+          deleteButton.addEventListener('click', () => {
+            amenitiesList.removeChild(newLabel);
+            setServicesList(previousList => previousList.filter(service => service !== selectedService));
+          });
+
+          newLabel.appendChild(deleteButton);
           amenitiesList.appendChild(newLabel);
         })
         .catch(error => {
@@ -140,11 +153,6 @@ const Details = () => {
     if (isLoggedIn) {
       try {
         setValues(newDatesRange);
-        if (newDatesRange[1]) {
-          changeBookingDates(newDatesRange)
-          // setAmenities(servicesList)
-          navigate("/pay")
-        }
       } catch (error) {
         showErrorDialog("An error occurred:", error, false, navigate);
       }
@@ -186,6 +194,15 @@ const Details = () => {
   // Function to handle booking
   const handleBook = async e => {
     toggleModal()
+  }
+
+  // Function to handle pay
+  const handlePay = async e => {
+    if (values[1]) {
+      changeBookingDates(values)
+      changeAmenitiesList(servicesList)
+      navigate("/pay")
+    }
   }
 
   // Function to fetch data
@@ -411,6 +428,13 @@ const Details = () => {
               </select>
               <div className="amenities-list">
               </div>
+            </div>
+          </div>
+          <div onClick={handlePay}>
+            <div className="style-layer-23">
+              <span className="button-52">
+                Book now
+              </span>
             </div>
           </div>
         </div>

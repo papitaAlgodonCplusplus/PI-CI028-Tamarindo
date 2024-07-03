@@ -4,12 +4,11 @@ import { AuthContext } from '../AuthContext.js';
 import { DateObject } from "react-multi-date-picker"
 import { Calendar } from "react-multi-date-picker"
 import { showErrorDialog, showWarningDialog, calculateNumberOfDays, emptyContainer, updateContainer, deleteDataWithTimeout, putDataWithTimeout } from '../Misc.js';
-import "../styles/reservation_list.scss";
+import "../styles/reservation_search.scss";
 import { useNavigate } from 'react-router-dom';
 
-const ReservationsList = () => {
+const ReservationSearch = () => {
   const { isLoggedIn } = useContext(AuthContext)
-  const [pagination, setPagination] = useState({ page: 1, limit: 10, totalPages: 1 });
 
   const [selectedDateRange, setSelectedDateRange] = useState([
     new DateObject({ hour: 7 }),
@@ -21,7 +20,7 @@ const ReservationsList = () => {
     const newReservationHTML = `
     <div className="reservations-container">
     <div style="
-      height: 70px;
+      height: 100px;
       margin-left: 100px;
       margin-top: 2%;
       margin-bottom: 2vh;
@@ -36,8 +35,8 @@ const ReservationsList = () => {
       position: relative; /* Add position: relative to the parent div */">
       <img style="
         margin-left: 35px;
-        width: 100px;
-        height: 70px;
+        max-width: 90px;
+        max-height: 90px;
         margin-right: 24px;
         margin-bottom: 10px;" src=${filename} alt="${title}-icon"/>
       <div style="
@@ -250,7 +249,7 @@ const ReservationsList = () => {
     if (isLoggedIn) {
       // Selecting the services container
       const servicesContainer = document.querySelector('.reservations-container');
-      let result = false;
+
       try {
         // Clearing the services container
         emptyContainer(servicesContainer);
@@ -269,8 +268,6 @@ const ReservationsList = () => {
           if (logged < start) {
             continue;
           }
-
-          result = true;
           // Formatting check-in and check-out dates
           const checkIn = new Date(reservation.check_in).toISOString().slice(0, 19).replace('T', ' ');
           const checkOut = new Date(reservation.check_out).toISOString().slice(0, 19).replace('T', ' ');
@@ -296,19 +293,11 @@ const ReservationsList = () => {
           // Updating the services container
           updateContainer(servicesContainer);
         }
-
         setPagination({
           page: page,
           limit: limit,
           totalPages: Math.ceil(res.data.length / limit),
         });
-
-        if (!result) {
-          // No rooms to show
-          document.getElementById("no-result").style.display = "flex";
-        } else {
-          document.getElementById("no-result").style.display = "none";
-        }
         return;
       } catch (error) {
         showErrorDialog("An error occurred:", error);
@@ -366,57 +355,6 @@ const ReservationsList = () => {
     const newLimit = parseInt(e.target.value);
     fetchData(1, newLimit);
   }
-  const handlePageChange = (newPage) => {
-    fetchData(newPage, pagination.limit);
-  };
-
-  const renderPagination = () => {
-    const { page, totalPages } = pagination;
-    const pages = [];
-
-    if (totalPages <= 5) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i);
-      }
-    } else {
-      if (page <= 3) {
-        pages.push(1, 2, 3, 4, '...', totalPages);
-      } else if (page > totalPages - 3) {
-        pages.push(1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
-      } else {
-        pages.push(1, '...', page - 1, page, page + 1, '...', totalPages);
-      }
-    }
-
-    return (
-      <div className="pagination-controls">
-        <button
-          className="pagination-button previous"
-          disabled={page === 1}
-          onClick={() => handlePageChange(page - 1)}
-        >
-          &laquo; Prev
-        </button>
-        {pages.map((p, index) => (
-          <button
-            key={index}
-            className={`pagination-button ${p === page ? 'active' : ''}`}
-            onClick={() => typeof p === 'number' && handlePageChange(p)}
-            disabled={typeof p !== 'number'}
-          >
-            {p}
-          </button>
-        ))}
-        <button
-          className="pagination-button next"
-          disabled={page === totalPages}
-          onClick={() => handlePageChange(page + 1)}
-        >
-          Next &raquo;
-        </button>
-      </div>
-    );
-  };
 
   // State variable for room ID
   const handleModifyConfirm = async (e) => {
@@ -522,6 +460,7 @@ const ReservationsList = () => {
 
   const [inputs, setInputs] = useState({
     name: "",
+    email: "",
     desc: "",
     searchQuery: "",
     delete: "",
@@ -531,16 +470,65 @@ const ReservationsList = () => {
   const handleChange = e => {
     if (isLoggedIn) {
       // Update input state when input values change
-      setInputs(prev => ({ ...prev, [e.target.name]: e.target.value }));
-      handleSearch()
+      setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     } else {
       return;
     }
   }
 
-  const [nRooms, setNRooms] = useState(0);
-  var inDate = useRef('--/--/----');
-  var outDate = useRef('--/--/----');
+  const handlePageChange = (newPage) => {
+    fetchData(newPage, pagination.limit);
+  };
+
+  const renderPagination = () => {
+    const { page, totalPages } = pagination;
+    const pages = [];
+
+    if (totalPages <= 5) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      if (page <= 3) {
+        pages.push(1, 2, 3, 4, '...', totalPages);
+      } else if (page > totalPages - 3) {
+        pages.push(1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+      } else {
+        pages.push(1, '...', page - 1, page, page + 1, '...', totalPages);
+      }
+    }
+
+    return (
+      <div className="pagination-controls">
+        <button
+          className="pagination-button previous"
+          disabled={page === 1}
+          onClick={() => handlePageChange(page - 1)}
+        >
+          &laquo; Prev
+        </button>
+        {pages.map((p, index) => (
+          <button
+            key={index}
+            className={`pagination-button ${p === page ? 'active' : ''}`}
+            onClick={() => typeof p === 'number' && handlePageChange(p)}
+            disabled={typeof p !== 'number'}
+          >
+            {p}
+          </button>
+        ))}
+        <button
+          className="pagination-button next"
+          disabled={page === totalPages}
+          onClick={() => handlePageChange(page + 1)}
+        >
+          Next &raquo;
+        </button>
+      </div>
+    );
+  };
+
+  const [pagination, setPagination] = useState({ page: 1, limit: 10, totalPages: 1 });
 
 
   const handleSearch = async (e) => {
@@ -548,133 +536,87 @@ const ReservationsList = () => {
       if (e) {
         e.preventDefault();
       }
-      const servicesContainer = document.querySelector('.reservations-container');
-      const searchTerm = inputs.searchQuery;
-      // No rooms to show
-      if (searchTerm.trim() === '') {
 
+      // Verify if the email is valid
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(inputs.email)) {
+        showErrorDialog("An error occurred:", "Please enter a valid email address.");
+        return;
+      }
+
+      // Verify if the email is register in the database
+      const userIDClient = await axios.get(`/auth/getUserID${inputs.email}`);
+      if (userIDClient.data.length <= 0) {
+        showErrorDialog("The email entered is not registered:", "Please verify the information.");
+        return;
+      }
+
+      const servicesContainer = document.querySelector('.reservations-container');
+      const searchTerm = inputs.email;
+      if (searchTerm.trim() === '') {
         return;
       } else {
         try {
-          // Clearing the services container
-          emptyContainer(servicesContainer);
-
-          // Fetching reservations data for the current user
-          const res = await axios.get(`/reservations/by_userID${userId}`);
-          let result = false;
-          let logged = 0;
-          // Iterating through each reservation
-          for (const reservation of res.data) {
-            if (logged >= logs) {
-              // document.getElementById("no-result").style.display = "flex";
-              break;
-            }
-            // Formatting check-in and check-out dates
-            const checkIn = new Date(reservation.check_in).toISOString().slice(0, 19).replace('T', ' ');
-            const checkOut = new Date(reservation.check_out).toISOString().slice(0, 19).replace('T', ' ');
-
-            // Fetching room data for the reservation
-            const res2 = await axios.get(`/rooms/by_roomID${reservation.id_room}`);
-
-            if (!res2.data[0].title.includes(inputs.searchQuery)) {
-              continue;
-            }
-
-            // Fetching image data for the room
-            const image = await axios.get(`/files/get_image_by_id${res2.data[0].imageid}`);
-            const filepath = "/upload/" + image.data[0].filename;
-
-            // Fetching payment data for the reservation
-            const res3 = await axios.get(`/payments/payment_byPaymentID${reservation.payment_id}`);
-
-            let status = 'Awaiting'
-            if (res3.data[0].id_method === 1) {
-              status = 'Approved'
-            }
-
-            result = true;
-            // Adding reservation to the services container
-            addReservation(res2.data[0].title, checkIn, checkOut, filepath, status, reservation.reservationid);
-
-            // Updating the services container
-            updateContainer(servicesContainer);
-          }
-
-          if (!result) {
-            // No rooms to show
-            document.getElementById("no-result").style.display = "flex";
+          if (inputs.searchQuery.trim() === '') {
           } else {
-            document.getElementById("no-result").style.display = "none";
+            try {
+              // Clearing the services container
+              emptyContainer(servicesContainer);
+
+              // Fetching reservations data for the current user
+              const res = await axios.get(`/reservations/get_reservations_by_room_title${inputs.searchQuery}`);
+
+              let logged = 0;
+              // Iterating through each reservation
+              for (const reservation of res.data) {
+                if (logged >= logs) {
+                  break;
+                }
+                // Formatting check-in and check-out dates
+                const checkIn = new Date(reservation.check_in).toISOString().slice(0, 19).replace('T', ' ');
+                const checkOut = new Date(reservation.check_out).toISOString().slice(0, 19).replace('T', ' ');
+
+                // Fetching room data for the reservation
+                const res2 = await axios.get(`/rooms/by_roomID${reservation.id_room}`);
+
+                // Fetching image data for the room
+                const image = await axios.get(`/files/get_image_by_id${res2.data[0].imageid}`);
+                const filepath = "/upload/" + image.data[0].filename;
+
+                // Fetching payment data for the reservation
+                const res3 = await axios.get(`/payments/payment_byPaymentID${reservation.payment_id}`);
+
+                let status = 'Awaiting'
+                if (res3.data[0].id_method === 1) {
+                  status = 'Approved'
+                }
+
+                // Adding reservation to the services container
+                addReservation(res2.data[0].title, checkIn, checkOut, filepath, status, reservation.reservationid);
+
+                // Updating the services container
+                updateContainer(servicesContainer);
+              }
+              return;
+            } catch (error) {
+              showErrorDialog("An error occurred:", error, false, navigate);
+            }
           }
-          return;
-        } catch (error) {
-          showErrorDialog("An error occurred:", error, false, navigate);
-        }
-      }
-    } else {
-      return;
-    }
-  }
-
-  function isDateBetween(targetDate, startDate, endDate) {
-    // Convert the date strings to Date objects
-    const target = new Date(targetDate);
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-
-    // Check if the target date is between the start and end dates
-    return target >= start && target <= end;
-  }
-
-  const handleFilterCalendarChange = async (newDatesRange, event) => {
-    if (isLoggedIn) {
-      const servicesContainer = document.querySelector('.reservations-container');
-      // Update selected dates
-      setValues(newDatesRange);
-      let requestParams;
-      if (newDatesRange[0]) inDate.current = newDatesRange[0].toString()
-      if (newDatesRange[1]) outDate.current = newDatesRange[1].toString()
-      if (newDatesRange[1]) {
-        // Set default time for check-in and check-out dates
-        const checkInDateTime = newDatesRange[0].set({
-          hour: 7,
-          minute: 0,
-          second: 0,
-        }).format('YYYY-MM-DD HH:mm:ss');
-
-        const checkOutDateTime = newDatesRange[1].set({
-          hour: 18,
-          minute: 0,
-          second: 0,
-        }).format('YYYY-MM-DD HH:mm:ss');
-
-        // Assign to requestParams
-        requestParams = {
-          check_in_date: checkInDateTime,
-          check_out_date: checkOutDateTime,
-        };
-        try {
           // Clearing the services container
           emptyContainer(servicesContainer);
 
           // Fetching reservations data for the current user
-          const res = await axios.get(`/reservations/by_userID${userId}`);
-          let result = false;
+          const res = await axios.get(`/reservations/by_userID${userIDClient.data[0].userid}`);
+
           let logged = 0;
           // Iterating through each reservation
           for (const reservation of res.data) {
-            // No rooms to show
             if (logged >= logs) {
-              document.getElementById("no-result").style.display = "flex";
               break;
             }
             // Formatting check-in and check-out dates
             const checkIn = new Date(reservation.check_in).toISOString().slice(0, 19).replace('T', ' ');
             const checkOut = new Date(reservation.check_out).toISOString().slice(0, 19).replace('T', ' ');
-
-            if (!(isDateBetween(requestParams.check_in_date, checkIn, checkOut) || isDateBetween(requestParams.check_out_date, checkIn, checkOut))) {
-              continue;
-            }
 
             // Fetching room data for the reservation
             const res2 = await axios.get(`/rooms/by_roomID${reservation.id_room}`);
@@ -691,19 +633,11 @@ const ReservationsList = () => {
               status = 'Approved'
             }
 
-            result = true;
             // Adding reservation to the services container
             addReservation(res2.data[0].title, checkIn, checkOut, filepath, status, reservation.reservationid);
 
             // Updating the services container
             updateContainer(servicesContainer);
-          }
-
-          if (!result) {
-            // No rooms to show
-            document.getElementById("no-result").style.display = "flex";
-          } else {
-            document.getElementById("no-result").style.display = "none";
           }
           return;
         } catch (error) {
@@ -730,7 +664,7 @@ const ReservationsList = () => {
       <div className="my-reservations">
         <div className="my-reservations-1">
           <div className="my-reservations">
-            My Reservations
+            Reservations
           </div>
           <div className="line-2">
           </div>
@@ -738,47 +672,21 @@ const ReservationsList = () => {
       </div>
 
       <input autoComplete="new-password"
+        value={inputs.email}
+        placeholder="Search reservation by email address"
+        onChange={handleChange} maxLength={33} name="email" className='input_az'></input>
+
+      <label className='custom-filter'>Filter By: </label>
+
+      <input autoComplete="new-password"
         value={inputs.searchQuery}
-        placeholder="Search Room by Name"
-        onChange={handleChange} maxLength={33} name="searchQuery" className='input_az0'></input>
+        placeholder="Search reservation by room name"
+        onChange={handleChange} maxLength={33} name="searchQuery" className='input_az2'></input>
 
-      <div className="frame-40">
-        <div className="check-in">
-          <div className="text-field-1">
-            <img alt="undefined graphic" className="vector-1" src={require("../assets/Calendar.png")} />
-          </div>
-          <div className="label-text-2">
-            <span className="label-text-3">
-              Check-in
-            </span>
-            <p style={{ position: "absolute", marginTop: "4.3vh" }}>{inDate.current}</p>
-          </div>
-        </div>
-        <div onClick={toggleModal} className="check_in_icon"></div>
-        <div className="check-out">
-          <div className="text-field-2">
-            <img alt="undefined graphic" className="vector-2" onClick={toggleModal} src={require("../assets/Calendar.png")} />
-          </div>
-          <div className="label-text-4">
-            <span className="label-text-5">
-              Check-out
-            </span>
-            <p style={{ position: "absolute", marginTop: "4.3vh" }}>{outDate.current}</p>
-          </div>
-        </div>
+      <div className="search-button2">
+        <button type="submit" className='create' onClick={handleSearch}>Search</button>
       </div>
-      {/* Modal for filter options, visible if modalVisible is true */}
-      {modalVisible && (
-        <Calendar className="calendar"
-          value={values}
-          onChange={(newDatesRange, event) => handleFilterCalendarChange(newDatesRange, event)}
-          range
-          numberOfMonths={2}
-          showOtherDays
-        />
-      )}
 
-      <label className='custom-filter0'>Filter By: </label>
 
       <div className="reservations-bar">
         <div className="reservations-info-bar">
@@ -801,12 +709,12 @@ const ReservationsList = () => {
       </div>
 
       <div>
-        <div className="reservations-container"> </div>
-        <label id="no-result" className='noResult'>Couldn't find a reservation</label>
+        <div className="reservations-container">
+
+        </div>
       </div>
 
       {renderPagination()}
-
       <div id="calendar-modal-modify" className="form-modal-2">
         <div className="form-modal-content-2">
           <span className="close-modal-x" onClick={closeModal}>&times;</span>
@@ -900,4 +808,4 @@ const ReservationsList = () => {
   )
 }
 
-export default ReservationsList;
+export default ReservationSearch;

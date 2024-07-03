@@ -26,7 +26,7 @@ const Rooms = () => {
     room_type_price: 0,
   })
 
-  
+
   const handleLoggingChange = e => {
     const newLimit = parseInt(e.target.value);
     fetchData(1, newLimit);
@@ -36,6 +36,53 @@ const Rooms = () => {
     fetchData(newPage, pagination.limit);
   };
 
+  const renderPagination = () => {
+    const { page, totalPages } = pagination;
+    const pages = [];
+
+    if (totalPages <= 5) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      if (page <= 3) {
+        pages.push(1, 2, 3, 4, '...', totalPages);
+      } else if (page > totalPages - 3) {
+        pages.push(1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+      } else {
+        pages.push(1, '...', page - 1, page, page + 1, '...', totalPages);
+      }
+    }
+
+    return (
+      <div className="pagination-controls">
+        <button
+          className="pagination-button previous"
+          disabled={page === 1}
+          onClick={() => handlePageChange(page - 1)}
+        >
+          &laquo; Prev
+        </button>
+        {pages.map((p, index) => (
+          <button
+            key={index}
+            className={`pagination-button ${p === page ? 'active' : ''}`}
+            onClick={() => typeof p === 'number' && handlePageChange(p)}
+            disabled={typeof p !== 'number'}
+          >
+            {p}
+          </button>
+        ))}
+        <button
+          className="pagination-button next"
+          disabled={page === totalPages}
+          onClick={() => handlePageChange(page + 1)}
+        >
+          Next &raquo;
+        </button>
+      </div>
+    );
+  };
 
   // Function to add a card to the UI
   const addCard = (title, description, room_type, filename, id) => {
@@ -219,7 +266,7 @@ const Rooms = () => {
       let result = false;
       // Adding cards for each room to UI
       for (const room of roomsResponse.data) {
-        if (logged >= limit*page) {
+        if (logged >= limit * page) {
           break;
         }
         logged++;
@@ -252,11 +299,6 @@ const Rooms = () => {
       if (!result) {
         // No rooms to show
         document.getElementById("no-result-rooms").style.display = "flex";
-        setPagination({
-          page: page,
-          limit: limit,
-          totalPages: 1,
-        });
       }
       return;
     } catch (error) {
@@ -636,26 +678,20 @@ const Rooms = () => {
           </div>
           <div className="list-container">
           </div>
-            
-          <label id="no-result-rooms" className='noResultRooms'>No rooms to show</label>
-          <div className="pagination-controls" style={{ textAlign: 'center', marginTop: '20px' }}>
-            <button className='pagination-button' disabled={pagination.page === 1} onClick={() => handlePageChange(1)}>First</button>
-            <button className='pagination-button' disabled={pagination.page === 1} onClick={() => handlePageChange(pagination.page - 1)}>Previous</button>
-            <span>Page {pagination.page} of {pagination.totalPages}</span>
-            <button className='pagination-button' disabled={pagination.page === pagination.totalPages} onClick={() => handlePageChange(pagination.page + 1)}>Next</button>
-            <button className='pagination-button' disabled={pagination.page === pagination.totalPages} onClick={() => handlePageChange(pagination.totalPages)}>Last</button>
-          </div>
 
-          <label className="custom-show">Show: </label>
-          <select name="lazy-logger" className="custom-select" id="lazy-logger"
-            onChange={handleLoggingChange}>
-            <option key={5} value={5}>5</option>
-            <option selected key={10} value={10}>10</option>
-            <option key={15} value={15}>15</option>
-            <option key={25} value={25}>25</option>
-          </select>
+          <label id="no-result-rooms" className='noResultRooms'>No rooms to show</label>
+
+          {renderPagination()}
         </div>
       </div></center>
+      <label className="custom-show">Show: </label>
+      <select name="lazy-logger" className="custom-select" id="lazy-logger"
+        onChange={handleLoggingChange}>
+        <option key={5} value={5}>5</option>
+        <option selected key={10} value={10}>10</option>
+        <option key={15} value={15}>15</option>
+        <option key={25} value={25}>25</option>
+      </select>
     </div >
     : <div></div>))
 };

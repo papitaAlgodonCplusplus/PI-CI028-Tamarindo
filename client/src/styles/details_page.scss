@@ -446,6 +446,16 @@
   box-sizing: border-box;
 }
 
+.details_page .button-52 {
+  overflow-wrap: break-word;
+  font-family: 'Poppins';
+  font-weight: 600;
+  font-size: 18px;
+  height: 35px;
+  margin-left: 25px;
+  color: #FFFFFF;
+}
+
 .details .button-5 {
   overflow-wrap: break-word;
   font-family: 'Poppins';
@@ -465,6 +475,20 @@
   margin-right: 150px;
   width: 250px;
   margin-top: -35px;
+}
+
+.details_page .style-layer-23 {
+  position: absolute;
+  padding-top: 1%;
+  padding-right: -1%;
+  border-radius: 4px;
+  background: #1E91B6;
+  display: flex;
+  top: 125vh;
+  left: 71.5vw;
+  width: 130px;
+  height: fit-content;
+  box-sizing: border-box;
 }
 
 .details .style-layer-2 {

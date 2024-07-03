@@ -100,6 +100,7 @@ const Home = () => {
             <li><a href="/amenities">Amenities</a></li>
             <li><a href="/rooms">Rooms</a></li>
             <li><a href="/room_type">Room Types</a></li>
+            <li><a href="/reservation_search">Reservations</a></li>
           </ul>
         </div>
         :

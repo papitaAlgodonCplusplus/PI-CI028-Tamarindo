@@ -214,13 +214,16 @@ hr {
 
 
 .billing_page .custom-show {
-  position: relative;
-  margin-left: 24vw;
+  position: absolute;
+  margin-left: 67.5vw;
+  margin-top: -3vh;
 }
 
 .billing_page .custom-select {
-  position: relative;
-  left: 1vw;
+  position: absolute;
+  margin-left: 72vw;
+  margin-top: -2.8vh;
+  width: 3vw;
 }
 
 .modal-overlay {

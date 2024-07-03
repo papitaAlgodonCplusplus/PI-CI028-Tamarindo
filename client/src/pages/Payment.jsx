@@ -22,7 +22,7 @@ const Payment = () => {
   const [totalAmenitiesPrice, setTotalAmenitiesPrice] = useState(0);
   const [originalPrice, setOriginalPrice] = useState(0);
   const [currentCurrency, setCurrentCurrency] = useState('Dollars');
-  const { lastRoomClickedID, bookingDates } = useContext(Context);
+  const { lastRoomClickedID, bookingDates, amenities } = useContext(Context);
   const number_of_days = calculateNumberOfDays(bookingDates[0].toString(), bookingDates[1].toString()) + 1
   const { userId } = useContext(AuthContext)
   let cardType = "";
@@ -56,6 +56,15 @@ const Payment = () => {
         if (response.data[0]) {
           setServiceOption(response.data[0].service_name);
         }
+
+        let totalPrice = 0;
+        response.data.forEach(service => {
+          if (amenities.includes(service.service_name)) {
+            totalPrice += service.service_price;
+          }
+        });
+
+        setTotalAmenitiesPrice(totalPrice);
       });
 
       // Fetch room details by room ID

@@ -14,10 +14,10 @@ import RoomType from "./pages/RoomType";
 import Details from "./pages/Details";
 import MyAccount from "./pages/MyAccount.jsx";
 import Billing from "./pages/Billing.jsx";
-// import Reservation from "./pages/Reservation.jsx";
+import AboutUs from "./pages/AboutUs.jsx";
+import ReservationSearch from "./pages/ReservationSearch.jsx";
 import Payment from "./pages/Payment.jsx";
 import Amenities from "./pages/Amenities.jsx";
-// import ReservationsAdmin from "./pages/ReservationsAdmin.jsx";
 
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 
@@ -92,20 +92,15 @@ const router = createBrowserRouter([
         path: "/billing",
         element: <Billing />,
       },
+      {
+        path: "/about_us",
+        element: <AboutUs />,
+      },
+      {
+        path: "/reservation_search",
+        element: <ReservationSearch />,
+      },
     ],
-    //   {
-    //     path: "/rooms",
-    //     element: <Rooms />,
-    //   },
-    //   {
-    //     path: "/reservation",
-    //     element: <Reservation />,
-    //   },
-    //   {
-    //     path: "/reservations_admin",
-    //     element: <ReservationsAdmin />
-    //   }
-    // ]
   },
 ]);
 
